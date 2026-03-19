@@ -7,6 +7,7 @@ interface AnimatedCounterProps {
   from: number
   to: number
   suffix?: string
+  duration?: number
 }
 
 export const AnimatedCounter = ({ from, to, suffix = "" }: AnimatedCounterProps) => {

@@ -4,43 +4,46 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { Linkedin } from "lucide-react";
+import { Linkedin, ArrowRight } from "lucide-react";
 
 const team = [
   {
     name: "Sankar S",
     role: "Founder & CEO",
     specialty: "EV Power Electronics Engineer",
-    linkedin: "https://www.linkedin.com/in/sankar-edriftelectric",
-    initials: "SS"
+    initials: "SS",
+    color: "from-royal-blue to-vibrant-purple"
   },
   {
     name: "R&D Lead",
-    role: "Senior Engineer",
-    specialty: "Digital Control Systems",
-    linkedin: "#",
-    initials: "RD"
+    role: "Digital Control",
+    specialty: "DSP & Smart Control Systems",
+    initials: "JL",
+    color: "from-royal-blue to-vivid-cyan"
   },
   {
     name: "Power Systems",
-    role: "Design Engineer",
-    specialty: "High Density Converters",
-    linkedin: "#",
-    initials: "PS"
+    role: "Mechanical Lead",
+    specialty: "Thermal & Packaging Specialist",
+    initials: "AK",
+    color: "from-vibrant-purple to-royal-blue"
   }
 ];
 
 export const Team = () => {
   return (
-    <section id="team" className="py-24 px-6 bg-navy-mid/10">
+    <section id="team" className="py-32 px-6 bg-slate-50">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <Badge className="mb-4">Our Leaders</Badge>
-          <h2 className="text-4xl md:text-5xl font-black font-space text-text-primary mb-4">
-             Meet the <span className="text-gradient">Innovators</span>
-          </h2>
-          <p className="text-text-secondary max-w-2xl mx-auto">
-             A world-class team of engineers dedicated to revolutionizing the EV charging landscape.
+        <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+          <div>
+            <Badge variant="cyan" className="mb-4">Our Visionaries</Badge>
+            <h2 className="text-4xl md:text-6xl font-black font-space text-slate-900 tracking-tighter">
+              Meet the <br />
+              <span className="text-gradient">Innovators</span>
+            </h2>
+          </div>
+          <p className="text-slate-500 max-w-sm mb-2 font-medium leading-relaxed">
+            A specialized group of engineers building the next decade of power conversion technology.
           </p>
         </div>
 
@@ -48,29 +51,30 @@ export const Team = () => {
           {team.map((member, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
             >
-              <GlassCard className="text-center p-10 h-full flex flex-col items-center">
-                 <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-start to-primary-end flex items-center justify-center text-3xl font-black text-navy-dark mb-6 group-hover:scale-110 transition-transform">
-                   {member.initials}
-                 </div>
-                 
-                 <h3 className="text-xl font-bold text-text-primary mb-1">{member.name}</h3>
-                 <p className="text-accent-teal text-sm font-mono uppercase tracking-wider mb-4">{member.role}</p>
-                 <p className="text-text-secondary text-sm mb-8 flex-grow">{member.specialty}</p>
+              <div className="p-1 text-center h-full group bg-white border border-slate-100 transition-all duration-500 hover:shadow-2xl rounded-[32px] overflow-hidden">
+                <div className="p-10 flex flex-col items-center">
+                   <div className={`w-32 h-32 rounded-full bg-gradient-to-br ${member.color} p-1 mb-8 shadow-xl shadow-royal-blue/10`}>
+                      <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-3xl font-black text-slate-800">
+                         {member.initials}
+                      </div>
+                   </div>
+                   
+                   <h3 className="text-2xl font-black font-space text-slate-900 mb-2">{member.name}</h3>
+                   <div className="px-4 py-1.5 rounded-full bg-slate-50 border border-slate-100 mb-6">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-royal-blue">{member.role}</p>
+                   </div>
+                   <p className="text-sm text-slate-500 leading-relaxed mb-10 font-medium">{member.specialty}</p>
 
-                 <a 
-                    href={member.linkedin} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-text-secondary hover:text-accent-teal hover:bg-white/10 transition-all"
-                 >
-                    <Linkedin className="w-5 h-5" />
-                 </a>
-              </GlassCard>
+                   <a href="#" className="flex items-center gap-2 text-slate-900 font-black text-xs uppercase hover:text-royal-blue transition-colors group/btn">
+                      LinkedIn <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                   </a>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>

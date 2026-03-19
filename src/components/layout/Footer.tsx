@@ -1,78 +1,114 @@
-import Link from 'next/link'
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Zap, Mail, Phone, MapPin, Twitter, Linkedin, Facebook } from "lucide-react";
 
 export default function Footer() {
+  const links = {
+    products: [
+      { name: "Portable Battery Charger", href: "/products/portable-charger" },
+      { name: "Din Rail Power Supplies", href: "/#products" },
+      { name: "On-Board Charger", href: "/products/onboard-charger" },
+    ],
+    company: [
+      { name: "About Us", href: "/about" },
+      { name: "Careers", href: "#" },
+      { name: "Contact", href: "/contact" },
+    ],
+    social: [
+      { icon: Linkedin, href: "https://www.linkedin.com/in/sankar-edriftelectric" },
+      { icon: Twitter, href: "#" },
+      { icon: Facebook, href: "#" },
+    ]
+  };
+
   return (
-    <footer className="bg-navy-dark border-t border-border-subtle pt-16 pb-8 px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-        {/* Col 1: Logo + Tagline */}
-        <div className="space-y-6">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded bg-gradient-to-br from-primary-start to-primary-end flex items-center justify-center font-bold text-navy-dark">
-              e
-            </div>
-            <span className="font-space text-xl font-bold text-text-primary">
-              eDrift <span className="text-accent-teal">Electric</span>
-            </span>
-          </Link>
-          <p className="text-text-secondary text-sm leading-relaxed max-w-xs">
-             Pioneering advanced power electronics for the electric mobility ecosystem with cutting-edge SiC & GaN technology.
-          </p>
-          <div className="flex gap-4">
-             <a href="https://www.linkedin.com/in/sankar-edriftelectric" target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-accent-teal transition-colors">
-               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-             </a>
+    <footer className="bg-white border-t border-slate-100 pt-24 pb-12 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
+          <div className="lg:col-span-1">
+             <Link href="/" className="flex items-center gap-2 group mb-8">
+                <div className="relative w-48 h-14">
+                   <Image 
+                     src="/images/edrift logo.png" 
+                     alt="eDrift Electric" 
+                     fill 
+                     className="object-contain"
+                   />
+                </div>
+             </Link>
+             <p className="text-slate-500 text-sm leading-relaxed mb-8 font-medium">
+                Pioneering innovation in power electronics from conception to completion.
+             </p>
+             <div className="flex gap-4">
+               {links.social.map((s, i) => (
+                 <a key={i} href={s.href} target="_blank" className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-royal-blue hover:bg-royal-blue/10 transition-all border border-slate-100">
+                    <s.icon className="w-5 h-5" />
+                 </a>
+               ))}
+             </div>
+          </div>
+
+          <div>
+            <h4 className="text-slate-900 font-black font-space text-lg mb-8">Solutions</h4>
+            <ul className="space-y-4">
+              {links.products.map(link => (
+                <li key={link.name}>
+                  <Link href={link.href} className="text-slate-500 hover:text-royal-blue text-sm transition-colors font-medium">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-slate-900 font-black font-space text-lg mb-8">Quick Links</h4>
+            <ul className="space-y-4">
+              {links.company.map(link => (
+                <li key={link.name}>
+                  <Link href={link.href} className="text-slate-500 hover:text-royal-blue text-sm transition-colors font-medium">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-slate-900 font-black font-space text-lg mb-8">Contact Info</h4>
+            <ul className="space-y-6">
+              <li className="flex items-start gap-4 group">
+                 <Mail className="w-5 h-5 text-royal-blue shrink-0 group-hover:scale-110 transition-transform" />
+                 <span className="text-slate-500 text-sm font-medium">info@edriftelectric.com</span>
+              </li>
+              <li className="flex items-start gap-4 group">
+                 <Phone className="w-5 h-5 text-emerald-600 shrink-0 group-hover:scale-110 transition-transform" />
+                 <span className="text-slate-500 text-sm font-medium">+91 97902 74709</span>
+              </li>
+              <li className="flex items-start gap-4 group">
+                 <MapPin className="w-5 h-5 text-vibrant-purple shrink-0 group-hover:scale-110 transition-transform" />
+                 <span className="text-slate-500 text-sm font-medium leading-relaxed">
+                    Dr A.P.J ABDUL KALAM Block,<br />
+                    IIT Palakkad, 678623
+                 </span>
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* Col 2: Products */}
-        <div>
-          <h4 className="text-text-primary font-bold mb-6">Products</h4>
-          <ul className="space-y-4 text-sm">
-            <li><Link href="/products/onboard-charger" className="text-text-secondary hover:text-accent-teal transition-colors">On-Board Charger (OBC)</Link></li>
-            <li><Link href="/products/portable-charger" className="text-text-secondary hover:text-accent-teal transition-colors">Portable EV Charger</Link></li>
-            <li><span className="text-text-secondary/50">DC-DC Converter</span></li>
-            <li><span className="text-text-secondary/50">Integrated Charger</span></li>
-          </ul>
-        </div>
-
-        {/* Col 3: Company */}
-        <div>
-          <h4 className="text-text-primary font-bold mb-6">Company</h4>
-          <ul className="space-y-4 text-sm">
-            <li><Link href="/#about" className="text-text-secondary hover:text-accent-teal transition-colors">About Us</Link></li>
-            <li><Link href="/#team" className="text-text-secondary hover:text-accent-teal transition-colors">Our Team</Link></li>
-            <li><Link href="/contact" className="text-text-secondary hover:text-accent-teal transition-colors">Contact</Link></li>
-            <li><Link href="/contact" className="text-text-secondary hover:text-accent-teal transition-colors">Careers</Link></li>
-          </ul>
-        </div>
-
-        {/* Col 4: Contact info */}
-        <div>
-          <h4 className="text-text-primary font-bold mb-6">Contact</h4>
-          <ul className="space-y-4 text-sm">
-            <li className="flex flex-col">
-              <span className="text-text-secondary">Email</span>
-              <a href="mailto:sankar.s@edriftelectric.com" className="text-text-primary hover:text-accent-teal transition-colors">sankar.s@edriftelectric.com</a>
-            </li>
-            <li className="flex flex-col">
-              <span className="text-text-secondary">Phone</span>
-              <a href="tel:+919790274709" className="text-text-primary hover:text-accent-teal transition-colors">+91-9790274709</a>
-            </li>
-            <li className="flex flex-col">
-              <span className="text-text-secondary">Location</span>
-              <span className="text-text-primary">Coimbatore, Tamil Nadu, India</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto pt-8 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-secondary">
-        <p>© 2025 eDrift Electric Private Limited. All rights reserved.</p>
-        <div className="flex gap-6">
-          <Link href="#" className="hover:text-text-primary">Privacy Policy</Link>
-          <Link href="#" className="hover:text-text-primary">Terms of Service</Link>
+        <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
+           <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest text-center md:text-left leading-relaxed">
+              © 2024 eDrift Electric Private Limited. <br className="md:hidden" /> Empowering Industrial Automation.
+           </p>
+           <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              <Link href="#" className="hover:text-slate-900 transition-colors">Privacy Policy</Link>
+              <Link href="#" className="hover:text-slate-900 transition-colors">Terms of Service</Link>
+           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

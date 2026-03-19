@@ -3,9 +3,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { GlowButton } from "@/components/ui/GlowButton";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, ArrowRight } from "lucide-react";
 
 export const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,15 +13,14 @@ export const ContactSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
     await new Promise(r => setTimeout(r, 1500));
     setIsSubmitting(false);
     setSubmitted(true);
   }
 
   return (
-    <section id="contact" className="py-24 px-6 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+    <section id="contact" className="py-32 px-6 bg-slate-50 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
         {/* Left: Info */}
         <motion.div
            initial={{ opacity: 0, x: -30 }}
@@ -30,43 +28,31 @@ export const ContactSection = () => {
            viewport={{ once: true }}
            transition={{ duration: 0.8 }}
         >
-          <Badge className="mb-6">Connect With Us</Badge>
-          <h2 className="text-4xl md:text-5xl font-black font-space text-text-primary mb-8 leading-tight">
+          <Badge variant="purple" className="mb-6">Connect With Us</Badge>
+          <h2 className="text-4xl md:text-6xl font-black font-space text-slate-900 mb-10 leading-tight tracking-tighter">
             Ready to <span className="text-gradient">Power Up</span><br />
-            Your EV Project?
+            Your Project?
           </h2>
-          <p className="text-text-secondary text-lg mb-12">
+          <p className="text-slate-600 text-lg mb-12 font-medium">
              Our team of experts is ready to assist you with technical specifications, custom solutions, or partnership opportunities.
           </p>
 
-          <div className="space-y-8">
-            <div className="flex items-center gap-6 group">
-               <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-accent-teal group-hover:scale-110 transition-transform">
-                  <Mail className="w-6 h-6" />
-               </div>
-               <div>
-                  <p className="text-text-secondary text-sm">Email Us</p>
-                  <p className="text-text-primary font-bold">sankar.s@edriftelectric.com</p>
-               </div>
-            </div>
-            <div className="flex items-center gap-6 group">
-               <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-accent-green group-hover:scale-110 transition-transform">
-                  <Phone className="w-6 h-6" />
-               </div>
-               <div>
-                  <p className="text-text-secondary text-sm">Call Us</p>
-                  <p className="text-text-primary font-bold">+91-9790274709</p>
-               </div>
-            </div>
-            <div className="flex items-center gap-6 group">
-               <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-accent-teal group-hover:scale-110 transition-transform">
-                  <MapPin className="w-6 h-6" />
-               </div>
-               <div>
-                  <p className="text-text-secondary text-sm">Our Headquarters</p>
-                  <p className="text-text-primary font-bold">Coimbatore, Tamil Nadu, India</p>
-               </div>
-            </div>
+          <div className="space-y-10">
+            {[
+              { icon: Mail, label: "Email Us", val: "sankar.s@edriftelectric.com", color: "text-royal-blue" },
+              { icon: Phone, label: "Call Us", val: "+91-9790274709", color: "text-emerald-600" },
+              { icon: MapPin, label: "Visit Us", val: "Coimbatore, Tamil Nadu, India", color: "text-vibrant-purple" }
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-6 group">
+                 <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-900 group-hover:scale-110 transition-transform shadow-sm">
+                    <item.icon className={`w-8 h-8 ${item.color}`} />
+                 </div>
+                 <div>
+                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{item.label}</p>
+                    <p className="text-slate-900 font-black font-space text-lg">{item.val}</p>
+                 </div>
+              </div>
+            ))}
           </div>
         </motion.div>
 
@@ -77,56 +63,50 @@ export const ContactSection = () => {
            viewport={{ once: true }}
            transition={{ duration: 0.8 }}
         >
-          <GlassCard className="p-10 border-accent-teal/10">
+          <div className="p-10 border border-slate-100 bg-white rounded-[40px] shadow-2xl">
             {submitted ? (
-              <div className="text-center py-12">
-                 <div className="w-20 h-20 rounded-full bg-accent-green/20 text-accent-green flex items-center justify-center mx-auto mb-6">
+              <div className="text-center py-20">
+                 <div className="w-24 h-24 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center mx-auto mb-8 animate-bounce">
                     <Send className="w-10 h-10" />
                  </div>
-                 <h3 className="text-2xl font-bold text-text-primary mb-2">Message Sent!</h3>
-                 <p className="text-text-secondary">We'll get back to you within 24-48 hours.</p>
-                 <GlowButton className="mt-8" variant="outline" onClick={() => setSubmitted(false)}>Send Another</GlowButton>
+                 <h3 className="text-3xl font-black font-space text-slate-900 mb-4">Message Sent!</h3>
+                 <p className="text-slate-500 font-medium mb-10">We&apos;ll get back to you within 24-48 hours.</p>
+                 <GlowButton variant="outline" onClick={() => setSubmitted(false)} className="rounded-2xl">Send Another</GlowButton>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-text-primary">Name</label>
-                    <input required className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-text-primary focus:border-accent-teal outline-none transition-colors" placeholder="John Doe" />
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue">Full Name</label>
+                    <input required className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium" placeholder="Sankar S" />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-text-primary">Email</label>
-                    <input required type="email" className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-text-primary focus:border-accent-teal outline-none transition-colors" placeholder="john@example.com" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-text-primary">Phone (Optional)</label>
-                    <input className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-text-primary focus:border-accent-teal outline-none transition-colors" placeholder="+91..." />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-text-primary">Subject</label>
-                    <select className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-text-primary focus:border-accent-teal outline-none transition-colors appearance-none">
-                      <option>General Inquiry</option>
-                      <option>Product Quote</option>
-                      <option>Technical Support</option>
-                      <option>Partnership</option>
-                    </select>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue">Email Address</label>
+                    <input required type="email" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium" placeholder="sankar@edrift.com" />
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-text-primary">Message</label>
-                  <textarea required rows={4} className="w-full bg-navy-dark/50 border border-white/10 rounded-xl px-4 py-3 text-text-primary focus:border-accent-teal outline-none transition-colors resize-none" placeholder="How can we help you?" />
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue">Project Discovery</label>
+                  <select className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium appearance-none">
+                    <option>Product Inqiury</option>
+                    <option>Technical Partnership</option>
+                    <option>Custom R&D Request</option>
+                  </select>
                 </div>
 
-                <GlowButton type="submit" className="w-full py-4 text-lg" disabled={isSubmitting}>
-                   {isSubmitting ? "Sending..." : "Send Message"}
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue">Your Vision</label>
+                  <textarea required rows={4} className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium resize-none" placeholder="Tell us about your project requirements..." />
+                </div>
+
+                <GlowButton type="submit" variant="primary" className="w-full h-16 text-lg rounded-2xl" disabled={isSubmitting}>
+                   {isSubmitting ? "Transmitting..." : "Send Secure Message"}
+                   <ArrowRight className="w-5 h-5 ml-2" />
                 </GlowButton>
               </form>
             )}
-          </GlassCard>
+          </div>
         </motion.div>
       </div>
     </section>

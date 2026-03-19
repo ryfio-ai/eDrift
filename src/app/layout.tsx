@@ -51,9 +51,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased dark`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col pt-0">
+      <body className="min-h-full flex flex-col pt-0 bg-white">
         <Navbar />
         <main className="flex-grow">
           {children}

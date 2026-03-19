@@ -1,119 +1,86 @@
 "use client";
 
-import React, { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Points, PointMaterial } from "@react-three/drei";
-import * as random from "maath/random/dist/maath-random.esm";
+import React from "react";
 import { motion } from "framer-motion";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
-
-function StarBackground() {
-  const ref = React.useRef<any>(null);
-  const [sphere] = React.useState(() => random.inSphere(new Float32Array(5000), { radius: 1.5 }));
-
-  return (
-    <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false}>
-        <PointMaterial
-          transparent
-          color="#00C6FF"
-          size={0.002}
-          sizeAttenuation={true}
-          depthWrite={false}
-        />
-      </Points>
-    </group>
-  );
-}
+import { ChevronRight, Zap } from "lucide-react";
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-navy-dark pt-20">
-      {/* Background 3D Particles */}
-      <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 1] }}>
-          <Suspense fallback={null}>
-            <StarBackground />
-          </Suspense>
-        </Canvas>
-      </div>
-
-      {/* Decorative Gradient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-start/20 rounded-full blur-[120px] pointer-events-none z-0" />
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-white pt-20 pb-32">
+      {/* Subtle Background Elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-royal-blue/5 blur-[120px] rounded-full -z-10" />
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-vibrant-purple/5 blur-[100px] rounded-full -z-10" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-slate-50 border border-slate-200 mb-8"
         >
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-space tracking-tighter mb-6 leading-tight">
-            Powering the Future of <br />
-            <span className="text-gradient">Electric Mobility</span>
-          </h1>
-          
-          <p className="text-lg md:text-xl text-text-secondary max-w-3xl mx-auto mb-10 leading-relaxed">
-            Advanced OBC & Portable EV Chargers — SiC Technology <span className="text-accent-teal mx-2">|</span> 
-            97%+ Efficiency <span className="text-accent-teal mx-2">|</span> IP67 Rated
-          </p>
+          <div className="w-2 h-2 rounded-full bg-royal-blue animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Pioneering Solutions Tailored to Industry Needs</span>
+        </motion.div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <GlowButton className="min-w-[200px] text-lg py-4">
-               Explore Products
-            </GlowButton>
-            <GlowButton variant="outline" className="min-w-[200px] text-lg py-4">
-               Get in Touch
-            </GlowButton>
-          </div>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="text-6xl md:text-9xl font-black font-space text-slate-900 mb-8 tracking-tighter leading-[0.9]"
+        >
+          Welcome to <br />
+          <span className="text-gradient">E-Drift_</span>
+        </motion.h1>
 
-          {/* Stats Bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-10 border-y border-border-subtle bg-navy-mid/30 backdrop-blur-sm rounded-2xl px-8">
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl font-space font-black text-text-primary">
-                <AnimatedCounter from={0} to={97} suffix="%" />
-              </span>
-              <span className="text-xs uppercase tracking-widest text-accent-teal font-bold mt-2">Efficiency</span>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
+        >
+          Innovative power solutions tailored to unique industry needs. 
+          Empowering your mission from conception to completion.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-6"
+        >
+          <GlowButton variant="primary" size="lg" className="w-full sm:w-auto h-16 group shadow-2xl shadow-royal-blue/20">
+            Get in Touch 
+            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </GlowButton>
+          <GlowButton variant="outline" size="lg" className="w-full sm:w-auto h-16 border-slate-200 text-slate-900 hover:bg-slate-50">
+            Our Products
+          </GlowButton>
+        </motion.div>
+
+        {/* Stats Section */}
+        <motion.div
+           initial={{ opacity: 0 }}
+           animate={{ opacity: 1 }}
+           transition={{ delay: 0.6, duration: 1 }}
+           className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-12 border-t border-slate-100 pt-16"
+        >
+          {[
+            { label: "Founded", value: 2022, suffix: "" },
+            { label: "Innovation", value: 100, suffix: "%" },
+            { label: "Support", value: 24, suffix: "/7" },
+            { label: "Engineered In", value: 0, suffix: "India" },
+          ].map((stat, i) => (
+            <div key={i} className="text-center group">
+               <div className="text-3xl md:text-5xl font-black font-space text-slate-900 flex items-center justify-center">
+                 {stat.label === "Founded" ? stat.value : <AnimatedCounter from={0} to={stat.value} duration={2} />}
+                 <span className="text-royal-blue">{stat.suffix}</span>
+               </div>
+               <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-3 group-hover:text-royal-blue transition-colors">{stat.label}</p>
             </div>
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl font-space font-black text-text-primary">
-                <AnimatedCounter from={0} to={6.6} /> 
-                <span className="text-xl ml-1">kW</span>
-              </span>
-              <span className="text-xs uppercase tracking-widest text-accent-teal font-bold mt-2">Max Power</span>
-            </div>
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl font-space font-black text-text-primary uppercase">
-                 IP67
-              </span>
-              <span className="text-xs uppercase tracking-widest text-accent-teal font-bold mt-2">Protection</span>
-            </div>
-            <div className="flex flex-col items-center border-0">
-              <span className="text-3xl md:text-4xl font-space font-black text-text-primary">
-                -40<span className="text-xl">°C</span>
-              </span>
-              <span className="text-xs uppercase tracking-widest text-accent-teal font-bold mt-2">Op Range</span>
-            </div>
-          </div>
+          ))}
         </motion.div>
       </div>
-
-      {/* Floating Image Placeholder (CAD Render) */}
-      <motion.div 
-        className="relative z-10 mt-12 w-full max-w-4xl px-6"
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="aspect-[16/9] relative rounded-2xl overflow-hidden glass border-white/5 shadow-2xl group">
-           <div className="absolute inset-0 bg-gradient-to-t from-navy-dark via-transparent to-transparent z-10" />
-           {/* Replace with actual charger image when available */}
-           <div className="w-full h-full bg-gradient-to-br from-navy-mid to-navy-dark flex items-center justify-center p-12">
-              <div className="w-2/3 h-2/3 border-4 border-dashed border-white/10 rounded-3xl flex items-center justify-center text-white/20 font-space font-black text-4xl italic uppercase">
-                 Charger 3D Visual
-              </div>
-           </div>
-        </div>
-      </motion.div>
     </section>
   );
 };

@@ -1,86 +1,102 @@
 "use client";
 
-import React, { useState } from "react";
-import { HoveredLink, Menu, MenuItem, ProductItem } from "@/components/ui/navbar-menu";
-import { cn } from "@/lib/utils";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { GlowButton } from "@/components/ui/GlowButton";
+import { Menu, X, Zap, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function Navbar({ className }: { className?: string }) {
-  const [active, setActive] = useState<string | null>(null);
-  
+export const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: "Products", href: "/#products" },
+    { name: "Technology", href: "/#tech" },
+    { name: "About", href: "/about" },
+  ];
+
   return (
-    <header className={cn("fixed top-6 inset-x-0 w-full z-50 px-4", className)}>
+    <nav 
+      className={cn(
+        "fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-6 py-4",
+        scrolled ? "bg-white/80 backdrop-blur-xl border-b border-slate-200 py-3 shadow-sm" : "bg-transparent"
+      )}
+    >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-start to-primary-end flex items-center justify-center font-bold text-navy-dark text-xl group-hover:shadow-[0_0_15px_rgba(0,198,255,0.5)] transition-all">
-             e
+        {/* Logo Integration */}
+        <Link href="/" className="flex items-center gap-3">
+           <div className="relative w-64 h-16">
+              <Image 
+                src="/images/edrift logo.png" 
+                alt="eDrift Electric" 
+                fill 
+                className="object-contain"
+                priority
+              />
            </div>
-           <span className="font-space text-2xl font-black tracking-tighter text-text-primary">
-             eDrift <span className="text-accent-teal">Electric</span>
-           </span>
         </Link>
 
-        {/* Navigation Menu */}
-        <div className="hidden lg:block absolute left-1/2 -translate-x-1/2">
-          <Menu setActive={setActive}>
-            <MenuItem setActive={setActive} active={active} item="Products">
-              <div className="grid grid-cols-2 gap-10 p-4">
-                <ProductItem
-                  title="On-Board Charger"
-                  href="/products/onboard-charger"
-                  src="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=300&h=200&auto=format&fit=crop"
-                  description="Advanced OBC with 98% efficiency and IP67 rating."
-                />
-                <ProductItem
-                  title="Portable Charger"
-                  href="/products/portable-charger"
-                  src="https://images.unsplash.com/photo-1695653422718-990ff7302c61?q=80&w=300&h=200&auto=format&fit=crop"
-                  description="Compact and lightweight charging on the go."
-                />
-                <ProductItem
-                  title="DC-DC Converter"
-                  href="#"
-                  src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=300&h=200&auto=format&fit=crop"
-                  description="High-performance isolated power conversion (Coming Soon)."
-                />
-                <ProductItem
-                  title="Bidirectional Charger"
-                  href="#"
-                  src="https://images.unsplash.com/photo-1558444479-c86e1055639d?q=80&w=300&h=200&auto=format&fit=crop"
-                  description="Vehicle-to-Everything (V2X) technology (Coming Soon)."
-                />
-              </div>
-            </MenuItem>
-            
-            <MenuItem setActive={setActive} active={active} item="Solution">
-              <div className="flex flex-col space-y-4 text-sm w-48">
-                <HoveredLink href="/#about">About Us</HoveredLink>
-                <HoveredLink href="/#tech">Engineering</HoveredLink>
-                <HoveredLink href="/#mission">Our Mission</HoveredLink>
-                <HoveredLink href="/#clients">Partners</HoveredLink>
-              </div>
-            </MenuItem>
-            
-            <MenuItem setActive={setActive} active={active} item="Company">
-               <div className="flex flex-col space-y-4 text-sm w-48">
-                <HoveredLink href="/#team">Our Team</HoveredLink>
-                <HoveredLink href="/contact">Careers</HoveredLink>
-                <HoveredLink href="/contact">Press Kits</HoveredLink>
-              </div>
-            </MenuItem>
-          </Menu>
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center gap-10">
+           {navLinks.map((link) => (
+             <Link 
+               key={link.name} 
+               href={link.href} 
+               className="text-sm font-bold text-slate-600 hover:text-royal-blue transition-colors"
+             >
+               {link.name}
+             </Link>
+           ))}
+           <Link href="/contact">
+             <GlowButton variant="primary" size="sm">Get a Quote</GlowButton>
+           </Link>
         </div>
 
-        {/* CTA */}
-        <div className="flex items-center gap-4">
-           <Link href="/contact" className="hidden sm:block">
-              <GlowButton className="text-sm px-5 py-2.5">Get a Quote</GlowButton>
-           </Link>
-           {/* Mobile menu toggle would go here */}
-        </div>
+        {/* Mobile Toggle */}
+        <button 
+          className="md:hidden text-slate-900"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          {mobileMenuOpen ? <X /> : <Menu />}
+        </button>
       </div>
-    </header>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-white border-b border-slate-200 overflow-hidden absolute top-full left-0 right-0 px-6 py-8 shadow-xl"
+          >
+            <div className="flex flex-col gap-6">
+               {navLinks.map((link) => (
+                 <Link 
+                   key={link.name} 
+                   href={link.href} 
+                   onClick={() => setMobileMenuOpen(false)}
+                   className="text-2xl font-black text-slate-900 flex justify-between items-center"
+                 >
+                   {link.name} <ChevronRight className="text-royal-blue" />
+                 </Link>
+               ))}
+               <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
+                 <GlowButton className="w-full">Get a Quote</GlowButton>
+               </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
-}
+};
