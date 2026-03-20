@@ -48,7 +48,7 @@ export const Team = () => {
               <div className="relative w-56 h-56 mx-auto mb-12">
                 <div className="absolute inset-0 bg-gradient-to-br from-royal-blue/20 to-vibrant-purple/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="relative w-full h-full rounded-full p-2 bg-gradient-to-br from-slate-50 to-white shadow-inner">
-                  <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white shadow-xl">
+                  <div className="relative w-full h-full rounded-full border-4 border-white overflow-hidden shadow-xl">
                     <Image 
                       src={founder.image} 
                       alt={founder.name}
@@ -58,14 +58,6 @@ export const Team = () => {
                   </div>
                 </div>
                 
-                {/* Floating Sparkle Icon - matching reference */}
-                <motion.div 
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  className="absolute bottom-2 right-4 w-14 h-14 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-royal-blue shadow-[0_8px_24px_rgba(0,0,0,0.08)] z-10"
-                >
-                   <Sparkles className="w-7 h-7" />
-                </motion.div>
               </div>
 
               <h3 className="text-4xl font-black font-space text-slate-900 mb-2 tracking-tight">{founder.name}</h3>
