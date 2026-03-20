@@ -14,15 +14,6 @@ export const Hero = () => {
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-vibrant-purple/5 blur-[100px] rounded-full -z-10" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-slate-50 border border-slate-200 mb-8"
-        >
-          <div className="w-2 h-2 rounded-full bg-royal-blue animate-pulse" />
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Pioneering Solutions Tailored to Industry Needs</span>
-        </motion.div>
-
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -63,13 +54,12 @@ export const Hero = () => {
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
            transition={{ delay: 0.6, duration: 1 }}
-           className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-12 border-t border-slate-100 pt-16"
+           className="mt-24 grid grid-cols-2 md:grid-cols-3 gap-12 border-t border-slate-100 pt-16"
         >
           {[
             { label: "Founded", value: 2022, suffix: "" },
             { label: "Innovation", value: 100, suffix: "%" },
             { label: "Support", value: 24, suffix: "/7" },
-            { label: "Engineered In", value: 0, suffix: "India" },
           ].map((stat, i) => (
             <div key={i} className="text-center group">
                <div className="text-3xl md:text-5xl font-black font-space text-slate-900 flex items-center justify-center">

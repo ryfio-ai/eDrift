@@ -19,34 +19,35 @@ export const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "Products", href: "/#products" },
-    { name: "Technology", href: "/#tech" },
+    { name: "Products", href: "/products" },
+    { name: "Technology", href: "/technology" },
     { name: "About", href: "/about" },
+    { name: "Team", href: "/team" },
   ];
 
   return (
     <nav 
       className={cn(
         "fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-6 py-4",
-        scrolled ? "bg-white/80 backdrop-blur-xl border-b border-slate-200 py-3 shadow-sm" : "bg-transparent"
+        scrolled ? "bg-white/80 backdrop-blur-xl border-b border-slate-200 py-3 shadow-sm" : "bg-transparent py-6"
       )}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo Integration */}
+      <div className="max-w-[1400px] mx-auto flex items-center justify-between">
+        {/* Significantly Larger Logo Visibility */}
         <Link href="/" className="flex items-center gap-3">
-           <div className="relative w-64 h-16">
+           <div className="relative w-[280px] h-[70px] md:w-[320px] md:h-[80px]">
               <Image 
                 src="/images/edrift logo.png" 
                 alt="eDrift Electric" 
                 fill 
-                className="object-contain"
+                className="object-contain object-left"
                 priority
               />
            </div>
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden lg:flex items-center gap-10">
            {navLinks.map((link) => (
              <Link 
                key={link.name} 
@@ -57,13 +58,13 @@ export const Navbar = () => {
              </Link>
            ))}
            <Link href="/contact">
-             <GlowButton variant="primary" size="sm">Get a Quote</GlowButton>
+             <GlowButton variant="primary" size="sm" className="px-8">Get a Quote</GlowButton>
            </Link>
         </div>
 
         {/* Mobile Toggle */}
         <button 
-          className="md:hidden text-slate-900"
+          className="lg:hidden text-slate-900"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X /> : <Menu />}
@@ -77,7 +78,7 @@ export const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-slate-200 overflow-hidden absolute top-full left-0 right-0 px-6 py-8 shadow-xl"
+            className="lg:hidden bg-white border-b border-slate-200 overflow-hidden absolute top-full left-0 right-0 px-6 py-8 shadow-xl"
           >
             <div className="flex flex-col gap-6">
                {navLinks.map((link) => (

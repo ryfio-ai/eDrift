@@ -14,7 +14,8 @@ export default function Footer() {
     ],
     company: [
       { name: "About Us", href: "/about" },
-      { name: "Careers", href: "#" },
+      { name: "Technology", href: "/technology" },
+      { name: "Meet the Team", href: "/team" },
       { name: "Contact", href: "/contact" },
     ],
     social: [
@@ -30,12 +31,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
           <div className="lg:col-span-1">
              <Link href="/" className="flex items-center gap-2 group mb-8">
-                <div className="relative w-48 h-14">
+                <div className="relative w-64 h-16">
                    <Image 
                      src="/images/edrift logo.png" 
                      alt="eDrift Electric" 
                      fill 
-                     className="object-contain"
+                     className="object-contain object-left"
                    />
                 </div>
              </Link>
@@ -91,8 +92,7 @@ export default function Footer() {
               <li className="flex items-start gap-4 group">
                  <MapPin className="w-5 h-5 text-vibrant-purple shrink-0 group-hover:scale-110 transition-transform" />
                  <span className="text-slate-500 text-sm font-medium leading-relaxed">
-                    Dr A.P.J ABDUL KALAM Block,<br />
-                    IIT Palakkad, 678623
+                    Hosur, Tamil Nadu, India
                  </span>
               </li>
             </ul>
@@ -101,7 +101,7 @@ export default function Footer() {
 
         <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest text-center md:text-left leading-relaxed">
-              © 2024 eDrift Electric Private Limited. <br className="md:hidden" /> Empowering Industrial Automation.
+              © 2026 eDrift Electric Private Limited. <br className="md:hidden" /> Empowering Industrial Automation.
            </p>
            <div className="flex gap-8 text-[10px] font-bold uppercase tracking-widest text-slate-400">
               <Link href="#" className="hover:text-slate-900 transition-colors">Privacy Policy</Link>

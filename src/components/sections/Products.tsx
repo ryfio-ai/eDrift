@@ -38,9 +38,9 @@ const productCategories = [
   },
   {
     id: "bidirectional",
-    name: "Bidirectional Chargers",
+    name: "Bidirectional DC Chargers",
     status: "Upcoming",
-    tagline: "V2G (Vehicle-to-Grid) and V2L ready technology.",
+    tagline: "V2G (Vehicle-to-Grid) and V2L ready DC technology.",
     icon: RefreshCw,
     image: "https://images.unsplash.com/photo-1620218173997-442402f114a2?q=80&w=800&h=600&auto=format&fit=crop"
   }
@@ -83,7 +83,7 @@ export const Products = () => {
                   />
                   <div className="absolute top-6 left-6">
                      {cat.status ? (
-                       <Badge variant="purple" className="bg-white/90 backdrop-blur shadow-sm">{cat.status}</Badge>
+                       <Badge variant="purple" className="bg-white/90 backdrop-blur shadow-sm">Upcoming</Badge>
                      ) : (
                        <Badge variant="cyan" className="bg-white/90 backdrop-blur shadow-sm">Production</Badge>
                      )}
@@ -112,7 +112,7 @@ export const Products = () => {
                       ))
                     ) : (
                       <div className="p-4 rounded-2xl bg-slate-100/50 border border-dashed border-slate-200 text-center">
-                         <span className="text-[10px] uppercase tracking-widest font-black text-slate-400">Available Q4 2024</span>
+                         <span className="text-[10px] uppercase tracking-widest font-black text-slate-400">Launching Soon</span>
                       </div>
                     )}
                   </div>

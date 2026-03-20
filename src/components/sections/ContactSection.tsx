@@ -39,9 +39,9 @@ export const ContactSection = () => {
 
           <div className="space-y-10">
             {[
-              { icon: Mail, label: "Email Us", val: "sankar.s@edriftelectric.com", color: "text-royal-blue" },
-              { icon: Phone, label: "Call Us", val: "+91-9790274709", color: "text-emerald-600" },
-              { icon: MapPin, label: "Visit Us", val: "Coimbatore, Tamil Nadu, India", color: "text-vibrant-purple" }
+              { icon: Mail, label: "Email Us", val: "info@edriftelectric.com", color: "text-royal-blue" },
+              { icon: Phone, label: "Call Us", val: "+91 97902 74709", color: "text-emerald-600" },
+              { icon: MapPin, label: "Visit Us", val: "Hosur, Tamil Nadu, India", color: "text-vibrant-purple" }
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-6 group">
                  <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-900 group-hover:scale-110 transition-transform shadow-sm">
@@ -49,7 +49,7 @@ export const ContactSection = () => {
                  </div>
                  <div>
                     <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{item.label}</p>
-                    <p className="text-slate-900 font-black font-space text-lg">{item.val}</p>
+                    <p className="text-slate-900 font-black font-space text-lg leading-tight">{item.val}</p>
                  </div>
               </div>
             ))}
@@ -63,7 +63,7 @@ export const ContactSection = () => {
            viewport={{ once: true }}
            transition={{ duration: 0.8 }}
         >
-          <div className="p-10 border border-slate-100 bg-white rounded-[40px] shadow-2xl">
+          <div className="p-12 border border-slate-100 bg-white rounded-[48px] shadow-2xl">
             {submitted ? (
               <div className="text-center py-20">
                  <div className="w-24 h-24 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center mx-auto mb-8 animate-bounce">
@@ -77,30 +77,30 @@ export const ContactSection = () => {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue">Full Name</label>
-                    <input required className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium" placeholder="Sankar S" />
+                    <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue font-space">Full Name</label>
+                    <input required className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium" placeholder="Your Name" />
                   </div>
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue">Email Address</label>
-                    <input required type="email" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium" placeholder="sankar@edrift.com" />
+                    <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue font-space">Email Address</label>
+                    <input required type="email" className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium" placeholder="email@address.com" />
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue">Project Discovery</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue font-space">Interest Area</label>
                   <select className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium appearance-none">
-                    <option>Product Inqiury</option>
+                    <option>EV Charging Solutions</option>
+                    <option>Industrial Automation</option>
                     <option>Technical Partnership</option>
-                    <option>Custom R&D Request</option>
                   </select>
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue">Your Vision</label>
-                  <textarea required rows={4} className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium resize-none" placeholder="Tell us about your project requirements..." />
+                  <label className="text-[10px] font-black uppercase tracking-widest text-royal-blue font-space">Your VISION</label>
+                  <textarea required rows={4} className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-900 focus:border-royal-blue outline-none transition-all font-medium resize-none" placeholder="How can we help you innovate?" />
                 </div>
 
-                <GlowButton type="submit" variant="primary" className="w-full h-16 text-lg rounded-2xl" disabled={isSubmitting}>
+                <GlowButton type="submit" variant="primary" className="w-full h-16 text-lg rounded-2xl shadow-xl shadow-royal-blue/30" disabled={isSubmitting}>
                    {isSubmitting ? "Transmitting..." : "Send Secure Message"}
                    <ArrowRight className="w-5 h-5 ml-2" />
                 </GlowButton>
