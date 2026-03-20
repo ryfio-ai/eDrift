@@ -9,25 +9,43 @@ import { ChevronRight, Zap } from "lucide-react";
 export const Hero = () => {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-white pt-20 pb-32">
-      {/* Subtle Background Elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-royal-blue/5 blur-[120px] rounded-full -z-10" />
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-vibrant-purple/5 blur-[100px] rounded-full -z-10" />
+      {/* Animated Subtle Background Elements */}
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.1, 1],
+          x: [0, 20, 0],
+          y: [0, -20, 0]
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-royal-blue/5 blur-[120px] rounded-full -z-10" 
+      />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.2, 1],
+          x: [0, -30, 0],
+          y: [0, 30, 0]
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-vibrant-purple/5 blur-[100px] rounded-full -z-10" 
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-6xl md:text-9xl font-black font-space text-slate-900 mb-8 tracking-tighter leading-[0.9]"
-        >
-          Welcome to <br />
-          <span className="text-gradient">E-Drift_</span>
-        </motion.h1>
+        <div className="overflow-hidden mb-8">
+           <motion.h1
+             initial={{ y: "100%" }}
+             animate={{ y: 0 }}
+             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+             className="text-6xl md:text-9xl font-black font-space text-slate-900 tracking-tighter leading-[0.9]"
+           >
+             Welcome to <br />
+             <span className="text-gradient">E-Drift_</span>
+           </motion.h1>
+        </div>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
           className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-12 leading-relaxed font-medium"
         >
           Innovative power solutions tailored to unique industry needs. 

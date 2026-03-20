@@ -12,20 +12,25 @@ export const AboutUs = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
             <h2 className="text-4xl md:text-6xl font-black font-space text-slate-900 mb-8 tracking-tighter">
               From Conception <br />
               to <span className="text-gradient">Completion_</span>
             </h2>
-            <p className="text-xl text-slate-600 leading-relaxed mb-10 font-medium">
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 1 }}
+              className="text-xl text-slate-600 leading-relaxed mb-10 font-medium"
+            >
               e-Drift Electric specializes in innovative power electronics, from Battery Chargers to Power Supplies, 
               revolutionizing the industry with locally made, pioneering solutions tailored to the unique 
               needs of our clients.
-            </p>
+            </motion.p>
             
             <div className="space-y-6 mb-12">
                <div className="p-8 bg-white border border-slate-200 rounded-[32px] shadow-sm group hover:shadow-xl transition-all duration-500">
