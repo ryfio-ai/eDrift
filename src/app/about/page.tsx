@@ -41,15 +41,14 @@ export default function AboutPage() {
           >
             <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-6">Our Engineering Mission</div>
             <h1 className="text-4xl md:text-6xl font-semibold text-slate-900 mb-8 leading-tight">
-               Powering the <br />
-               <span className="text-brand-primary">EV Revolution</span>
+               Redefining EV <br />
+               <span className="text-brand-primary">Charging AI_</span>
             </h1>
             <p className="text-lg text-slate-600 font-medium leading-relaxed mb-10">
-               Founded in **2022** and incubated within the prestigious **IIT Palakkad** research ecosystem, 
-               eDrift Electric was born from a singular vision: to bridge the gap between 
-               theoretical power electronics and industrial-grade automotive deployment. 
-               We empower OEMs with mission-critical SiC/GaN power conversion systems that 
-               define the new standard for efficiency and functional safety.
+               Founded in **2018**, eDrift Electric is dedicated to providing world-class EV charging 
+               solutions that combine efficiency, reliability, and innovation. With over **15 years** 
+                of industry experience, we are committed to making electric vehicle charging accessible, 
+               safe, and convenient for everyone across the globe.
             </p>
             <div className="flex flex-wrap gap-6 border-t border-slate-100 pt-10">
                <div className="flex items-center gap-3">
@@ -92,10 +91,10 @@ export default function AboutPage() {
               
               <div className="grid grid-cols-2 gap-6">
                  {[
-                   { label: "Founded", val: "2022", sub: "IIT Palakkad" },
-                   { label: "IP Portfolio", val: "12+", sub: "Filed Patents" },
-                   { label: "Test Hours", val: "50k+", sub: "Validation Cycles" },
-                   { label: "OEM Partners", val: "15+", sub: "Global Ecosystem" }
+                   { label: "Founded", val: "2018", sub: "Global HQ" },
+                   { label: "Products", val: "10K+", sub: "Units Delivered" },
+                   { label: "Countries", val: "20+", sub: "Served Global" },
+                   { label: "Efficiency", val: "≥97%", sub: "Industrial Peak" }
                  ].map((m, i) => (
                    <div key={i} className="p-8 rounded-3xl bg-slate-50 border border-slate-100 text-center flex flex-col justify-center border-b-4 border-b-brand-primary">
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">{m.label}</p>
@@ -119,10 +118,10 @@ export default function AboutPage() {
               </div>
               <div>
                  <div className="text-5xl md:text-6xl font-semibold text-brand-primary mb-4 tracking-tighter">
-                   <Counter value={50000} />
+                   <Counter value={10000} suffix="+" />
                  </div>
-                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Chargers Powered</p>
-                 <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Field-verified units across OEM partner fleets.</p>
+                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Chargers Delivered</p>
+                 <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Field-verified units across global OEM fleets.</p>
               </div>
               <div>
                  <div className="text-5xl md:text-6xl font-semibold text-white mb-4 tracking-tighter">

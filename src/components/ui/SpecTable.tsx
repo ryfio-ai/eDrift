@@ -25,7 +25,7 @@ export const SpecTable = ({ rows }: SpecTableProps) => {
           {rows.map((row, i) => (
             <tr key={i} className="group hover:bg-white/[0.02] transition-colors">
               <td className="px-8 py-5 text-sm font-bold text-text-secondary group-hover:text-white transition-colors">{row.label}</td>
-              <td className="px-8 py-5 text-sm font-black font-space text-white">{row.value}</td>
+              <td className="px-8 py-5 text-sm font-black font-sans text-white">{row.value}</td>
             </tr>
           ))}
         </tbody>

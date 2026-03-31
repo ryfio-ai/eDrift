@@ -86,16 +86,16 @@ export default function Footer() {
             <ul className="space-y-6">
               <li className="flex items-start gap-4 group">
                  <Mail className="w-5 h-5 text-brand-primary shrink-0 transition-transform" />
-                 <span className="text-slate-500 text-sm font-medium">eng@edriftelectric.com</span>
+                 <span className="text-slate-500 text-sm font-medium leading-relaxed">info@edriftelectric.com</span>
               </li>
               <li className="flex items-start gap-4 group">
                  <Phone className="w-5 h-5 text-brand-primary shrink-0 transition-transform" />
-                 <span className="text-slate-500 text-sm font-medium">+91 97902 74709</span>
+                 <span className="text-slate-500 text-sm font-medium leading-relaxed">+91 97902 74709</span>
               </li>
               <li className="flex items-start gap-4 group">
                  <MapPin className="w-5 h-5 text-brand-primary shrink-0 transition-transform" />
                  <span className="text-slate-500 text-sm font-medium leading-relaxed">
-                    Hosur, Tamil Nadu, India
+                    Dr A.P.J Abdul Kalam Block,<br/>IIT Palakkad, 678623
                  </span>
               </li>
             </ul>

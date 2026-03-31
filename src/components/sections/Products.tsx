@@ -53,7 +53,7 @@ export const Products = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="max-w-2xl">
             <Badge variant="purple" className="mb-6">Global Lineup</Badge>
-            <h2 className="text-4xl md:text-6xl font-black font-space tracking-tighter text-slate-900">
+            <h2 className="text-4xl md:text-6xl font-black font-sans tracking-tighter text-slate-900">
               Technical <br />
               <span className="text-gradient">Product Roadmap</span>
             </h2>
@@ -108,7 +108,7 @@ export const Products = () => {
                   <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-royal-blue mb-4 shadow-sm">
                      <cat.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-black font-space mb-2 text-slate-900">{cat.name}</h3>
+                  <h3 className="text-2xl font-black font-sans mb-2 text-slate-900">{cat.name}</h3>
                   <p className="text-slate-500 text-sm mb-6 font-medium leading-relaxed">{cat.tagline}</p>
                   
                   <div className="mt-auto space-y-3">

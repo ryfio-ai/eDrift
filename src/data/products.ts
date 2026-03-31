@@ -1,9 +1,9 @@
 export interface Product {
   id: string;
-  slug: string; // New field for dynamic routing
+  slug: string;
   name: string;
   subtitle: string;
-  description: string; // Expanded 150-word description
+  description: string;
   category: "Portable Charger" | "On-Board Charger" | "Din Rail Power Supply" | "Custom PSU";
   powerRating: string;
   inputType: string;
@@ -14,8 +14,6 @@ export interface Product {
   badges: ("In production" | "Customizable" | "Sample available")[];
   useCase: string[];
   image: string;
-  
-  // Expanded B2B Technical Data
   specs: { label: string; value: string; notes?: string }[];
   features: string[];
   applications: { type: string; compatibility: string }[];
@@ -26,170 +24,169 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: "ebc-33",
+    id: "obc-33",
     slug: "onboard-charger-33",
     name: "3.3kW On-Board Charger",
-    subtitle: "Automotive-Grade SiC High-Efficiency Charging",
+    subtitle: "High-Efficiency SiC Modular Power",
     category: "On-Board Charger",
     powerRating: "3.3 kW",
-    inputType: "Single Phase (180V-265V AC)",
-    outputVoltage: "72V DC (Configurable)",
+    inputType: "Universal AC (180V-265V)",
+    outputVoltage: "48V - 400V (7 Options)",
     ipRating: "IP67",
-    efficiency: "95%+",
+    efficiency: "≥97%",
     topology: "Isolated LLC Resonant",
     badges: ["In production", "Customizable"],
-    useCase: ["2W/3W", "4W"],
+    useCase: ["2W/3W", "L7 Category"],
     image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?q=80&w=800&h=600&auto=format&fit=crop",
-    description: "The eDrift 3.3kW On-Board Charger is a high-density power conversion solution designed specifically for the next generation of electric two-wheelers and three-wheelers. Leveraging advanced Silicon Carbide (SiC) MOSFETs, this unit achieves peak efficiencies exceeding 95% while maintaining a compact, thermal-efficient footprint. It features a fully isolated LLC resonant topology, ensuring mission-critical reliability and low EMI signature. The ruggedized IP67 enclosure and ASIL-D ready diagnostics make it the ideal choice for automotive OEMs requiring uncompromising performance in harsh environmental conditions.",
+    description: "The eDrift 3.3kW On-Board Charger redefined EV power density. Featuring a market-leading ≥97% conversion efficiency across a broad voltage spectrum from 48V to 400V. Built with Silicon Carbide (SiC) MOSFETs, this series is designed for 2-wheeler and 3-wheeler OEMs requiring mission-critical reliability and compact form factors. Fully isolated LLC resonant topology ensures minimal EMI and maximum safety for automotive-grade integration.",
     specs: [
-      { label: "Input Voltage Range", value: "180V - 265V AC", notes: "Full power range" },
-      { label: "Output Power", value: "3.3 kW Peak", notes: "72V @ 45A max" },
-      { label: "Efficiency", value: "95.5% @ Full Load", notes: "Ambient 25°C" },
-      { label: "Weight", value: "4.2 kg", notes: "Compact aluminum housing" },
-      { label: "Cooling", value: "Natural Convection / Fan", notes: "Dependent on frame" }
+      { label: "Voltage Options", value: "48V / 60V / 72V / 96V / 240V / 400V", notes: "Configurable by OEM" },
+      { label: "Efficiency", value: "≥97%", notes: "Industry Leading Benchmark" },
+      { label: "Communication", value: "CAN 2.0B / SAE J1939", notes: "Standard Automotive Protocol" },
+      { label: "Weight", value: "4.2 kg", notes: "Aluminum Housing" },
+      { label: "Cooling", value: "Natural Air Cooling", notes: "Maintenance Free" }
     ],
     features: [
-      "Ultra-low EMI signature compliant with CISPR 25 Class 3",
-      "CAN 2.0B Communication protocol for real-time telemetry",
-      "Integrated over-voltage and over-temperature protection",
-      "High power density: 1.5 kW/L",
-      "Automotive-grade ASIL-D diagnostic readiness",
-      "Wide operating temperature: -40°C to +85°C"
+      "Ultra-high efficiency ≥97% for minimal thermal output",
+      "Robust IP67 protection against moisture and debris",
+      "Modular design for rapid platform integration",
+      "Comprehensive safety suite: OVP, OCP, OTP",
+      "Automotive grade component selection (AEC-Q)",
+      "Wide operating temperature range: -40°C to +85°C"
     ],
     applications: [
-      { type: "Electric 2W/3W", compatibility: "72V LFP/NMC Battery Packs" },
-      { type: "Micro-Mobility", compatibility: "Standard AC Grid Integration" }
+      { type: "Electric 2W/3W", compatibility: "48V / 72V Battery Packs" },
+      { type: "Commercial Fleets", compatibility: "L7 Category Utility Vehicles" }
     ],
-    compliance: ["ASIL-D Ready", "IEC 61851-1", "SAE J1772", "AIS 038"],
-    customization: ["Voltage output profiles", "CAN protocol mapping", "Enclosure mounting points"],
+    compliance: ["CE Certified", "IEC 61851-1", "SAE J1772", "AIS 038"],
+    customization: ["CAN Protocol Mapping", "Voltage Trim Points", "Mounting Brackets"],
     leadTime: [
-      { volume: "1-100 units", weeks: "4 weeks" },
-      { volume: "100-500 units", weeks: "8 weeks" },
-      { volume: "500+ units", weeks: "12 weeks" }
+      { volume: "Batch Pilot", weeks: "4 weeks" },
+      { volume: "Production", weeks: "12 weeks" }
     ]
   },
   {
-    id: "ebc-66",
+    id: "obc-66",
     slug: "onboard-charger-66",
     name: "6.6kW On-Board Charger",
-    subtitle: "Ultra-Compact Liquid Cooled Solution",
+    subtitle: "Liquid-Cooled High Power OEM Series",
     category: "On-Board Charger",
     powerRating: "6.6 kW",
-    inputType: "Three Phase (380V-415V AC)",
-    outputVoltage: "96V DC / 400V DC Options",
+    inputType: "Three Phase / Single Phase",
+    outputVoltage: "96V / 240V / 400V Options",
     ipRating: "IP68",
-    efficiency: "96.5%",
+    efficiency: "≥97%",
     topology: "ZVS Full Bridge + LLC",
     badges: ["In production", "Sample available"],
-    useCase: ["4W", "Commercial Fleet"],
+    useCase: ["Commercial Trucks", "Passenger 4W"],
     image: "https://images.unsplash.com/photo-1620218173997-442402f114a2?q=80&w=800&h=600&auto=format&fit=crop",
-    description: "Built for heavy-duty electric vehicle applications, the 6.6kW On-Board Charger utilizes a sophisticated liquid-cooled thermal management system to maintain peak performance even during sustained high-load cycles. Designed for 4W passenger vehicles and commercial delivery fleets, this unit offers three-phase input compatibility and multi-voltage output options. The high-frequency ZVS (Zero Voltage Switching) architecture minimizes thermal losses, allowing for a 30% reduction in volume compared to traditional air-cooled alternatives. Fully compliant with international automotive safety standards, it provides the reliability required for high-utilization fleet environments.",
+    description: "Engineered for heavy-duty electrification, the 6.6kW OBC series offers premium liquid-cooled thermal management for sustained high-load performance. Targeting commercial trucks and high-performance passenger vehicles, this unit delivers up to 60A at 96V or 16.5A at 400V. The high-frequency ZVS architecture minimizes switching losses, delivering a compact solution with official CE certification and full functional safety readiness.",
     specs: [
-      { label: "Input Voltage", value: "380V - 415V AC", notes: "Three-phase support" },
-      { label: "Output Voltage", value: "96V - 450V DC", notes: "Configurable by OEM" },
-      { label: "Efficiency", value: "96.5%", notes: "Nominal efficiency" },
-      { label: "Cooling Method", value: "Liquid Cooled", notes: "Ethylene Glycol mix" },
-      { label: "Communication", value: "CAN 2.0B / J1939", notes: "Industrial standard" }
+      { label: "Max Current", value: "60A @ 96V | 16.5A @ 400V", notes: "High power density" },
+      { label: "Efficiency", value: "≥97%", notes: "Nominal" },
+      { label: "Cooling", value: "Liquid Cooling", notes: "Optimized for heavy duty" },
+      { label: "IP Rating", value: "IP68", notes: "Submersible Grade Protection" },
+      { label: "Communication", value: "CAN 2.0B", notes: "Industrial standard" }
     ],
     features: [
-      "Liquid-cooled for 100% duty cycle operation",
-      "Bi-directional charging capability (V2L) optional",
-      "High isolation voltage: 2.5kV AC",
-      "IP68 Rated for extreme outdoor environments",
-      "Modular design for parallel scalability",
-      "Diagnostic feedback via UDS protocol"
+      "Liquid-cooled for 100% duty cycle in extreme heat",
+      "Submersible-grade IP68 protection",
+      "High isolation voltage (2.5kV AC)",
+      "Modular scalability for higher power needs",
+      "SAE J1939 Compliant firmware",
+      "CE Certified for global market entry"
     ],
     applications: [
-      { type: "L5 Commercial Fleets", compatibility: "High-capacity battery systems" },
-      { type: "Passenger 4W", compatibility: "Integrated CMS compatibility" }
+      { type: "Commercial Trucks", compatibility: "High-voltage battery arrays" },
+      { type: "Passenger Vehicles", compatibility: "Integrated CMS / VCU" }
     ],
-    compliance: ["ASIL-D Ready", "IEC 62196", "SAE J1772", "AIS 156"],
-    customization: ["Cooling port orientation", "Firmware safety limits", "Custom harness connectors"],
+    compliance: ["CE Certified", "IEC 62196", "SAE J1772", "AIS 156"],
+    customization: ["Harness Connectors", "Firmware Over-the-Air", "Cooling Fittings"],
     leadTime: [
       { volume: "Sample Units", weeks: "6 weeks" },
-      { volume: "Production 100+", weeks: "14 weeks" }
+      { volume: "Volume Production", weeks: "14 weeks" }
     ]
   },
   {
-    id: "epc-22",
-    slug: "portable-charger-22",
-    name: "2.2kW Portable Charger",
-    subtitle: "Premium Plug-and-Play EVSE Solution",
+    id: "pc-33",
+    slug: "portable-charger-33",
+    name: "3.3kW Portable Charger",
+    subtitle: "Limitless & Flexible Plug-and-Play EVSE",
     category: "Portable Charger",
-    powerRating: "2.2 kW",
+    powerRating: "3.3 kW",
     inputType: "Single Phase (230V AC)",
-    outputVoltage: "48V DC / 60V DC",
+    outputVoltage: "48V - 400V (Universal)",
     ipRating: "IP65",
-    efficiency: "93%+",
+    efficiency: "≥95%",
     topology: "PFC + LLC Resonant",
     badges: ["In production"],
-    useCase: ["2W/3W"],
+    useCase: ["2W/3W", "Personal Charging"],
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&h=600&auto=format&fit=crop",
-    description: "The eDrift 2.2kW Portable Charger is a compact, plug-and-play solution designed for the growing electric two-wheeler and three-wheeler market. Optimized for user convenience and safety, it features a ruggedized IP65 enclosure suitable for diverse residential and commercial environments. The interleaved PFC (Power Factor Correction) and LLC resonant converter architecture ensure high efficiency and minimal noise. Equipped with comprehensive safety features including leakage protection and auto-shutoff, it provides a reliable, consumer-friendly charging experience for urban mobility.",
+    description: "The eDrift 3.3kW Portable Charger is a versatile EVSE solution designed for users who require charging flexibility without fixed installation. Supporting all standard voltage options from 48V to 400V, this compact unit is perfect for urban residency and commercial fleet trials. Integrated auto-grid stabilization and comprehensive safety indicators make it the preferred choice for reliable, anytime charging in diverse environments.",
     specs: [
-      { label: "Nominal Output", value: "2.2 kW", notes: "Stable @ 230V input" },
-      { label: "Output Voltage", value: "48V / 60V DC", notes: "Auto-detection" },
-      { label: "Connector Type", value: "Type 2 / Custom", notes: "Regional options" },
-      { label: "Weight", value: "2.8 kg", notes: "Ultra-portable design" }
+      { label: "Output Power", value: "3.3 kW", notes: "Stable @ 230V" },
+      { label: "Voltage Range", value: "48V - 400V Universal", notes: "Auto-detection ready" },
+      { label: "Form Factor", value: "Compact & Portable", notes: "No installation required" },
+      { label: "Efficiency", value: "≥95%", notes: "Premium power conversion" }
     ],
     features: [
-      "Auto-grid detection and stabilization",
-      "Over-temperature and short-circuit protection",
-      "Integrated 5-meter heavy-duty cable",
-      "LED status indicators for real-time feedback",
-      "Eco-mode for battery longevity",
-      "Field-replaceable fuse system"
+      "No installation required - plug directly into AC grid",
+      "Supports all eDrift voltage configurations",
+      "Lightweight, ruggedized housing (IP65)",
+      "High Power Factor Correction (PFC > 0.98)",
+      "Digital display for real-time charge monitoring",
+      "Automatic thermal-derating safety"
     ],
     applications: [
-      { type: "Urban 2W/3W", compatibility: "Standard home socket (15A/16A)" },
-      { type: "E-Rickshaws", compatibility: "Fleet charging stations" }
+      { type: "Personal EV", compatibility: "Standard home AC socket" },
+      { type: "Commercial Trials", compatibility: "Fleet demonstration vehicles" }
     ],
-    compliance: ["IEC 61851-21-2", "AIS 138-1", "CE", "BIS"],
-    customization: ["Branding & Logo", "Connector cable length", "Color options for housing"],
+    compliance: ["CE Certified", "IEC 61851-21-2", "AIS 138-1", "BIS"],
+    customization: ["Cable Lengths", "Connector Type (Type 2 / Custom)", "OEM Branding"],
     leadTime: [
-      { volume: "Standard Stock", weeks: "1 week" },
-      { volume: "Custom Bulk", weeks: "6-8 weeks" }
+      { volume: "Stock Orders", weeks: "1 week" },
+      { volume: "Custom Bulk", weeks: "8 weeks" }
     ]
   },
   {
     id: "dr-psu-48",
     slug: "din-rail-psu-48",
     name: "Industrial Din Rail PSU",
-    subtitle: "High-Efficiency Control Cabinet Power",
+    subtitle: "Robust Power for Industrial Control",
     category: "Din Rail Power Supply",
     powerRating: "1.2 kW",
     inputType: "Universal AC (90V-305V)",
     outputVoltage: "48V DC",
-    ipRating: "IP20 (Cabinet)",
+    ipRating: "IP20",
     efficiency: "94.5%",
     topology: "Isolated DC-DC",
-    badges: ["Customizable", "Sample available"],
+    badges: ["Customizable"],
     useCase: ["Industrial Automation"],
     image: "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?q=80&w=800&h=600&auto=format&fit=crop",
-    description: "Designed for mission-critical industrial automation and control systems, the eDrift Din Rail PSU offers a robust 1.2kW power solution in a standard industrial form factor. With a wide input range and precisely regulated 48V output, this unit is engineered to power PLC systems, motor drives, and industrial communication hubs. Its high efficiency minimizes heat generation within cabinets, reducing the need for active cooling and extending the lifecycle of adjacent electronics. The isolated topology provides superior noise immunity and protection against line surges, meeting stringent industrial EMC standards.",
+    description: "Mission-critical 1.2kW DIN rail power supply designed for industrial control cabinets and automation infrastructure. Featuring a wide universal input and highly stabilized 48V DC output, this unit powers everything from PLC systems to high-torque motor drives. The high MTBF and cold-start capability ensure maximum uptime in harsh factory environments, while its high efficiency reduces cabinet thermal load.",
     specs: [
-      { label: "Input Range", value: "90V - 305V AC", notes: "Full range support" },
-      { label: "Output Voltage", value: "48V DC (±2%)", notes: "Highly regulated" },
-      { label: "Mounting Type", value: "DIN Rail TS-35", notes: "Standard industrial" },
-      { label: "MTBF", value: "> 500,000 Hours", notes: "Calculated @ 25°C" }
+      { label: "MTBF", value: "> 500,000 Hours", notes: "Industrial Grade" },
+      { label: "Output Accuracy", value: "±1%", notes: "Precisely Regulated" },
+      { label: "Cooling", value: "Convection", notes: "No fans required" },
+      { label: "Protection", value: "Overload/Short Circuit", notes: "Auto-recovery" }
     ],
     features: [
-      "Parallel connection support for higher wattage",
-      "PFC active power factor correction (>0.98)",
-      "Built-in DC-OK relay contact",
-      "Overload constant current limiting",
       "Cold-start proof at -40°C",
-      "Tool-less mounting system"
+      "Tool-less DIN rail mounting system",
+      "Low harmonic distortion (THD < 5%)",
+      "Highly isolated output (3kV isolation)",
+      "Active PFC for energy efficiency",
+      "Integrated health status relay"
     ],
     applications: [
-      { type: "CNC Automation", compatibility: "Standard control cabinets" },
-      { type: "Telecom Hubs", compatibility: "48V backup systems" }
+      { type: "Factory Automation", compatibility: "PLC/SCADA Cabinets" },
+      { type: "Energy Storage", compatibility: "BMS Control Power" }
     ],
     compliance: ["UL 508", "EN 62368-1", "CE", "Class 1 Div 2"],
-    customization: ["Output voltage trim range", "Alarm signal mapping", "Special coating for harsh files"],
+    customization: ["Output Voltage Trim", "Monitoring BUS (Modbus)", "Ruggedized Components"],
     leadTime: [
-      { volume: "50-200 units", weeks: "3 weeks" },
-      { volume: "Bulk OEM", weeks: "10 weeks" }
+      { volume: "50-500 units", weeks: "3 weeks" },
+      { volume: "OEM Batch", weeks: "10 weeks" }
     ]
   }
 ];

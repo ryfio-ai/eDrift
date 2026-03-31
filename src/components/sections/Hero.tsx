@@ -7,76 +7,74 @@ import Link from "next/link";
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-white pt-32 pb-40">
+    <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden bg-white pt-32 pb-48">
       {/* Subtle background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-brand-primary/5 blur-[120px] rounded-full -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-brand-primary/5 blur-[150px] rounded-full -z-10" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.8 }}
-           className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary mb-12 shadow-sm"
+           className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary mb-12 shadow-sm"
         >
            <span className="w-2 h-2 rounded-full bg-brand-primary animate-pulse" />
-           Next-Gen EV Power Electronics
+           Automotive Grade Systems_
         </motion.div>
 
-        <div className="max-w-5xl mx-auto mb-16">
+        <div className="max-w-5xl mx-auto mb-20 text-center">
            <motion.h1
              initial={{ opacity: 0, y: 20 }}
              animate={{ opacity: 1, y: 0 }}
              transition={{ duration: 0.8, delay: 0.2 }}
-             className="text-5xl md:text-8xl font-black text-slate-900 tracking-tight leading-[1.05] mb-10"
+             className="text-6xl md:text-9xl font-black text-slate-900 tracking-tight leading-[0.95] mb-12"
            >
-             High-Efficiency <span className="text-brand-primary">Power Systems_</span> <br className="hidden md:block" /> for Global OEMs
+             Redefining EV <br />
+             <span className="text-brand-primary">Charging AI_</span>
            </motion.h1>
            
            <motion.p
              initial={{ opacity: 0, y: 20 }}
              animate={{ opacity: 1, y: 0 }}
              transition={{ duration: 0.8, delay: 0.3 }}
-             className="text-xl md:text-2xl text-slate-500 leading-relaxed font-semibold max-w-3xl mx-auto"
+             className="text-xl md:text-3xl text-slate-500 leading-relaxed font-semibold max-w-3xl mx-auto mb-16"
            >
-             eDrift Electric partners with automotive manufacturers to deliver 
-             specialized SiC-based conversion systems with 97.5% peak efficiency.
+             Flexible & Limitless. Premium onboard and portable EV chargers with industry-leading <span className="text-slate-900">≥97% efficiency</span> across 7 voltage options.
            </motion.p>
+
+           <motion.div
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.8, delay: 0.4 }}
+             className="flex flex-col sm:flex-row items-center justify-center gap-8"
+           >
+             <Link href="/contact" className="btn-primary min-w-[280px] h-16 text-xs shadow-2xl shadow-brand-primary/30">
+               Engineering Consultation
+               <ArrowRight className="w-5 h-5 ml-2" />
+             </Link>
+             <Link href="/products" className="btn-outline min-w-[280px] h-16 text-xs group">
+               Technical Specifications
+               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+             </Link>
+           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-32"
-        >
-          <Link href="/contact" className="btn-primary min-w-[240px] text-sm">
-            Request Quote
-            <ArrowRight className="w-5 h-5 ml-1" />
-          </Link>
-          <Link href="/products" className="btn-outline min-w-[240px] text-sm group">
-            View Specification Catalog
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
-
-        {/* Feature Highlights - Enhanced Visibility */}
+        {/* Global Authority Metrics */}
         <motion.div
            initial={{ opacity: 0, y: 40 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 0.6, duration: 1 }}
-           className="grid grid-cols-1 md:grid-cols-3 gap-16 border-t border-slate-100 pt-20"
+           className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 items-center border-t border-slate-100 pt-20"
         >
           {[
-            { icon: Shield, label: "Safety Integrity", val: "ASIL-D Certified" },
-            { icon: Zap, label: "Performance", val: "97.5% Efficiency" },
-            { icon: Globe, label: "Compliance", val: "Global SAE / IEC" },
+            { label: "Products Delivered", val: "10K+" },
+            { label: "Countries Served", val: "20+" },
+            { label: "Industry Experience", val: "15+ Yrs" },
+            { label: "Peak Efficiency", val: "≥97%" }
           ].map((item, i) => (
-            <div key={i} className="flex flex-col items-center group">
-               <div className="w-16 h-16 rounded-[20px] bg-slate-50 border border-slate-100 flex items-center justify-center text-brand-primary mb-6 group-hover:bg-brand-primary group-hover:text-white group-hover:shadow-xl group-hover:shadow-brand-primary/20 transition-all duration-500">
-                  <item.icon className="w-7 h-7" />
-               </div>
-               <p className="text-[10px] uppercase tracking-[0.25em] text-slate-400 font-black mb-2">{item.label}</p>
-               <h4 className="text-xl font-bold text-slate-900 tracking-tight">{item.val}</h4>
+            <div key={i} className="flex flex-col items-center">
+               <p className="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-black mb-3">{item.label}</p>
+               <h4 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">{item.val}</h4>
             </div>
           ))}
         </motion.div>

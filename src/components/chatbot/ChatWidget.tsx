@@ -72,7 +72,7 @@ export const ChatWidget = () => {
                    />
                 </div>
                 <div>
-                   <span className="block font-black font-space text-sm tracking-tight text-white">eDrift AI Expert</span>
+                   <span className="block font-black font-sans text-sm tracking-tight text-white">eDrift AI Expert</span>
                    <div className="flex items-center gap-1.5">
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                       <span className="text-[10px] uppercase tracking-widest font-black text-white/70">Online</span>

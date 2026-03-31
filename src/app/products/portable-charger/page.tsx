@@ -32,7 +32,7 @@ export default function PortableChargerPage() {
              animate={{ opacity: 1, x: 0 }}
            >
              <Badge variant="purple" className="mb-8">Premium Powerhouse</Badge>
-             <h1 className="text-5xl md:text-7xl font-black font-space text-slate-900 mb-8 tracking-tighter leading-none">
+             <h1 className="text-5xl md:text-7xl font-black font-sans text-slate-900 mb-8 tracking-tighter leading-none">
                 Portable EV <br />
                 <span className="text-gradient">Charger Series</span>
              </h1>
@@ -61,7 +61,7 @@ export default function PortableChargerPage() {
                   <div className="w-32 h-32 rounded-3xl bg-white shadow-xl flex items-center justify-center">
                      <Battery className="w-16 h-16 text-vibrant-purple" />
                   </div>
-                  <Badge variant="cyan" className="font-space">Premium Grade Components</Badge>
+                  <Badge variant="cyan" className="font-sans">Premium Grade Components</Badge>
               </div>
            </motion.div>
         </div>
@@ -71,7 +71,7 @@ export default function PortableChargerPage() {
            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
               <div>
                  <Badge variant="purple" className="mb-4">System Data</Badge>
-                 <h2 className="text-4xl font-black font-space text-slate-900 tracking-tighter">Technical Specifications</h2>
+                 <h2 className="text-4xl font-black font-sans text-slate-900 tracking-tighter">Technical Specifications</h2>
               </div>
            </div>
 
@@ -87,7 +87,7 @@ export default function PortableChargerPage() {
                    {Portable_Specs.map((row, i) => (
                      <tr key={i} className="group hover:bg-white transition-colors">
                        <td className="px-8 py-5 text-sm font-bold text-slate-500 group-hover:text-slate-900 transition-colors">{row.label}</td>
-                       <td className="px-8 py-5 text-sm font-black font-space text-slate-900">{row.value}</td>
+                       <td className="px-8 py-5 text-sm font-black font-sans text-slate-900">{row.value}</td>
                      </tr>
                    ))}
                  </tbody>
