@@ -9,13 +9,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+// ...
   title: {
-    default: 'eDrift Electric — B2B Power Electronics for EV OEMs',
-    template: '%s | eDrift Electric',
+    default: 'eDrift Electric — Automotive-Grade Power Electronics for EV OEMs',
+    template: '%s | eDrift Electric Engineering',
   },
-  description: 'eDrift Electric specializes in high-reliability EV power conversion products for OEMs, fleet operators, and industrial systems. Modular, efficient, and scalable charging infrastructure.',
-  keywords: ['EV charging OEM', 'B2B power electronics', 'SiC MOSFET chargers', 'on-board charging systems', 'fleet EV solutions'],
-  authors: [{ name: 'eDrift Electric Private Limited' }],
+  description: 'eDrift Electric specializes in 97.5% efficient SiC/GaN power conversion systems, ASIL-D compliant on-board chargers, and industrial PSU solutions for the global EV ecosystem. Founded at IIT Palakkad.',
+  keywords: [
+    'EV on-board charger OEM', 
+    'SiC power electronics', 
+    'ASIL-D compliant charging', 
+    'SiC MOSFET EV charger', 
+    'GaN power conversion', 
+    'Industrial DC Fast Chargers', 
+    'EV charging India OEM'
+  ],
+  authors: [{ name: 'eDrift Electric Engineering' }],
   creator: 'eDrift Electric',
   metadataBase: new URL('https://edriftelectric.com'),
   openGraph: {
@@ -26,7 +35,7 @@ export const metadata: Metadata = {
     images: [{ url: '/images/edrift logo.png', width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' },
-  robots: { index: true, follow: true },
+  robots: { index: true, follow: true, 'max-image-preview': 'large' },
 };
 
 import { Navbar } from "@/components/layout/Navbar";

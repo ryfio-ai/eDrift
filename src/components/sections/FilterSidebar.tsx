@@ -11,6 +11,7 @@ export interface FilterState {
   outputVoltage: string[];
   ipRating: string[];
   useCase: string[];
+  status: string[];
 }
 
 interface FilterSidebarProps {
@@ -49,6 +50,11 @@ const filterGroups = [
     id: "useCase",
     label: "Use Case",
     options: ["2W/3W", "4W", "Commercial Fleet", "Industrial Automation"],
+  },
+  {
+    id: "status",
+    label: "Availability Status",
+    options: ["In production", "Customizable", "Sample available"],
   },
 ];
 
@@ -122,7 +128,7 @@ export const FilterSidebar = ({ filters, onChange, onClear }: FilterSidebarProps
         ))}
       </div>
 
-      <div className="sticky bottom-6">
+      <div className="pt-4">
         <div className="p-6 rounded-2xl bg-white border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden relative group">
            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
               <Filter className="w-12 h-12 text-brand-primary" />

@@ -8,16 +8,17 @@ import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from "lucide-react";
 export default function Footer() {
   const links = {
     products: [
-      { name: "Portable Battery Charger", href: "/products/portable-charger" },
-      { name: "On-Board Charger (OEM)", href: "/products/onboard-charger" },
-      { name: "Power Supply Units", href: "/#products" },
-      { name: "Custom Solutions", href: "/contact" },
+      { name: "3.3kW On-Board Charger", href: "/products/ebc-33-sic" },
+      { name: "Portable Fleet Charger", href: "/products/ebc-portable" },
+      { name: "Custom PSU Solution", href: "/products/custom-psu" },
+      { name: "DC Fast Charging", href: "/products/dc-fast-charger" },
     ],
     company: [
-      { name: "About Us", href: "/#about" },
-      { name: "Design Calculation", href: "https://edrift-calculator.vercel.app/" },
-      { name: "Technical Support", href: "/contact" },
-      { name: "Privacy Policy", href: "#" },
+      { name: "About Engineering", href: "/about" },
+      { name: "Our Team", href: "/team" },
+      { name: "Case Study Portal", href: "/case-studies" },
+      { name: "Engineering Blog", href: "/blog" },
+      { name: "Design Calculator", href: "https://edrift-calculator.vercel.app/" },
     ],
     social: [
       { icon: Linkedin, href: "https://www.linkedin.com/in/sankar-edriftelectric" },
@@ -85,7 +86,7 @@ export default function Footer() {
             <ul className="space-y-6">
               <li className="flex items-start gap-4 group">
                  <Mail className="w-5 h-5 text-brand-primary shrink-0 transition-transform" />
-                 <span className="text-slate-500 text-sm font-medium">info@edriftelectric.com</span>
+                 <span className="text-slate-500 text-sm font-medium">eng@edriftelectric.com</span>
               </li>
               <li className="flex items-start gap-4 group">
                  <Phone className="w-5 h-5 text-brand-primary shrink-0 transition-transform" />

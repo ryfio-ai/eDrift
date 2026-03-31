@@ -20,8 +20,9 @@ export const Navbar = () => {
   const navLinks = [
     { name: "Products", href: "/products" },
     { name: "Technology", href: "/technology" },
-    { name: "About", href: "/about" },
-    { name: "Design Calculation", href: "https://edrift-calculator.vercel.app/" },
+    { name: "Case Studies", href: "/case-studies" },
+    { name: "Engineering Blog", href: "/blog" },
+    { name: "Design Calculator", href: "https://edrift-calculator.vercel.app/" },
   ];
 
   return (

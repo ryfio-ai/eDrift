@@ -59,14 +59,14 @@ export const Team = () => {
                 </div>
                 
               </div>
-
+ 
               <h3 className="text-4xl font-black font-space text-slate-900 mb-2 tracking-tight">{founder.name}</h3>
               <p className="text-royal-blue font-black uppercase tracking-[0.25em] text-[11px] mb-8">{founder.role}</p>
               
               <p className="text-slate-500 text-lg font-medium leading-relaxed mb-10 italic px-4">
                 &quot;{founder.bio}&quot;
               </p>
-
+ 
               <div className="flex justify-center gap-6">
                  {[
                    { icon: Linkedin, href: founder.linkedin, label: "LinkedIn" },

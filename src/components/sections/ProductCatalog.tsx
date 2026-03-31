@@ -14,6 +14,7 @@ const initialFilters: FilterState = {
   outputVoltage: [],
   ipRating: [],
   useCase: [],
+  status: [],
 };
 
 export const ProductCatalog = () => {
@@ -32,8 +33,9 @@ export const ProductCatalog = () => {
       const matchOutput = filters.outputVoltage.length === 0 || filters.outputVoltage.includes(product.outputVoltage);
       const matchIP = filters.ipRating.length === 0 || filters.ipRating.includes(product.ipRating);
       const matchUseCase = filters.useCase.length === 0 || product.useCase.some(uc => filters.useCase.includes(uc));
+      const matchStatus = filters.status.length === 0 || product.badges.some(b => filters.status.includes(b));
 
-      return matchSearch && matchCategory && matchPower && matchInput && matchOutput && matchIP && matchUseCase;
+      return matchSearch && matchCategory && matchPower && matchInput && matchOutput && matchIP && matchUseCase && matchStatus;
     });
   }, [filters, searchQuery]);
 
@@ -43,22 +45,20 @@ export const ProductCatalog = () => {
     <section id="catalog" className="py-20 px-6 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-12 border-b border-slate-100 pb-16">
-          <div className="max-w-2xl">
-            <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-6">Industrial Power Electronics</div>
-            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-slate-900 leading-tight">
-              Advanced Solutions for <br />
-              <span className="text-brand-primary">Automotive OEM Systems</span>
-            </h2>
-          </div>
-          
-          <div className="w-full md:w-auto flex flex-col gap-4">
-             {/* Search Bar */}
-             <div className="relative group w-full md:w-[400px]">
+        <div className="mb-12 border-b border-slate-100 pb-12">
+          <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-4">Industrial Power Electronics</div>
+          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-slate-900 leading-tight mb-8">
+            Advanced Solutions for <br />
+            <span className="text-brand-primary">Automotive OEM Systems</span>
+          </h2>
+
+          {/* Top Search Bar */}
+          <div className="flex flex-col md:flex-row items-center gap-6">
+             <div className="relative group flex-grow w-full">
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-brand-primary transition-colors" />
                 <input 
                    type="text" 
-                   placeholder="Search by product name or spec..." 
+                   placeholder="Search by product name, specification, or category..." 
                    className="w-full bg-slate-50 border border-slate-200 rounded-xl h-14 pl-14 pr-6 outline-none focus:border-brand-primary focus:bg-white transition-all text-sm font-medium text-slate-900 shadow-sm"
                    value={searchQuery}
                    onChange={(e) => setSearchQuery(e.target.value)}
@@ -68,19 +68,16 @@ export const ProductCatalog = () => {
              {/* Mobile Filter Toggle */}
              <button 
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="md:hidden flex items-center justify-between w-full p-4 bg-brand-primary text-white rounded-xl font-bold text-sm uppercase tracking-widest shadow-lg shadow-brand-primary/20"
+                className="lg:hidden flex items-center justify-center gap-3 px-8 h-14 bg-brand-primary text-white rounded-xl font-bold text-sm uppercase tracking-widest shadow-lg shadow-brand-primary/20 w-full md:w-auto"
              >
-                <div className="flex items-center gap-2">
-                   <SlidersHorizontal className="w-4 h-4" />
-                   Filter Selection
-                </div>
-                <ArrowRight className="w-4 h-4" />
+                <SlidersHorizontal className="w-4 h-4" />
+                Filters
              </button>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-12">
-          {/* Desktop Filter Sidebar */}
+        <div className="flex flex-col lg:flex-row items-start gap-12">
+          {/* Left Filter Sidebar */}
           <aside className="hidden lg:block w-[300px] shrink-0 sticky top-32 h-fit">
             <FilterSidebar 
                filters={filters} 
@@ -89,7 +86,7 @@ export const ProductCatalog = () => {
             />
           </aside>
 
-          {/* Product Grid Area */}
+          {/* Right Product Grid Area */}
           <main className="flex-grow">
             <div className="flex items-center justify-between mb-8">
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400">

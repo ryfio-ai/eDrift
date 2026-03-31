@@ -74,7 +74,7 @@ export const Hero = () => {
                <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-brand-primary mb-4 group-hover:bg-brand-primary group-hover:text-white transition-all duration-300">
                   <item.icon className="w-6 h-6" />
                </div>
-               <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">{item.label}</p>
+               <p className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-1">{item.label}</p>
                <h4 className="text-lg font-bold text-slate-900">{item.val}</h4>
             </div>
           ))}
