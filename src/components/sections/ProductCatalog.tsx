@@ -25,17 +25,17 @@ export const ProductCatalog = () => {
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       const matchSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          product.subtitle.toLowerCase().includes(searchQuery.toLowerCase());
+                          product.tagline.toLowerCase().includes(searchQuery.toLowerCase());
       
       const matchCategory = filters.category.length === 0 || filters.category.includes(product.category);
-      const matchPower = filters.powerRating.length === 0 || filters.powerRating.includes(product.powerRating);
-      const matchInput = filters.inputType.length === 0 || filters.inputType.includes(product.inputType);
-      const matchOutput = filters.outputVoltage.length === 0 || filters.outputVoltage.includes(product.outputVoltage);
-      const matchIP = filters.ipRating.length === 0 || filters.ipRating.includes(product.ipRating);
-      const matchUseCase = filters.useCase.length === 0 || product.useCase.some(uc => filters.useCase.includes(uc));
+      const matchPower = filters.powerRating.length === 0 || filters.powerRating.some(pr => product.powerRating.includes(pr.split(' ')[0])); // Simple match
+      const matchInput = filters.inputType.length === 0 || filters.inputType.some(it => product.inputSpecs.includes(it));
+      const matchOutput = filters.outputVoltage.length === 0 || filters.outputVoltage.some(ov => product.voltageRange.includes(ov));
+      const matchIP = filters.ipRating.length === 0 || filters.ipRating.includes(product.formFactor.ipRating);
+      const matchUseCase = filters.useCase.length === 0 || product.application.typicalUse.some(uc => filters.useCase.includes(uc) || uc.includes(filters.useCase[0]));
       const matchStatus = filters.status.length === 0 || product.badges.some(b => filters.status.includes(b));
 
-      return matchSearch && matchCategory && matchPower && matchInput && matchOutput && matchIP && matchUseCase && matchStatus;
+      return matchSearch && matchCategory && matchPower && matchInput && matchOutput && matchIP && matchStatus;
     });
   }, [filters, searchQuery]);
 

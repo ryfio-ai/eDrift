@@ -15,7 +15,7 @@ export const MissionVision = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="p-10 h-full border border-slate-100 bg-slate-50/30 rounded-[24px] group transition-all duration-500 hover:bg-white hover:shadow-xl">
+            <div className="p-10 h-full border border-slate-200 bg-white rounded-[32px] group transition-all duration-500 hover:shadow-2xl hover:border-brand-primary/20 hover:-translate-y-1 shadow-sm">
                <div className="w-16 h-16 rounded-2xl bg-brand-primary/5 flex items-center justify-center text-brand-primary mb-8 group-hover:scale-105 transition-transform">
                   <Target className="w-8 h-8" />
                </div>
@@ -37,7 +37,7 @@ export const MissionVision = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="p-10 h-full border border-slate-100 bg-slate-50/30 rounded-[24px] group transition-all duration-500 hover:bg-white hover:shadow-xl">
+            <div className="p-10 h-full border border-slate-200 bg-white rounded-[32px] group transition-all duration-500 hover:shadow-2xl hover:border-brand-primary/20 hover:-translate-y-1 shadow-sm">
                <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-700 mb-8 group-hover:scale-105 transition-transform">
                   <Rocket className="w-8 h-8" />
                </div>

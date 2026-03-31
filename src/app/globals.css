@@ -3,6 +3,8 @@
 @theme {
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
   --font-heading: var(--font-poppins), system-ui, -apple-system, sans-serif;
+  --font-alt-heading: "Montserrat", system-ui, -apple-system, sans-serif;
+  --font-alt-body: "Roboto", system-ui, -apple-system, sans-serif;
   
   --color-brand-primary: #0066FF;
   --color-brand-secondary: #0F172A;
@@ -27,24 +29,43 @@
     line-height: 1.75;
   }
 
-  h1, h2, h3, h4 {
-    @apply font-heading font-bold text-slate-900 tracking-[-0.02em] leading-[1.15];
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-black text-slate-900 tracking-[-0.02em] leading-tight;
+    font-family: var(--font-heading);
   }
 
   h1 {
-    @apply text-4xl md:text-6xl lg:text-7xl;
+    @apply text-5xl md:text-7xl lg:text-8xl;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl;
+    @apply text-4xl md:text-5xl;
   }
 
   h3 {
-    @apply text-2xl md:text-3xl;
+    @apply text-3xl md:text-4xl;
   }
 
   h4 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h5 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h6 {
     @apply text-lg md:text-xl;
+  }
+
+  /* Accessibility: Global focus ring for keyboard navigation */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-primary ring-offset-2 transition-all;
+  }
+
+  /* Form and interactive elements should inherit font */
+  button, input, select, textarea {
+    font-family: inherit;
   }
 }
 

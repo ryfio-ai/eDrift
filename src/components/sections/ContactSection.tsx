@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, Clock, ShieldCheck, ArrowRight } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Clock, ShieldCheck, ArrowRight, ChevronDown } from "lucide-react";
 
 export const ContactSection = () => {
   const [formType, setFormType] = useState<"consultation" | "rfq">("rfq");
@@ -48,7 +48,7 @@ export const ContactSection = () => {
                  <div key={i} className="flex flex-col gap-3 p-6 bg-slate-50 rounded-2xl border border-slate-100">
                     <item.icon className={`w-6 h-6 ${item.color}`} />
                     <div>
-                       <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">{item.label}</p>
+                       <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">{item.label}</p>
                        <p className="text-sm font-black text-slate-900">{item.val}</p>
                     </div>
                  </div>
@@ -62,11 +62,11 @@ export const ContactSection = () => {
                 { icon: MapPin, label: "HQ & Lab", val: "Dr A.P.J Abdul Kalam Block, IIT Palakkad, 678623" }
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-6 group">
-                   <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-brand-primary group-hover:text-white transition-all shadow-sm">
+                   <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-500 group-hover:bg-brand-primary group-hover:text-white transition-all shadow-sm">
                       <item.icon className="w-5 h-5" />
                    </div>
                    <div>
-                      <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">{item.label}</p>
+                      <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">{item.label}</p>
                       <p className="text-base font-bold text-slate-900">{item.val}</p>
                    </div>
                 </div>
@@ -85,17 +85,23 @@ export const ContactSection = () => {
               <div className="p-1 gap-2 bg-slate-50 border border-slate-100 rounded-2xl flex mb-10">
                  <button 
                    onClick={() => setFormType("rfq")}
-                   className={`flex-1 py-3 px-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formType === "rfq" ? "bg-white text-brand-primary shadow-sm border border-slate-100" : "text-slate-400 hover:text-slate-600"}`}
+                   className={`flex-1 py-3 px-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formType === "rfq" ? "bg-white text-brand-primary shadow-sm border border-slate-100" : "text-slate-500 hover:text-slate-600"}`}
                  >
                     Request Analysis
                  </button>
                  <button 
                    onClick={() => setFormType("consultation")}
-                   className={`flex-1 py-3 px-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formType === "consultation" ? "bg-white text-brand-primary shadow-sm border border-slate-100" : "text-slate-400 hover:text-slate-600"}`}
+                   className={`flex-1 py-3 px-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formType === "consultation" ? "bg-white text-brand-primary shadow-sm border border-slate-100" : "text-slate-500 hover:text-slate-600"}`}
                  >
                     Technical Review
                  </button>
               </div>
+
+               <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-8 text-center bg-slate-50/50 py-2 rounded-lg border border-slate-100/50">
+                  {formType === "rfq" 
+                    ? "Detailed quote for production-ready designs" 
+                    : "Direct consultation with our principal electronics lead"}
+               </p>
 
               {submitted ? (
                 <div className="py-20 text-center">
@@ -110,26 +116,29 @@ export const ContactSection = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                       <label className="text-[10px] uppercase tracking-widest font-black text-slate-400">Full Name</label>
+                       <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Full Name</label>
                        <input required className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="Principal Lead / Engineering Manager" />
                     </div>
                     <div className="space-y-2">
-                       <label className="text-[10px] uppercase tracking-widest font-black text-slate-400">Work Email</label>
+                       <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Work Email</label>
                        <input required type="email" className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="engineering-lead@company.com" />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                     <label className="text-[10px] uppercase tracking-widest font-black text-slate-400">Industry segment</label>
-                     <select className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900 appearance-none">
-                        <option>Automotive OEM</option>
-                        <option>Fleet Operator</option>
-                        <option>Energy Infrastructure</option>
-                     </select>
+                     <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Industry segment</label>
+                     <div className="relative">
+                       <select className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900 appearance-none">
+                          <option>Automotive OEM</option>
+                          <option>Fleet Operator</option>
+                          <option>Energy Infrastructure</option>
+                       </select>
+                       <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                     </div>
                   </div>
 
                   <div className="space-y-2">
-                     <label className="text-[10px] uppercase tracking-widest font-black text-slate-400">Technical Requirements</label>
+                     <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Technical Requirements</label>
                      <textarea required rows={4} className="w-full bg-slate-50 border border-slate-100 rounded-xl px-6 py-4 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900 resize-none" placeholder={formType === "rfq" ? "Specify your voltage, power levels, and target start-of-production date..." : "Describe the technical parameters you wish to discuss with our engineering lead..."} />
                   </div>
 
@@ -138,7 +147,7 @@ export const ContactSection = () => {
                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
 
-                  <p className="text-[10px] text-center text-slate-400 font-bold uppercase tracking-widest">
+                  <p className="text-[10px] text-center text-slate-500 font-bold uppercase tracking-widest">
                      🔒 Encrypted Connection & Secure Data Handling
                   </p>
                 </form>
