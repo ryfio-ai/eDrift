@@ -123,14 +123,19 @@ export const FilterSidebar = ({ filters, onChange, onClear }: FilterSidebarProps
       </div>
 
       <div className="sticky bottom-6">
-        <div className="p-6 rounded-2xl bg-slate-900 text-white shadow-xl shadow-slate-900/10 overflow-hidden relative group">
-           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
-             <Filter className="w-12 h-12" />
+        <div className="p-6 rounded-2xl bg-white border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden relative group">
+           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+              <Filter className="w-12 h-12 text-brand-primary" />
            </div>
-           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Technical Support</p>
-           <p className="text-sm font-bold mb-4 leading-tight">Require a custom power specification?</p>
-           <Link href="/contact" className="btn-primary w-full h-10 text-[10px] !bg-brand-accent !text-slate-900 !rounded-xl">
-             Request Custom RFQ
+           <div className="flex items-center gap-2 mb-4">
+              <div className="w-1.5 h-6 bg-brand-primary rounded-full" />
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Engineering Support</p>
+           </div>
+           <p className="text-sm font-semibold text-slate-900 mb-6 leading-tight">
+              Require custom power <br /> specifications for your project?
+           </p>
+           <Link href="/contact" className="btn-primary w-full h-11 text-xs font-semibold">
+              Request Custom RFQ
            </Link>
         </div>
       </div>
