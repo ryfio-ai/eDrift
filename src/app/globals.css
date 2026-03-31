@@ -2,6 +2,7 @@
 
 @theme {
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-heading: var(--font-poppins), system-ui, -apple-system, sans-serif;
   
   --color-brand-primary: #0066FF;
   --color-brand-secondary: #0F172A;
@@ -27,7 +28,7 @@
   }
 
   h1, h2, h3, h4 {
-    @apply font-bold text-slate-900 tracking-[-0.02em] leading-[1.15];
+    @apply font-heading font-bold text-slate-900 tracking-[-0.02em] leading-[1.15];
   }
 
   h1 {

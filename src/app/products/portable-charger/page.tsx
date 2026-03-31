@@ -71,7 +71,7 @@ export default function PortableChargerPage() {
            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
               <div>
                  <Badge variant="purple" className="mb-4">System Data</Badge>
-                 <h2 className="text-4xl font-black font-sans text-slate-900 tracking-tighter">Technical Specifications</h2>
+                 <h2 className="text-4xl font-black font-heading text-slate-900 tracking-tighter">Technical Specifications</h2>
               </div>
            </div>
 

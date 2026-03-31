@@ -15,7 +15,7 @@ export default function ContactPage() {
            className="text-center max-w-4xl mx-auto"
         >
           <Badge variant="purple" className="mb-8">Contact Engineering</Badge>
-          <h1 className="text-6xl md:text-8xl font-black font-sans text-slate-900 mb-10 leading-[0.9] tracking-tighter">
+          <h1 className="text-6xl md:text-8xl font-black font-heading text-slate-900 mb-10 leading-[0.9] tracking-tighter">
             Let&apos;s Build the <br />
             <span className="text-gradient">Fastest Charger</span>
           </h1>

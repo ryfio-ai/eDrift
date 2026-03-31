@@ -44,7 +44,7 @@ export default function OnboardChargerPage() {
              animate={{ opacity: 1, x: 0 }}
            >
              <Badge variant="cyan" className="mb-8 text-royal-blue">Production Series</Badge>
-             <h1 className="text-5xl md:text-7xl font-black font-sans text-slate-900 mb-8 tracking-tighter leading-none">
+             <h1 className="text-5xl md:text-7xl font-black font-heading text-slate-900 mb-8 tracking-tighter leading-none">
                 On-Board EV <br />
                 <span className="text-gradient">Charger (OBC)</span>
              </h1>
@@ -85,7 +85,7 @@ export default function OnboardChargerPage() {
            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
               <div>
                  <Badge variant="purple" className="mb-4">Engineering Data</Badge>
-                 <h2 className="text-4xl font-black font-sans text-slate-900 tracking-tighter">Product Specifications</h2>
+                 <h2 className="text-4xl font-black font-heading text-slate-900 tracking-tighter">Product Specifications</h2>
               </div>
               <div className="flex bg-slate-100 p-1.5 rounded-3xl border border-slate-200">
                  {(["Electrical", "Mechanical"] as const).map((tab) => (
@@ -138,7 +138,7 @@ export default function OnboardChargerPage() {
            <div className="absolute top-0 right-0 w-96 h-96 bg-royal-blue/20 blur-[100px] -z-0" />
            <div className="relative z-10 flex flex-col md:flex-row gap-12 items-center">
               <div className="flex-grow">
-                 <h3 className="text-3xl font-black font-sans mb-4 tracking-tight">Need a custom voltage configuration?</h3>
+                 <h3 className="text-3xl font-black font-heading mb-4 tracking-tight">Need a custom voltage configuration?</h3>
                  <p className="text-slate-400 font-medium max-w-xl">Our chargers come with a user-configurable GUI and can be tailored to any battery chemistry from 48V to 400V.</p>
               </div>
               <GlowButton variant="primary" size="lg" className="shrink-0 bg-white text-slate-900 border-none">Consult Engineering</GlowButton>
