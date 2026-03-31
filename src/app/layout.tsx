@@ -1,29 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: 'eDrift Electric — Advanced EV Charging Solutions',
+    default: 'eDrift Electric — B2B Power Electronics for EV OEMs',
     template: '%s | eDrift Electric',
   },
-  description: 'eDrift Electric Private Limited designs next-generation EV on-board and portable chargers using SiC & GaN technology. 2.2kW to 6.6kW OBC, IP67 rated, 97%+ efficiency.',
-  keywords: ['EV charger', 'on-board charger', 'OBC', 'electric vehicle', 'SiC MOSFET', 'portable EV charger', 'eDrift Electric', 'India EV charging'],
+  description: 'eDrift Electric specializes in high-reliability EV power conversion products for OEMs, fleet operators, and industrial systems. Modular, efficient, and scalable charging infrastructure.',
+  keywords: ['EV charging OEM', 'B2B power electronics', 'SiC MOSFET chargers', 'on-board charging systems', 'fleet EV solutions'],
   authors: [{ name: 'eDrift Electric Private Limited' }],
   creator: 'eDrift Electric',
   metadataBase: new URL('https://edriftelectric.com'),
@@ -32,7 +23,7 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: 'https://edriftelectric.com',
     siteName: 'eDrift Electric',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: '/images/edrift logo.png', width: 1200, height: 630 }],
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
@@ -40,7 +31,6 @@ export const metadata: Metadata = {
 
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-
 import { ChatWidget } from "@/components/chatbot/ChatWidget";
 
 export default function RootLayout({
@@ -51,9 +41,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col pt-0 bg-white">
+      <body className="min-h-full flex flex-col pt-0 bg-white font-sans">
         <Navbar />
         <main className="flex-grow">
           {children}

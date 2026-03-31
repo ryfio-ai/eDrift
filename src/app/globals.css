@@ -1,49 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  --color-vivid-cyan: #00F0FF;
-  --color-royal-blue: #0066FF;
-  --color-vibrant-purple: #AD00FF;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   
-  --color-navy-dark: #FFFFFF;
-  --color-navy-mid: #F8FAFC;
-  --color-navy-light: #F1F5F9;
+  --color-brand-primary: #0066FF;
+  --color-brand-secondary: #0F172A;
+  --color-brand-accent: #00F0FF;
+  
+  --color-background-subtle: #F8FAFC;
+  --color-border-default: rgba(15, 23, 42, 0.08);
 
-  --color-text-primary: #0F172A;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94A3B8;
-
-  --color-border-subtle: rgba(15, 23, 42, 0.08);
-  --color-glass-bg: rgba(255, 255, 255, 0.85);
-  --color-glass-border: rgba(15, 23, 42, 0.1);
-
-  --radius-xl: 32px;
-  --radius-lg: 24px;
+  --radius-xl: 12px;
+  --radius-lg: 8px;
 }
 
 @layer base {
   body {
-    @apply bg-navy-dark text-text-primary antialiased selection:bg-vivid-cyan/30;
+    @apply bg-white text-slate-900 antialiased selection:bg-brand-primary/20;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-slate-900;
   }
 }
 
 @layer components {
-  .glass {
-    @apply backdrop-blur-xl bg-glass-bg border border-glass-border shadow-xl;
-    border-radius: var(--radius-xl);
+  .btn-primary {
+    @apply px-6 py-3 bg-brand-primary text-white font-semibold rounded-lg transition-all hover:bg-blue-700 active:scale-95 shadow-md shadow-blue-500/10 inline-flex items-center justify-center gap-2;
   }
   
-  .glass-hover {
-    @apply transition-all duration-500 hover:bg-slate-50 hover:border-slate-200 hover:shadow-cyan-500/5;
+  .btn-outline {
+    @apply px-6 py-3 bg-white border border-slate-200 text-slate-700 font-semibold rounded-lg transition-all hover:border-brand-primary hover:text-brand-primary active:scale-95 inline-flex items-center justify-center gap-2;
+  }
+
+  .glass {
+    @apply backdrop-blur-xl bg-white/80 border border-slate-200 shadow-xl;
+    border-radius: var(--radius-xl);
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-royal-blue to-vibrant-purple;
-  }
-
-  .btn-gradient {
-    @apply bg-gradient-to-r from-vivid-cyan to-royal-blue text-white font-bold transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-cyan-500/20;
-    border-radius: 9999px;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary;
   }
 }
 
@@ -52,7 +49,7 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-navy-dark;
+  @apply bg-white;
 }
 ::-webkit-scrollbar-thumb {
   @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;

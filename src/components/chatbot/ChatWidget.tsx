@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Zap, Loader2, Sparkles } from "lucide-react";
 import { GlowButton } from "../ui/GlowButton";
@@ -61,8 +62,14 @@ export const ChatWidget = () => {
             {/* Header */}
             <div className="p-6 bg-gradient-to-r from-royal-blue to-vibrant-purple text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
-                   <Sparkles className="w-5 h-5 text-white" />
+                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center p-1.5 shadow-sm overflow-hidden shrink-0">
+                   <Image 
+                     src="/images/edrift logo.png" 
+                     alt="eDrift" 
+                     width={28} 
+                     height={28} 
+                     className="object-contain"
+                   />
                 </div>
                 <div>
                    <span className="block font-black font-space text-sm tracking-tight text-white">eDrift AI Expert</span>

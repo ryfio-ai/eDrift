@@ -4,8 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { GlowButton } from "@/components/ui/GlowButton";
-import { Menu, X, Zap, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Navbar = () => {
@@ -22,20 +21,19 @@ export const Navbar = () => {
     { name: "Products", href: "/products" },
     { name: "Technology", href: "/technology" },
     { name: "About", href: "/about" },
-    { name: "Team", href: "/team" },
+    { name: "Design Calculation", href: "https://edrift-calculator.vercel.app/" },
   ];
 
   return (
     <nav 
       className={cn(
-        "fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-6 py-4",
-        scrolled ? "bg-white/80 backdrop-blur-xl border-b border-slate-200 py-3 shadow-sm" : "bg-transparent py-6"
+        "fixed top-0 left-0 right-0 z-[100] transition-all duration-300 px-6",
+        scrolled ? "bg-white/90 backdrop-blur-md border-b border-slate-100 py-3 shadow-sm" : "bg-transparent py-5"
       )}
     >
-      <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-        {/* Significantly Larger Logo Visibility */}
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-           <div className="relative w-[280px] h-[70px] md:w-[320px] md:h-[80px]">
+           <div className="relative w-48 h-12">
               <Image 
                 src="/images/edrift logo.png" 
                 alt="eDrift Electric" 
@@ -47,24 +45,24 @@ export const Navbar = () => {
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-10">
+        <div className="hidden lg:flex items-center gap-8">
            {navLinks.map((link) => (
              <Link 
-               key={link.name} 
-               href={link.href} 
-               className="text-sm font-bold text-slate-600 hover:text-royal-blue transition-colors"
+                key={link.name} 
+                href={link.href} 
+                className="text-sm font-semibold text-slate-600 hover:text-brand-primary transition-colors"
              >
-               {link.name}
+                {link.name}
              </Link>
            ))}
-           <Link href="/contact">
-             <GlowButton variant="primary" size="sm" className="px-8">Get a Quote</GlowButton>
+           <Link href="/contact" className="btn-primary py-2.5 px-6 text-sm">
+             Request Quote
            </Link>
         </div>
 
         {/* Mobile Toggle */}
         <button 
-          className="lg:hidden text-slate-900"
+          className="lg:hidden text-slate-900 p-2"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X /> : <Menu />}
@@ -75,10 +73,10 @@ export const Navbar = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-b border-slate-200 overflow-hidden absolute top-full left-0 right-0 px-6 py-8 shadow-xl"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="lg:hidden bg-white border-b border-slate-100 absolute top-full left-0 right-0 px-6 py-8 shadow-2xl"
           >
             <div className="flex flex-col gap-6">
                {navLinks.map((link) => (
@@ -86,13 +84,17 @@ export const Navbar = () => {
                    key={link.name} 
                    href={link.href} 
                    onClick={() => setMobileMenuOpen(false)}
-                   className="text-2xl font-black text-slate-900 flex justify-between items-center"
+                   className="text-lg font-semibold text-slate-900 flex justify-between items-center"
                  >
-                   {link.name} <ChevronRight className="text-royal-blue" />
+                   {link.name} <ChevronRight className="w-4 h-4 text-slate-300" />
                  </Link>
                ))}
-               <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
-                 <GlowButton className="w-full">Get a Quote</GlowButton>
+               <Link 
+                 href="/contact" 
+                 onClick={() => setMobileMenuOpen(false)}
+                 className="btn-primary w-full h-14"
+               >
+                 Request Quote
                </Link>
             </div>
           </motion.div>

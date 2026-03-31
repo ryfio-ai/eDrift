@@ -2,7 +2,6 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Badge } from "@/components/ui/Badge";
 
 const partners = [
   { name: "Tech Partner 1", initials: "TP" },
@@ -14,28 +13,29 @@ const partners = [
 
 export const Clients = () => {
   return (
-    <section className="py-32 px-6 bg-white text-slate-900 border-t border-slate-50">
+    <section className="py-24 px-6 bg-slate-50 border-t border-slate-100">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <Badge variant="purple" className="mb-4">Trusted By Leaders</Badge>
-          <h2 className="text-3xl md:text-5xl font-black font-space tracking-tighter">
-            Technology <span className="text-gradient">Partnerships</span>
+          <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 mb-4">Strategic Ecosystem</div>
+          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">
+            Industrial & <span className="text-brand-primary">Technology Partnerships</span>
           </h2>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-8">
+        <div className="flex flex-wrap justify-center gap-8 md:gap-12">
           {partners.map((client, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
             >
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-[32px] bg-slate-50 border border-slate-100 flex items-center justify-center group hover:border-royal-blue hover:bg-white hover:shadow-xl transition-all duration-500">
-                 <div className="w-16 h-16 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-xl font-black text-slate-300 group-hover:text-royal-blue group-hover:border-royal-blue/20 transition-all uppercase">
+              <div className="w-40 h-40 rounded-2xl bg-white border border-slate-200 flex flex-col items-center justify-center p-6 group hover:border-brand-primary hover:shadow-lg transition-all duration-300">
+                 <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-xl font-bold text-slate-300 group-hover:text-brand-primary group-hover:bg-brand-primary/5 transition-all">
                     {client.initials}
                  </div>
+                 <p className="mt-4 text-[10px] uppercase tracking-widest font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">{client.name}</p>
               </div>
             </motion.div>
           ))}
