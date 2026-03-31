@@ -45,33 +45,40 @@ export const ProductCatalog = () => {
     <section id="catalog" className="py-20 px-6 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="mb-12 border-b border-slate-100 pb-12">
-          <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-4">Industrial Power Electronics</div>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-slate-900 leading-tight mb-8">
-            Advanced Solutions for <br />
-            <span className="text-brand-primary">Automotive OEM Systems</span>
+        <div className="mb-20 border-b border-slate-100 pb-16">
+          <div className="flex items-center gap-4 mb-8">
+             <div className="w-12 h-[3px] bg-brand-primary" />
+             <div className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-primary">Industrial Power Catalog</div>
+          </div>
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 leading-[1.1] mb-12">
+            Automotive Grade <br />
+            <span className="text-brand-primary">Power Solutions_</span>
           </h2>
 
-          {/* Top Search Bar */}
-          <div className="flex flex-col md:flex-row items-center gap-6">
+          {/* Top Search Bar - Enhanced for Visibility */}
+          <div className="flex flex-col lg:flex-row items-center gap-8">
              <div className="relative group flex-grow w-full">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-brand-primary transition-colors" />
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-brand-primary transition-colors" />
                 <input 
                    type="text" 
-                   placeholder="Search by product name, specification, or category..." 
-                   className="w-full bg-slate-50 border border-slate-200 rounded-xl h-14 pl-14 pr-6 outline-none focus:border-brand-primary focus:bg-white transition-all text-sm font-medium text-slate-900 shadow-sm"
+                   placeholder="Search by SKU, power rating, or application..." 
+                   className="w-full bg-slate-50 border border-slate-200 rounded-[20px] h-16 pl-16 pr-8 outline-none focus:border-brand-primary focus:bg-white focus:shadow-2xl focus:shadow-brand-primary/5 transition-all text-base font-semibold text-slate-900 shadow-sm"
                    value={searchQuery}
                    onChange={(e) => setSearchQuery(e.target.value)}
                 />
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-3">
+                   <div className="h-6 w-[1px] bg-slate-200" />
+                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Advanced Search</span>
+                </div>
              </div>
              
              {/* Mobile Filter Toggle */}
              <button 
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="lg:hidden flex items-center justify-center gap-3 px-8 h-14 bg-brand-primary text-white rounded-xl font-bold text-sm uppercase tracking-widest shadow-lg shadow-brand-primary/20 w-full md:w-auto"
+                className="lg:hidden btn-primary w-full h-16 text-sm"
              >
-                <SlidersHorizontal className="w-4 h-4" />
-                Filters
+                <SlidersHorizontal className="w-5 h-5" />
+                Refine Specs
              </button>
           </div>
         </div>
