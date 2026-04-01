@@ -5,9 +5,12 @@ import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send, Clock, ShieldCheck, ArrowRight, ChevronDown } from "lucide-react";
 
 export const ContactSection = () => {
-  const [formType, setFormType] = useState<"consultation" | "rfq">("rfq");
+  const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const nextStep = () => setStep(2);
+  const prevStep = () => setStep(1);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,137 +21,143 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-32 px-6 bg-white overflow-hidden relative">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-primary/5 blur-[100px] rounded-full -z-10 translate-x-1/2 -translate-y-1/2" />
-
+    <section id="contact" className="py-32 px-6 bg-slate-50 overflow-hidden relative">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
           
-          {/* Left Side: Authority & Information */}
+          {/* Left Side: Contact Information */}
           <div>
             <div className="flex items-center gap-4 mb-8">
-               <div className="w-12 h-[3px] bg-brand-primary" />
-               <div className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-primary">Direct Technical Line</div>
+               <div className="w-12 h-[2px] bg-brand-primary" />
+               <div className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-primary">Contact Engineering</div>
             </div>
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tight leading-tight">
-               Consult with our <br />
-               <span className="text-brand-primary">Engineering Team_</span>
+               Talk to our <br />
+               <span className="text-brand-primary">Technical Team_</span>
             </h2>
             <p className="text-lg text-slate-500 font-semibold leading-relaxed mb-12 max-w-lg">
-               Skip the generic sales queue. Connect directly with our power electronics 
-               specialists to discuss your project requirements and technical integration.
+               Connect with eDrift for feasibility reviews, system-level discussions, custom specifications, and RFQ planning for production or pilot programs.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
                {[
-                 { icon: Clock, label: "Efficiency", val: "Response < 24 Hours", color: "text-emerald-500" },
-                 { icon: ShieldCheck, label: "Privacy", val: "Full NDA Protocol", color: "text-brand-primary" }
+                 { icon: Mail, label: "Technical Support", val: "eng@edriftelectric.com" },
+                 { icon: Phone, label: "Business Development", val: "+91 97902 74709" },
+                 { icon: MapPin, label: "Engineering Base", val: "Hosur, Tamil Nadu / IIT Palakkad" }
                ].map((item, i) => (
-                 <div key={i} className="flex flex-col gap-3 p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                    <item.icon className={`w-6 h-6 ${item.color}`} />
+                 <div key={i} className={`p-8 bg-white rounded-3xl border border-slate-100 shadow-sm ${i === 2 ? "sm:col-span-2" : ""}`}>
+                    <item.icon className="w-6 h-6 text-brand-primary mb-6" />
                     <div>
-                       <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">{item.label}</p>
+                       <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-2">{item.label}</p>
                        <p className="text-sm font-black text-slate-900">{item.val}</p>
                     </div>
                  </div>
                ))}
             </div>
 
-            <div className="space-y-8">
-              {[
-                { icon: Mail, label: "Technical Queries", val: "info@edriftelectric.com" },
-                { icon: Phone, label: "OEM Hotline", val: "+91 97902 74709" },
-                { icon: MapPin, label: "HQ & Lab", val: "Dr A.P.J Abdul Kalam Block, IIT Palakkad, 678623" }
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-6 group">
-                   <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-500 group-hover:bg-brand-primary group-hover:text-white transition-all shadow-sm">
-                      <item.icon className="w-5 h-5" />
-                   </div>
-                   <div>
-                      <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-1">{item.label}</p>
-                      <p className="text-base font-bold text-slate-900">{item.val}</p>
-                   </div>
-                </div>
-              ))}
-            </div>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-3">
+              <Clock className="w-4 h-4 text-brand-primary" />
+              Initial response within 1 business day for qualified inquiries
+            </p>
           </div>
 
-          {/* Right Side: Specialized B2B Form */}
+          {/* Right Side: Progressive RFQ Form */}
           <div className="relative">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="glass-card p-10 lg:p-12"
+              className="bg-white p-10 lg:p-12 rounded-[40px] border border-slate-100 shadow-2xl"
             >
-              <div className="p-1 gap-2 bg-slate-50 border border-slate-100 rounded-2xl flex mb-10">
-                 <button 
-                   onClick={() => setFormType("rfq")}
-                   className={`flex-1 py-3 px-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formType === "rfq" ? "bg-white text-brand-primary shadow-sm border border-slate-100" : "text-slate-500 hover:text-slate-600"}`}
-                 >
-                    Request Analysis
-                 </button>
-                 <button 
-                   onClick={() => setFormType("consultation")}
-                   className={`flex-1 py-3 px-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formType === "consultation" ? "bg-white text-brand-primary shadow-sm border border-slate-100" : "text-slate-500 hover:text-slate-600"}`}
-                 >
-                    Technical Review
-                 </button>
+              <div className="mb-10 text-center">
+                 <h3 className="text-2xl font-bold text-slate-900 mb-2">Submit an RFQ Request</h3>
+                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                   {step === 1 ? "Step 1: Product & Volume" : "Step 2: Project Details"}
+                 </p>
+                 <div className="flex gap-2 mt-6 justify-center">
+                   <div className={`h-1 rounded-full transition-all duration-300 ${step === 1 ? "w-12 bg-brand-primary" : "w-6 bg-slate-100"}`} />
+                   <div className={`h-1 rounded-full transition-all duration-300 ${step === 2 ? "w-12 bg-brand-primary" : "w-6 bg-slate-100"}`} />
+                 </div>
               </div>
-
-               <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-8 text-center bg-slate-50/50 py-2 rounded-lg border border-slate-100/50">
-                  {formType === "rfq" 
-                    ? "Detailed quote for production-ready designs" 
-                    : "Direct consultation with our principal electronics lead"}
-               </p>
 
               {submitted ? (
                 <div className="py-20 text-center">
-                  <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-500/20">
+                  <div className="w-20 h-20 bg-brand-primary text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl shadow-brand-primary/20">
                     <ShieldCheck className="w-10 h-10" />
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900 mb-4">Transmission Successful</h3>
                   <p className="text-slate-500 font-semibold mb-8">Our engineering lead will contact you within 24 hours.</p>
-                  <button onClick={() => setSubmitted(false)} className="btn-outline w-full">Initiate New Inquiry</button>
+                  <button onClick={() => { setSubmitted(false); setStep(1); }} className="btn-outline w-full">Initiate New Inquiry</button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                       <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Full Name</label>
-                       <input required className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="Principal Lead / Engineering Manager" />
-                    </div>
-                    <div className="space-y-2">
-                       <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Work Email</label>
-                       <input required type="email" className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="engineering-lead@company.com" />
-                    </div>
-                  </div>
+                  {step === 1 ? (
+                    <motion.div 
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="space-y-6"
+                    >
+                      <div className="space-y-2">
+                        <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Company Name</label>
+                        <input required className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="OEM / Industrial Partner" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Work Email</label>
+                        <input required type="email" className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="engineering-lead@company.com" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Product Interest</label>
+                        <div className="relative">
+                          <select className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900 appearance-none">
+                            <option>3.3kW On-Board Charger</option>
+                            <option>Portable Fleet Charger</option>
+                            <option>Custom PSU Solution</option>
+                            <option>DC Fast Charging Systems</option>
+                          </select>
+                          <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Estimated Annual Volume</label>
+                        <input required className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="e.g. 5,000 units/year" />
+                      </div>
+                      <button type="button" onClick={nextStep} className="btn-primary w-full h-16 shadow-xl shadow-brand-primary/20 mt-4 group">
+                        Next: Project Details
+                        <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </motion.div>
+                  ) : (
+                    <motion.div 
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="space-y-6"
+                    >
+                      <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Full Name</label>
+                          <input required className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="John Doe" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Professional Role</label>
+                          <input required className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900" placeholder="Engineering Lead" />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Requirement Summary</label>
+                        <textarea required rows={4} className="w-full bg-slate-50 border border-slate-100 rounded-xl px-6 py-4 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900 resize-none" placeholder="Share your application, power requirement, and deployment timeline..." />
+                      </div>
+                      <div className="flex gap-4">
+                        <button type="button" onClick={prevStep} className="btn-outline flex-1 h-16">Back</button>
+                        <button type="submit" className="btn-primary flex-[2] h-16 shadow-xl shadow-brand-primary/20 group" disabled={isSubmitting}>
+                          {isSubmitting ? "Routing to Engineering..." : "Submit RFQ Request"}
+                          <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
 
-                  <div className="space-y-2">
-                     <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Industry segment</label>
-                     <div className="relative">
-                       <select className="w-full bg-slate-50 border border-slate-100 h-14 rounded-xl px-6 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900 appearance-none">
-                          <option>Automotive OEM</option>
-                          <option>Fleet Operator</option>
-                          <option>Energy Infrastructure</option>
-                       </select>
-                       <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
-                     </div>
-                  </div>
-
-                  <div className="space-y-2">
-                     <label className="text-[10px] uppercase tracking-widest font-black text-slate-500">Technical Requirements</label>
-                     <textarea required rows={4} className="w-full bg-slate-50 border border-slate-100 rounded-xl px-6 py-4 outline-none focus:border-brand-primary focus:bg-white transition-all font-semibold text-slate-900 resize-none" placeholder={formType === "rfq" ? "Specify your voltage, power levels, and target start-of-production date..." : "Describe the technical parameters you wish to discuss with our engineering lead..."} />
-                  </div>
-
-                  <button type="submit" className="btn-primary w-full h-16 shadow-xl shadow-brand-primary/20 mt-4 group" disabled={isSubmitting}>
-                     {isSubmitting ? "Routing to Engineering..." : formType === "rfq" ? "Request Technical RFQ" : "Expert Consultation"}
-                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-
-                  <p className="text-[10px] text-center text-slate-500 font-bold uppercase tracking-widest">
-                     🔒 Encrypted Connection & Secure Data Handling
+                  <p className="text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest">
+                     NDA-friendly discussions and encrypted data handling
                   </p>
                 </form>
               )}

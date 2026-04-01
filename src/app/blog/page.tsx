@@ -1,100 +1,103 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
+import { ArrowRight, BookOpen, Clock, Tag } from "lucide-react";
 import Link from "next/link";
-import { blogPosts } from "@/data/blog";
-import { ArrowRight, Clock, Tag, BookOpen } from "lucide-react";
 
-export default function BlogIndex() {
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+const posts = [
+  {
+    title: "Optimizing SiC Switching Topologies for ASIL-D Compliance",
+    desc: "A deep dive into functional safety requirements for high-voltage power conversion in automotive environments.",
+    date: "March 28, 2026",
+    tag: "Functional Safety",
+    readTime: "12 min"
+  },
+  {
+    title: "Thermal Derating Strategies in High-Density GaN Modules",
+    desc: "Evaluating the performance of Gallium Nitride semiconductors under extreme thermal stress and high-ambient conditions.",
+    date: "March 15, 2026",
+    tag: "Hardware Design",
+    readTime: "8 min"
+  },
+  {
+    title: "The Future of 800V Architecture in Commercial EV Fleets",
+    desc: "Why the shift to higher voltage systems is mandatory for the next generation of industrial and long-haul electric mobility.",
+    date: "March 02, 2026",
+    tag: "Industry Trends",
+    readTime: "10 min"
+  },
+  {
+    title: "EMI/EMC Mitigation in 22kW On-Board Charging Systems",
+    desc: "Advanced techniques for reducing electromagnetic interference in high-power AC-DC conversion stages.",
+    date: "February 18, 2026",
+    tag: "Compliance",
+    readTime: "15 min"
+  }
+];
 
-  const categories = ["all", "technical-guides", "oem-resources", "industry-insights"];
-
-  const filteredPosts = activeCategory === "all" 
-    ? blogPosts 
-    : blogPosts.filter(post => post.category === activeCategory);
-
+export default function BlogPage() {
   return (
-    <main className="pt-32 bg-white min-h-screen font-sans">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Blog Header */}
-        <div className="max-w-3xl mb-20">
-          <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-6">Engineering Knowledge Hub</div>
-          <h1 className="text-4xl md:text-5xl font-semibold text-slate-900 mb-8 leading-tight">
-            Insights Into <br />
-            <span className="text-brand-primary">Power Electronics Innovation</span>
-          </h1>
-          <p className="text-lg text-slate-600 font-medium leading-relaxed">
-            Technical guides, industry trends, and OEM integration strategy from the eDrift engineering team.
-          </p>
+    <div className="pt-32 pb-48 px-6 bg-white dark:bg-slate-950 min-h-screen">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-24">
+           <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-[3px] bg-brand-primary" />
+              <div className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-primary">Engineering Blog</div>
+           </div>
+           <h1 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white mb-8 tracking-tight leading-[0.95]">
+             Technical <br />
+             <span className="text-brand-primary">Perspectives_</span>
+           </h1>
+           <p className="text-xl text-slate-500 dark:text-slate-400 font-semibold leading-relaxed max-w-2xl">
+             In-depth research and engineering insights from our power 
+             electronics lab at IIT Palakkad.
+           </p>
         </div>
 
-        {/* Categories Bar */}
-        <div className="flex flex-wrap gap-4 mb-16 border-b border-slate-100 pb-8">
-           {categories.map((cat) => (
-             <button
-               key={cat}
-               onClick={() => setActiveCategory(cat)}
-               className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
-                 activeCategory === cat 
-                 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20" 
-                 : "bg-slate-50 text-slate-400 hover:bg-slate-100"
-               }`}
-             >
-               {cat.replace('-', ' ')}
-             </button>
-           ))}
-        </div>
-
-        {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-32">
-           {filteredPosts.map((post, idx) => (
-             <motion.article 
-               key={post.slug}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+           {posts.map((post, i) => (
+             <motion.div
+               key={i}
                initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: idx * 0.1 }}
-               className="group flex flex-col h-full bg-white border border-slate-100 rounded-[32px] overflow-hidden hover:shadow-2xl transition-all duration-500"
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ delay: i * 0.1 }}
+               className="glass-card p-10 group hover:border-brand-primary/30 transition-all duration-500 flex flex-col justify-between"
              >
-               <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="h-full w-full flex items-center justify-center text-slate-200 uppercase tracking-widest text-[10px] font-bold">Engineering Insights</div>
-               </div>
-               
-               <div className="p-8 flex-grow flex flex-col">
-                 <div className="flex items-center gap-4 mb-6">
-                    <span className="text-[10px] font-bold text-brand-primary uppercase tracking-widest bg-brand-primary/5 px-3 py-1 rounded-full">
-                      {post.category.replace('-', ' ')}
-                    </span>
-                    <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1 uppercase tracking-widest">
-                       <Clock className="w-3 h-3" /> {post.readingTime}
-                    </span>
-                 </div>
+                <div>
+                   <div className="flex items-center gap-4 mb-8">
+                      <span className="px-3 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-400 border border-slate-100 dark:border-slate-800">
+                        {post.tag}
+                      </span>
+                   </div>
+                   <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 group-hover:text-brand-primary transition-colors">
+                     {post.title}
+                   </h3>
+                   <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-10">
+                     {post.desc}
+                   </p>
+                </div>
 
-                 <h3 className="text-xl font-semibold text-slate-900 mb-4 leading-tight group-hover:text-brand-primary transition-colors">
-                    <Link href={`/blog/${post.slug}`}>
-                      {post.title}
-                    </Link>
-                 </h3>
-
-                 <p className="text-sm text-slate-500 leading-relaxed font-medium mb-8 line-clamp-3">
-                   {post.excerpt}
-                 </p>
-
-                 <div className="mt-auto pt-6 border-t border-slate-50">
-                    <Link 
-                      href={`/blog/${post.slug}`}
-                      className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-brand-primary group-hover:translate-x-2 transition-transform"
-                    >
-                       Technical Post <ArrowRight className="w-4 h-4" />
-                    </Link>
-                 </div>
-               </div>
-             </motion.article>
+                <div className="pt-8 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                   <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-2">
+                         <Clock className="w-3.5 h-3.5 text-slate-300" />
+                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{post.readTime}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                         <BookOpen className="w-3.5 h-3.5 text-slate-300" />
+                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{post.date}</span>
+                      </div>
+                   </div>
+                   <button className="text-brand-primary hover:translate-x-1 transition-transform">
+                      <ArrowRight className="w-5 h-5" />
+                   </button>
+                </div>
+             </motion.div>
            ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }
