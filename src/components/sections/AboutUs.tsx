@@ -2,8 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Shield, Cpu, Zap, Share2 } from "lucide-center";
-import { Cpu as CpuIcon, Shield as ShieldIcon, Zap as ZapIcon, Share2 as ShareIcon } from "lucide-react";
+import { Shield, Cpu, Zap, Share2 } from "lucide-react";
 import { staggerContainer, fadeIn } from "@/lib/motion";
 
 export const AboutUs = () => {
@@ -59,22 +58,22 @@ export const AboutUs = () => {
           >
             {[
               { 
-                icon: CpuIcon, 
+                icon: Cpu, 
                 title: "In-house R&D", 
                 desc: "Rapid prototyping and advanced power architecture design." 
               },
               { 
-                icon: ShieldIcon, 
+                icon: Shield, 
                 title: "Compliance Ready", 
                 desc: "Alignment with global IEC and SAE engineering standards." 
               },
               { 
-                icon: ZapIcon, 
+                icon: Zap, 
                 title: "Tier-1 Support", 
                 desc: "Enterprise-grade support for complex OEM programs." 
               },
               { 
-                icon: ShareIcon, 
+                icon: Share2, 
                 title: "Scalable Output", 
                 desc: "Production delivery from pilot builds to high volumes." 
               }
