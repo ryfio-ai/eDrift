@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://edriftelectric.in/sitemap.xml
+Sitemap: https://www.edriftelectric.com/sitemap.xml

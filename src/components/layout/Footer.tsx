@@ -28,7 +28,7 @@ export default function Footer() {
       { name: "Contact", href: "/contact" },
     ],
     social: [
-      { icon: Linkedin, href: "https://www.linkedin.com/in/sankar-edriftelectric" },
+      { icon: Linkedin, href: "https://www.linkedin.com/company/edrift-electric/" },
     ]
   };
 

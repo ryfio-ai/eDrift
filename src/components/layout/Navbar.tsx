@@ -53,7 +53,7 @@ export const Navbar = () => {
            <div className="relative w-36 h-9">
               <Image 
                 src="/images/edrift logo.png" 
-                alt="eDrift Electric" 
+                alt="eDrift Electric - Premium EV Power Electronics & Engineering Suite" 
                 fill 
                 className="object-contain object-left"
                 priority
