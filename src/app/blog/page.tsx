@@ -2,8 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Clock, Tag } from "lucide-react";
-import Link from "next/link";
+import { ArrowRight, BookOpen, Clock } from "lucide-react";
 
 const posts = [
   {
@@ -38,18 +37,18 @@ const posts = [
 
 export default function BlogPage() {
   return (
-    <div className="pt-32 pb-48 px-6 bg-white dark:bg-slate-950 min-h-screen">
+    <div className="pt-32 pb-48 px-6 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto">
         <div className="mb-24">
            <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-[3px] bg-brand-primary" />
-              <div className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-primary">Engineering Blog</div>
+              <div className="w-12 h-px bg-brand-primary" />
+              <p className="text-[10px] tracking-[0.15em] font-semibold text-brand-primary uppercase">Engineering Perspective_</p>
            </div>
-           <h1 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white mb-8 tracking-tight leading-[0.95]">
+           <h1 className="text-5xl md:text-7xl font-bold text-text-main mb-8 tracking-tight leading-[1.1]">
              Technical <br />
-             <span className="text-brand-primary">Perspectives_</span>
+             <span className="text-brand-primary">Knowledge Base_</span>
            </h1>
-           <p className="text-xl text-slate-500 dark:text-slate-400 font-semibold leading-relaxed max-w-2xl">
+           <p className="text-lg md:text-xl text-text-muted font-medium leading-relaxed max-w-2xl">
              In-depth research and engineering insights from our power 
              electronics lab at IIT Palakkad.
            </p>
@@ -63,31 +62,31 @@ export default function BlogPage() {
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                transition={{ delay: i * 0.1 }}
-               className="glass-card p-10 group hover:border-brand-primary/30 transition-all duration-500 flex flex-col justify-between"
+               className="p-10 border border-border-subtle bg-bg-main rounded-[24px] group hover:border-brand-primary/20 hover:shadow-xl transition-all duration-500 flex flex-col justify-between"
              >
                 <div>
                    <div className="flex items-center gap-4 mb-8">
-                      <span className="px-3 py-1 bg-slate-50 dark:bg-slate-800 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-400 border border-slate-100 dark:border-slate-800">
+                      <span className="px-3 py-1 bg-white rounded-lg text-[9px] font-semibold uppercase tracking-widest text-text-faint border border-border-subtle">
                         {post.tag}
                       </span>
                    </div>
-                   <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-6 group-hover:text-brand-primary transition-colors">
+                   <h3 className="text-2xl font-bold text-text-main mb-6 group-hover:text-brand-primary transition-colors">
                      {post.title}
                    </h3>
-                   <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-10">
+                   <p className="text-sm text-text-muted font-medium leading-relaxed mb-10">
                      {post.desc}
                    </p>
                 </div>
 
-                <div className="pt-8 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div className="pt-8 border-t border-border-subtle flex items-center justify-between">
                    <div className="flex items-center gap-6">
                       <div className="flex items-center gap-2">
-                         <Clock className="w-3.5 h-3.5 text-slate-300" />
-                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{post.readTime}</span>
+                         <Clock className="w-3.5 h-3.5 text-text-faint" />
+                         <span className="text-[10px] font-semibold text-text-faint uppercase tracking-wider">{post.readTime}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                         <BookOpen className="w-3.5 h-3.5 text-slate-300" />
-                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{post.date}</span>
+                         <BookOpen className="w-3.5 h-3.5 text-text-faint" />
+                         <span className="text-[10px] font-semibold text-text-faint uppercase tracking-wider">{post.date}</span>
                       </div>
                    </div>
                    <button className="text-brand-primary hover:translate-x-1 transition-transform">

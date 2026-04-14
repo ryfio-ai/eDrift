@@ -67,7 +67,7 @@ export default function Footer() {
           </motion.div>
 
           <motion.div variants={fadeIn}>
-            <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Product Line</h4>
+            <h4 className="text-text-main font-semibold text-[9px] uppercase tracking-[0.25em] mb-8">Product Line</h4>
             <ul className="space-y-4">
               {links.products.map(link => (
                 <li key={link.name}>
@@ -80,7 +80,7 @@ export default function Footer() {
           </motion.div>
 
           <motion.div variants={fadeIn}>
-            <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Resources</h4>
+            <h4 className="text-text-main font-semibold text-[9px] uppercase tracking-[0.25em] mb-8">Resources</h4>
             <ul className="space-y-4">
               {links.resources.map(link => (
                 <li key={link.name}>
@@ -93,7 +93,7 @@ export default function Footer() {
           </motion.div>
 
           <motion.div variants={fadeIn}>
-            <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Global HQ</h4>
+            <h4 className="text-text-main font-semibold text-[9px] uppercase tracking-[0.25em] mb-8">Global HQ</h4>
             <ul className="space-y-6">
               <li className="flex items-start gap-4">
                  <Mail className="w-5 h-5 text-brand-primary shrink-0" />
@@ -114,10 +114,10 @@ export default function Footer() {
         </motion.div>
 
         <div className="pt-12 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-6">
-           <p className="text-text-faint text-[9px] font-black uppercase tracking-[0.3em] text-center md:text-left">
+           <p className="text-text-faint text-[9px] font-semibold uppercase tracking-[0.25em] text-center md:text-left">
               © 2026 eDrift Electric. <br className="md:hidden" /> Engineering, validation, and scale.
            </p>
-           <div className="flex gap-8 text-[9px] font-black uppercase tracking-[0.3em] text-text-faint">
+           <div className="flex gap-8 text-[9px] font-semibold uppercase tracking-[0.25em] text-text-faint">
               <Link href="/about" className="hover:text-text-main transition-colors">Compliance</Link>
               <Link href="/contact" className="hover:text-text-main transition-colors">Partnerships</Link>
            </div>

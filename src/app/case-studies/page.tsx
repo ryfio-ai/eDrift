@@ -53,15 +53,15 @@ export default function CaseStudiesPage() {
       <div className="max-w-7xl mx-auto">
         <div className="mb-24 text-center">
            <div className="flex items-center justify-center gap-4 mb-8">
-              <div className="w-12 h-[3px] bg-brand-primary" />
-              <div className="text-[10px] uppercase tracking-[0.3em] font-black text-brand-primary">Technical Case Studies</div>
-              <div className="w-12 h-[3px] bg-brand-primary" />
+              <div className="w-12 h-px bg-brand-primary" />
+              <div className="text-[10px] tracking-[0.15em] font-semibold text-brand-primary uppercase">Technical Case Studies</div>
+              <div className="w-12 h-px bg-brand-primary" />
            </div>
-           <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 tracking-tight leading-[0.95]">
+           <h1 className="text-4xl md:text-7xl font-bold text-text-main mb-8 tracking-tight leading-[1.1]">
              Engineering <br />
              <span className="text-brand-primary">Success Stories_</span>
            </h1>
-           <p className="text-xl text-slate-500 font-semibold leading-relaxed max-w-2xl mx-auto">
+           <p className="text-lg md:text-xl text-text-muted font-medium leading-relaxed max-w-2xl mx-auto">
              How we help global OEMs solve complex power conversion challenges 
              with automotive-grade efficiency and reliability.
            </p>
@@ -73,16 +73,16 @@ export default function CaseStudiesPage() {
            ))}
         </div>
 
-        <div className="mt-32 pt-20 border-t border-slate-100 grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="mt-32 pt-20 border-t border-border-subtle grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
-              { icon: Globe, label: "Global Deployments", val: "10k+ Units" },
-              { icon: ShieldCheck, label: "Safety Standard", val: "ASIL-D / SIL-2" },
+              { icon: Globe, label: "Global Deployments", val: "10,000+ Units" },
+              { icon: ShieldCheck, label: "Safety Alignment", val: "ASIL-D / SIL-2" },
               { icon: Zap, label: "Avg. Efficiency", value: "97.5%" }
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center">
                  <stat.icon className="w-10 h-10 text-brand-primary opacity-20 mb-6" />
-                 <p className="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-black mb-2">{stat.label}</p>
-                 <h4 className="text-3xl font-black text-slate-900 tracking-tighter">{stat.val || stat.value}</h4>
+                 <p className="text-[10px] tracking-[0.2em] text-text-faint font-semibold uppercase mb-2">{stat.label}</p>
+                 <h4 className="text-3xl font-bold text-text-main tracking-tighter tech-value">{stat.val || stat.value}</h4>
               </div>
             ))}
         </div>

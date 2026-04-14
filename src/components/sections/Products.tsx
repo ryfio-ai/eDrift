@@ -3,8 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
-import { GlowButton } from "@/components/ui/GlowButton";
-import { ChevronRight, Cpu, Battery, Zap, RefreshCw, Layers } from "lucide-react";
+import { ChevronRight, Cpu, Zap, RefreshCw, Layers } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -53,13 +52,13 @@ export const Products = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
           <div className="max-w-2xl">
             <Badge variant="purple" className="mb-6">Global Lineup</Badge>
-            <h2 className="text-4xl md:text-6xl font-black font-heading tracking-tighter text-slate-900">
+            <h2 className="text-4xl md:text-6xl font-bold font-heading tracking-tight text-text-main">
               Technical <br />
-              <span className="text-gradient">Product Roadmap</span>
+              <span className="text-brand-primary">Product Roadmap_</span>
             </h2>
           </div>
-          <p className="text-slate-500 max-w-sm mb-2 font-medium">
-            From current production-ready chargers to our upcoming energy solutions, we cover the full power cycle.
+          <p className="text-text-muted max-w-sm mb-2 font-medium">
+            From current production-ready chargers to our upcoming energy solutions, we cover the full power electronics cycle.
           </p>
         </div>
 
@@ -83,12 +82,12 @@ export const Products = () => {
               key={cat.id}
               variants={{
                 hidden: { opacity: 0, y: 30 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+                show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
               }}
               className="flex flex-col"
             >
-              <div className="flex flex-col h-full bg-slate-50 border border-slate-100 rounded-[32px] overflow-hidden group hover:shadow-2xl transition-all duration-500">
-                <div className="aspect-[1/1] relative overflow-hidden bg-slate-200">
+              <div className="flex flex-col h-full bg-bg-main border border-border-subtle rounded-[24px] overflow-hidden group hover:shadow-xl transition-all duration-500">
+                <div className="aspect-[1/1] relative overflow-hidden bg-slate-100">
                   <Image 
                     src={cat.image} 
                     alt={cat.name}
@@ -105,28 +104,28 @@ export const Products = () => {
                 </div>
                 
                 <div className="p-8 flex-grow flex flex-col">
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-royal-blue mb-4 shadow-sm">
+                  <div className="w-12 h-12 rounded-xl bg-white border border-border-subtle flex items-center justify-center text-brand-primary mb-4 shadow-sm">
                      <cat.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-2xl font-black font-heading mb-2 text-slate-900">{cat.name}</h3>
-                  <p className="text-slate-500 text-sm mb-6 font-medium leading-relaxed">{cat.tagline}</p>
+                  <h3 className="text-xl font-bold font-heading mb-2 text-text-main">{cat.name}</h3>
+                  <p className="text-text-muted text-sm mb-6 font-medium leading-relaxed">{cat.tagline}</p>
                   
                   <div className="mt-auto space-y-3">
                     {cat.items ? (
                       cat.items.map((item, i) => (
                         <Link key={i} href={item.href} className="block group/link">
-                           <div className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-royal-blue hover:shadow-md transition-all flex items-center justify-between">
+                           <div className="p-4 rounded-xl bg-white border border-border-subtle hover:border-brand-primary/20 hover:shadow-md transition-all flex items-center justify-between">
                               <div>
-                                 <span className="block text-xs font-black text-slate-900 mb-1">{item.name}</span>
-                                 <span className="block text-[10px] text-slate-400 font-bold">{item.desc}</span>
+                                 <span className="block text-xs font-bold text-text-main mb-1">{item.name}</span>
+                                 <span className="block text-[10px] text-text-faint font-semibold uppercase tracking-wider">{item.desc}</span>
                               </div>
-                              <ChevronRight className="w-4 h-4 text-royal-blue group-hover/link:translate-x-1 transition-transform" />
+                              <ChevronRight className="w-4 h-4 text-brand-primary group-hover/link:translate-x-1 transition-transform" />
                            </div>
                         </Link>
                       ))
                     ) : (
-                      <div className="p-4 rounded-2xl bg-slate-100/50 border border-dashed border-slate-200 text-center">
-                         <span className="text-[10px] uppercase tracking-widest font-black text-slate-400">Launching Soon</span>
+                      <div className="p-4 rounded-xl bg-slate-100/30 border border-dashed border-border-subtle text-center">
+                         <span className="text-[10px] uppercase tracking-widest font-semibold text-text-faint">Launching Soon</span>
                       </div>
                     )}
                   </div>
