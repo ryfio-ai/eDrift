@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { calculatorConfig } from "@/lib/calculator/config";
-import { HelpCircle, ChevronRight } from "lucide-react";
+import { Calculator, HelpCircle, ChevronRight } from "lucide-react";
 import { slugify } from "@/lib/calculator/utils";
 import { cn } from "@/lib/utils";
 
@@ -16,19 +16,14 @@ export const CalculatorSidebar: React.FC = () => {
   
   return (
     <div className="w-80 h-full flex flex-col bg-white border-r border-slate-200">
-      {/* Sidebar Header with Logo */}
+      {/* Sidebar Header - Simplified */}
       <div className="p-8 pb-4 border-b border-slate-50">
         <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10">
-            <Image 
-              src="/images/edrift logo.png" 
-              alt="eDrift" 
-              fill 
-              className="object-contain"
-            />
+          <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary">
+            <Calculator className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-800 tracking-tight leading-none">eDrift Electric</h2>
+            <h2 className="text-xl font-bold text-slate-800 tracking-tight leading-none">Design Calculator</h2>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1.5">Engineering Suite</p>
           </div>
         </div>
