@@ -1,14 +1,104 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { CalculatorVariable, CalculationResult } from "@/lib/calculator/types";
 import { runCalculation } from "@/lib/calculator/engine";
 import { convertToBase, convertFromBase } from "@/lib/calculator/unitConversions";
 import { FormulaDisplay } from "./FormulaDisplay";
-import { Info, Download, Moon, LayoutGrid, Clock, ChevronDown, FileText, Table, Zap } from "lucide-react";
+import { HelpCircle, Calculator, ChevronDown, Check, Zap, Table, FileText, Clock, RotateCcw } from "lucide-react";
 import { useCalculatorHistory } from "@/lib/calculator/HistoryContext";
 import { cn } from "@/lib/utils";
 import * as XLSX from "xlsx";
+
+// --- HELPERS (Mirrored from Reference Source) ---
+
+const formatLabel = (label: string) => {
+  if (!label) return label;
+  if (label.includes("_")) {
+    const parts = label.split("_");
+    return (
+      <span className="inline-flex items-baseline">
+        {parts[0]}
+        <sub className="ml-[1px]" style={{ fontSize: '0.7em', bottom: '-0.2em' }}>{parts[1]}</sub>
+      </span>
+    );
+  }
+  const match = label.match(/^([A-ZΔ])(in|out|peak|rms|max)$/);
+  if (match) {
+    return (
+      <span className="inline-flex items-baseline">
+        {match[1]}
+        <sub className="ml-[1px]" style={{ fontSize: '0.7em', bottom: '-0.2em' }}>{match[2]}</sub>
+      </span>
+    );
+  }
+  return label;
+};
+
+const smartFormat = (val: number | string) => {
+  const num = typeof val === "string" ? parseFloat(val) : val;
+  if (!Number.isFinite(num)) return val;
+  const abs = Math.abs(num);
+  if (abs >= 1e6 || (abs > 0 && abs < 1e-4)) {
+    const [base, exp] = num.toExponential(3).split("e");
+    return (
+      <span>
+        {parseFloat(base).toFixed(3)} × 10<sup style={{ fontSize: '0.6em' }}>{parseInt(exp)}</sup>
+      </span>
+    );
+  }
+  return num.toFixed(abs < 1 ? 6 : 4);
+};
+
+// --- COMPONENTS ---
+
+const CustomDropdown = ({ options, value, onChange, className }: { 
+  options: string[], 
+  value: string, 
+  onChange: (v: string) => void,
+  className?: string 
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setIsOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  return (
+    <div className={cn("relative w-full", className)} ref={ref}>
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full h-[40px] px-3 py-2 bg-main text-main border border-main rounded-md cursor-pointer transition-all hover:border-gray-400 select-none"
+      >
+        <span className="text-[14px] font-medium">{value}</span>
+        <ChevronDown className={cn("w-4 h-4 text-muted transition-transform", isOpen && "rotate-180")} />
+      </div>
+      {isOpen && (
+        <div className="absolute z-50 left-0 right-0 mt-1 min-w-max bg-card border border-main rounded-md shadow-lg overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200">
+          <ul className="max-h-[200px] overflow-y-auto scrollbar-clean py-1">
+            {options.map((option) => (
+              <li
+                key={option}
+                onClick={() => { onChange(option); setIsOpen(false); }}
+                className={cn(
+                  "px-4 py-2 text-[14px] cursor-pointer transition-colors",
+                  value === option ? "bg-primary text-white font-semibold" : "text-main hover:bg-primary-soft hover:text-primary"
+                )}
+              >
+                {option}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
 
 interface CalculatorModuleProps {
   variable: CalculatorVariable;
@@ -19,9 +109,8 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
   const [inputs, setInputs] = useState<Record<string, number>>({});
   const [units, setUnits] = useState<Record<string, string>>({});
   const [outputUnit, setOutputUnit] = useState(variable.outputUnits[0]);
-  const [formData, setFormData] = useState<Record<string, any>>({
-    topology: "Buck Converter",
-  });
+  const [formData, setFormData] = useState<Record<string, any>>({ topology: "Buck Converter" });
+  const [calculated, setCalculated] = useState(false);
 
   const { addHistoryItem, history } = useCalculatorHistory();
   const activeMethod = variable.methods[methodIndex];
@@ -30,277 +119,257 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
     return history.filter(item => item.variableName === variable.name).slice(0, 10);
   }, [history, variable.name]);
 
+  // Sync state initially
   useEffect(() => {
-    const initialInputs: Record<string, number> = {};
     const initialUnits: Record<string, string> = {};
-    activeMethod.inputFields.forEach((field) => {
-      initialInputs[field.name] = 0;
-      initialUnits[field.name] = field.units[0];
-    });
-    setInputs(initialInputs);
+    activeMethod.inputFields.forEach(f => initialUnits[f.name] = f.units[0]);
     setUnits(initialUnits);
-  }, [activeMethod]);
+    setCalculated(false);
+  }, [activeMethod, variable.name]);
 
   const toBase = (fieldName: string) => {
-    const value = inputs[fieldName] || 0;
+    const val = inputs[fieldName] || 0;
     const unit = units[fieldName] || "";
-    return convertToBase(value, unit);
+    return convertToBase(val, unit);
   };
 
-  const currentResult: CalculationResult | null = useMemo(() => {
+  const result: CalculationResult | null = useMemo(() => {
     return runCalculation(variable.name, activeMethod.name, toBase, formData);
   }, [variable.name, activeMethod.name, inputs, units, formData]);
 
   const handleCalculate = () => {
-    if (currentResult && currentResult.primaryValue !== "0.000" && currentResult.primaryValue !== "Invalid") {
+    setCalculated(true);
+    if (result && result.primaryValue !== "0.000" && result.primaryValue !== "Invalid") {
       addHistoryItem({
         variableName: variable.name,
         variableLabel: variable.label,
         methodName: activeMethod.name,
-        primaryValue: currentResult.primaryValue,
-        primaryUnit: currentResult.primaryUnit,
+        primaryValue: result.primaryValue,
+        primaryUnit: result.primaryUnit,
         inputs: { ...inputs },
         inputUnits: { ...units },
-        secondaryValues: currentResult.secondaryValues
+        secondaryValues: result.secondaryValues
       });
     }
   };
 
   const exportToExcel = () => {
-    if (!currentResult || currentResult.primaryValue === "Invalid") return;
-    const data = [
-      { Property: "Tool", Value: variable.label },
-      { Property: "Method", Value: activeMethod.name },
-      { Property: "Result", Value: `${currentResult.primaryValue} ${currentResult.primaryUnit}` },
-      { Property: "Timestamp", Value: new Date().toLocaleString() }
-    ];
-    const ws = XLSX.utils.json_to_sheet(data);
+    if (!result) return;
+    const ws = XLSX.utils.json_to_sheet([{ Result: result.primaryValue, Unit: result.primaryUnit }]);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Result");
+    XLSX.utils.book_append_sheet(wb, ws, "Calculation");
     XLSX.writeFile(wb, `${variable.name}_report.xlsx`);
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-white">
-      {/* Main Area */}
-      <div className="flex-1 px-10 py-12">
-        {/* Header Section - Exactly as high-fidelity reference */}
-        <div className="flex justify-between items-start mb-2">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">{variable.category || "Design Tool"}</h1>
-            <div className="flex items-center gap-2 text-sm text-slate-400 font-medium tracking-tight">
-              <span>Calculating</span>
-              <span className="bg-brand-primary/10 text-brand-primary px-2 py-0.5 rounded font-bold">{variable.label}</span>
-              <span className="text-slate-200">|</span>
-              <span>Method: {activeMethod.name}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-             <button className="p-3 bg-slate-100 text-slate-600 rounded-2xl hover:bg-slate-200 transition-colors">
-               <Moon className="w-5 h-5" />
-             </button>
-          </div>
+    <div className="flex flex-col gap-6 animate-in fade-in duration-500">
+      {/* 1. Header Section */}
+      <div className="flex justify-between items-start">
+        <div className="flex flex-col">
+          <h1 className="text-[28px] font-normal text-slate-800 tracking-tight mb-1">
+            {variable.label}
+          </h1>
+          <p className="text-[14px] text-slate-500 font-medium font-sans">
+             Calculating <span className="text-brand-primary font-semibold">{variable.label}</span> • Method {activeMethod.name.replace("M", "")}
+          </p>
         </div>
-
-        {/* Method Tab Switcher */}
-        <div className="flex gap-4 my-10 border-b border-slate-50 pb-8">
-           <div className="flex bg-slate-50 p-1.5 rounded-2xl border border-slate-100 shadow-inner">
-             {variable.methods.map((method, idx) => (
-                <button
-                  key={method.name}
-                  onClick={() => setMethodIndex(idx)}
-                  className={cn(
-                    "px-8 py-3 rounded-xl text-xs font-bold transition-all uppercase tracking-widest",
-                    methodIndex === idx 
-                      ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20" 
-                      : "text-slate-400 hover:text-slate-600"
-                  )}
-                >
-                  {method.name}
-                </button>
-             ))}
-           </div>
-        </div>
-
-        {/* Hero Formula Box */}
-        <div className="bg-brand-primary/5 border border-brand-primary/10 rounded-[40px] p-16 mb-12 flex flex-col items-center justify-center relative shadow-sm">
-           <div className="absolute top-6 left-6 opacity-20">
-              <Zap className="w-6 h-6 text-brand-primary" />
-           </div>
-           <FormulaDisplay 
-              formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck Converter"]} 
-           />
-        </div>
-
-        {/* Input Area */}
-        <div className="space-y-12">
-           {/* Topology Settings (if applicable) */}
-           {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 p-8 bg-slate-50 rounded-[32px] border border-slate-100">
-                 <div className="flex items-center gap-3">
-                    <span className="text-lg font-bold text-slate-800">Topology Selection</span>
-                    <Info className="w-4 h-4 text-slate-300" />
-                 </div>
-                 <div className="flex bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm">
-                    {["Buck", "Boost"].map((top) => (
-                      <button
-                        key={top}
-                        onClick={() => setFormData({ ...formData, topology: `${top} Converter` })}
-                        className={cn(
-                          "px-10 py-3 rounded-xl text-xs font-bold transition-all uppercase tracking-widest",
-                          formData.topology === `${top} Converter` 
-                            ? "bg-brand-primary text-white shadow-md shadow-brand-primary/20" 
-                            : "text-slate-400 hover:text-slate-600"
-                        )}
-                      >
-                        {top}
-                      </button>
-                    ))}
-                 </div>
-              </div>
-           )}
-
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 group/inputs">
-              {activeMethod.inputFields
-                .filter(field => !field.topologyFilter || field.topologyFilter === formData.topology)
-                .map((field) => (
-                <div key={field.name} className="space-y-4">
-                  <div className="flex items-center justify-between px-2">
-                    <div className="flex items-center gap-2">
-                      <label className="text-[11px] font-black text-slate-400 uppercase tracking-[0.15em]">{field.label}</label>
-                      <Info className="w-3.5 h-3.5 text-slate-200" />
-                    </div>
-                  </div>
-                  <div className="flex bg-slate-50 rounded-3xl border border-slate-100 overflow-hidden focus-within:ring-4 focus-within:ring-brand-primary/5 focus-within:border-brand-primary/20 focus-within:bg-white transition-all shadow-sm">
-                    <input
-                      type="number"
-                      value={inputs[field.name] || ""}
-                      onChange={(e) => setInputs({ ...inputs, [field.name]: parseFloat(e.target.value) || 0 })}
-                      className="flex-grow bg-transparent px-8 py-5 text-lg font-bold text-slate-800 outline-none placeholder:text-slate-200"
-                      placeholder="0.00"
-                    />
-                    <div className="bg-white border-l border-slate-100 flex items-center px-6">
-                      <select
-                        value={units[field.name]}
-                        onChange={(e) => setUnits({ ...units, [field.name]: e.target.value })}
-                        className="bg-transparent text-[11px] font-black text-brand-primary outline-none cursor-pointer uppercase tracking-widest text-center min-w-[60px]"
-                      >
-                        {field.units.map((u) => (
-                          <option key={u} value={u}>{u}</option>
-                        ))}
-                      </select>
-                      <ChevronDown className="w-3.5 h-3.5 text-slate-300 ml-2" />
-                    </div>
-                  </div>
-                </div>
-              ))}
-           </div>
-
+        <div className="flex gap-2">
            <button 
-             onClick={handleCalculate}
-             className="w-full bg-brand-primary hover:bg-brand-primary/95 text-white py-6 rounded-[32px] font-bold text-xl shadow-2xl shadow-brand-primary/30 transition-all active:scale-[0.98] group flex items-center justify-center gap-4"
+             onClick={() => { setInputs({}); setCalculated(false); }}
+             className="w-10 h-10 bg-white border border-border-main rounded-lg flex items-center justify-center text-slate-500 hover:bg-bg-soft transition-colors shadow-sm"
            >
-             <Zap className="w-6 h-6 group-hover:scale-110 transition-transform" />
-             Execute Computation
+              <RotateCcw className="w-5 h-5" />
            </button>
-
-           {/* Results Preview Card - Premium Style */}
-           {currentResult && currentResult.primaryValue !== "0.000" && (
-              <div className="p-10 bg-slate-900 rounded-[40px] text-white shadow-2xl relative overflow-hidden animate-in fade-in slide-in-from-top-4 duration-700">
-                 <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/20 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
-                 <div className="relative z-10">
-                    <div className="flex items-center gap-4 mb-10">
-                       <div className="w-10 h-10 rounded-full bg-brand-primary/20 flex items-center justify-center text-brand-primary">
-                          <Zap className="w-5 h-5" />
-                       </div>
-                       <div className="h-px bg-white/10 flex-grow" />
-                       <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 italic">Result Verified_</span>
-                    </div>
-
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                       <div>
-                          <p className="text-[11px] font-black text-brand-primary uppercase tracking-[0.25em] mb-4">Calculated {variable.label}</p>
-                          <div className="flex items-end gap-5">
-                             <div className="text-7xl font-black tracking-tighter leading-none">{currentResult.primaryValue}</div>
-                             <div className="flex flex-col mb-1">
-                                <span className="bg-brand-primary text-[11px] px-3 py-1.5 rounded-lg font-black uppercase tracking-widest">{currentResult.primaryUnit}</span>
-                             </div>
-                          </div>
-                       </div>
-                       
-                       {currentResult.secondaryValues && (
-                          <div className="flex flex-wrap gap-8 pt-8 md:pt-0 border-t md:border-t-0 md:border-l border-white/10 md:pl-12">
-                             {Object.entries(currentResult.secondaryValues).map(([label, data]) => (
-                                <div key={label} className="flex flex-col gap-2">
-                                   <span className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em]">{label}</span>
-                                   <span className="text-xl font-black text-white/80">{data.value} <span className="text-[10px] text-brand-primary uppercase">{data.unit}</span></span>
-                                </div>
-                             ))}
-                          </div>
-                       )}
-                    </div>
-                 </div>
-              </div>
-           )}
         </div>
       </div>
 
-      {/* Right Interaction Sidebar */}
-      <div className="w-full lg:w-[420px] bg-slate-50/50 border-l border-slate-100 p-10 space-y-12">
-         {/* Export Actions */}
-         <div className="space-y-4">
-            <h3 className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-6 px-2">Data Operations_</h3>
-            <div className="grid grid-cols-2 gap-4">
-               <button 
-                 onClick={() => window.print()}
-                 className="flex flex-col items-center gap-4 p-6 bg-white border border-slate-200 rounded-[28px] hover:border-brand-primary/30 hover:shadow-xl hover:shadow-brand-primary/5 transition-all group"
-               >
-                  <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand-primary transition-colors">
-                     <FileText className="w-6 h-6" />
-                  </div>
-                  <span className="text-[11px] font-black uppercase tracking-widest text-slate-600">Export PDF</span>
-               </button>
-               <button 
-                 onClick={exportToExcel}
-                 className="flex flex-col items-center gap-4 p-6 bg-white border border-slate-200 rounded-[28px] hover:border-brand-primary/30 hover:shadow-xl hover:shadow-brand-primary/5 transition-all group"
-               >
-                  <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 group-hover:text-brand-primary transition-colors">
-                     <Table className="w-6 h-6" />
-                  </div>
-                  <span className="text-[11px] font-black uppercase tracking-widest text-slate-600">Export Excel</span>
-               </button>
-            </div>
-         </div>
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left Content Area */}
+        <div className="flex-1 min-w-0 flex flex-col gap-5">
+           
+           {/* 2. Method Tabs */}
+           <div className="w-full overflow-x-auto scrollbar-thin pb-2">
+              <div className="inline-flex items-center bg-white border border-border-main rounded-lg p-1 shadow-sm w-max font-sans">
+                 {variable.methods.map((method, index) => (
+                    <button
+                      key={method.name}
+                      onClick={() => setMethodIndex(index)}
+                      className={cn(
+                        "px-8 py-2 rounded-md text-[15px] font-medium transition-all-custom",
+                        methodIndex === index ? "bg-brand-primary text-white shadow-md" : "text-slate-500 hover:bg-bg-soft cursor-pointer"
+                      )}
+                    >
+                      {method.name.startsWith("M") ? `Method ${method.name.replace("M", "")}` : method.name}
+                    </button>
+                 ))}
+              </div>
+           </div>
 
-         {/* Calculator History */}
-         <div className="space-y-8">
-            <div className="flex items-center justify-between px-2">
-               <div className="flex items-center gap-3">
-                  <Clock className="w-6 h-6 text-brand-primary" />
-                  <h4 className="font-bold text-xl text-slate-800 tracking-tight">Recent Calc</h4>
-               </div>
-               <LayoutGrid className="w-5 h-5 text-slate-200" />
-            </div>
+           {/* 3. Formula Hero */}
+           <div className="bg-brand-primary/5 border border-brand-primary/10 rounded-xl p-8 flex flex-col items-center justify-center min-h-[120px] shadow-inner">
+              <FormulaDisplay formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck Converter"]} />
+           </div>
 
-            <div className="space-y-4">
-               {currentToolHistory.length === 0 ? (
-                 <div className="py-24 flex flex-col items-center justify-center text-slate-200 bg-white/50 rounded-[32px] border-2 border-dashed border-slate-100">
-                    <Clock className="w-12 h-12 mb-4 opacity-10" />
-                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">Ready for Calculations</p>
+           {/* 4. Input Form Area */}
+           <div className="bg-white p-6 rounded-xl border border-border-main shadow-sm flex flex-col gap-6">
+              {/* Topology Dropdown if needed */}
+              {["Inductance", "RMSCapacitorCurrent", "MinimumCapacitance"].includes(variable.name) && (
+                 <div className="w-full sm:w-1/2">
+                    <label className="text-brand-primary mb-2 text-[16px] block font-medium">Topology</label>
+                    <div className="flex gap-2 bg-bg-main p-1 rounded-md border border-border-main w-fit font-sans">
+                       {["Buck Converter", "Boost Converter"].map(t => (
+                          <button
+                            key={t}
+                            onClick={() => setFormData({ ...formData, topology: t })}
+                            className={cn(
+                              "px-8 py-1.5 rounded-md text-[14px] transition-all hover-translate",
+                              formData.topology === t ? "bg-brand-primary text-white shadow-md" : "text-slate-500 hover:bg-bg-soft"
+                            )}
+                          >
+                             {t.replace(" Converter", "")}
+                          </button>
+                       ))}
+                    </div>
                  </div>
-               ) : (
-                 currentToolHistory.map((item, idx) => (
-                    <div key={idx} className="p-6 bg-white border border-slate-200 rounded-[32px] hover:shadow-lg transition-all border-l-[6px] border-l-brand-primary group cursor-help">
-                       <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-3 block">{item.methodName}</span>
-                       <div className="flex items-center justify-between">
-                          <span className="text-2xl font-black text-slate-800 tracking-tighter group-hover:text-brand-primary transition-colors">{item.primaryValue}</span>
-                          <span className="bg-brand-primary/5 text-brand-primary text-[10px] font-black px-3 py-1.5 rounded-lg border border-brand-primary/10 uppercase">{item.primaryUnit}</span>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                 {activeMethod.inputFields
+                   .filter(f => !f.topologyFilter || f.topologyFilter === formData.topology)
+                   .map(field => (
+                    <div key={field.name} className="flex flex-col gap-1.5 relative">
+                       <label className="flex items-center text-brand-primary text-[15px] sm:text-[17px] font-medium tracking-wide">
+                          {formatLabel(field.label)}
+                          <div className="ml-3">
+                             <HelpCircle className="w-3.5 h-3.5 text-slate-200 cursor-help" />
+                          </div>
+                       </label>
+                       <div className="flex gap-2">
+                          <input 
+                            type="number"
+                            value={inputs[field.name] || ""}
+                            onChange={(e) => setInputs({ ...inputs, [field.name]: parseFloat(e.target.value) || 0 })}
+                            placeholder="0.0"
+                            className="w-full bg-bg-main border border-border-main rounded-md px-3 py-2 text-[14px] sm:text-[15px] h-[40px] outline-none hover:border-gray-300 focus:border-brand-primary transition-colors text-slate-800"
+                          />
+                          {field.units[0] !== "" && (
+                             <div className="flex-none w-[90px]">
+                                <CustomDropdown 
+                                   options={field.units} 
+                                   value={units[field.name] || field.units[0]} 
+                                   onChange={(val) => setUnits({ ...units, [field.name]: val })}
+                                />
+                             </div>
+                          )}
                        </div>
                     </div>
-                 ))
-               )}
-            </div>
-         </div>
+                 ))}
+              </div>
+
+              <div className="flex justify-end mt-4">
+                 <button 
+                   onClick={handleCalculate}
+                   className="px-16 py-3 bg-brand-primary hover:bg-brand-primary/90 text-white font-bold rounded-md shadow-lg glimmer-effect hover-translate transition-all"
+                 >
+                    Calculate
+                 </button>
+              </div>
+           </div>
+
+           {/* 5. Summary Board Cards */}
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-[260px]">
+              {/* Inputs Panel */}
+              <div className="bg-white border border-border-main rounded-xl p-6 shadow-sm flex flex-col overflow-hidden">
+                 <h3 className="text-[17px] font-semibold text-slate-800 mb-4">Current Inputs</h3>
+                 <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin space-y-3">
+                    {Object.keys(inputs).length === 0 ? (
+                       <p className="text-sm text-slate-500 italic text-center py-10">No inputs entered yet.</p>
+                    ) : (
+                       Object.entries(inputs).map(([key, val]) => (
+                          <div key={key} className="flex justify-between items-center border-b border-slate-50 pb-2 last:border-0">
+                             <span className="text-[15px] text-brand-primary font-semibold">{formatLabel(key)}</span>
+                             <span className="text-[15px] font-medium text-slate-800">{val} <span className="text-slate-500 font-normal lowercase">{units[key]}</span></span>
+                          </div>
+                       ))
+                    )}
+                 </div>
+              </div>
+
+              {/* Results Panel */}
+              <div className="bg-white border border-border-main rounded-xl p-6 shadow-sm flex flex-col overflow-hidden">
+                 <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-[17px] font-semibold text-slate-800 font-sans">Calculated Result</h3>
+                    <CustomDropdown 
+                       options={variable.outputUnits} 
+                       value={outputUnit} 
+                       onChange={setOutputUnit} 
+                       className="w-[90px] h-8"
+                    />
+                 </div>
+                 <div className="flex-1 flex flex-col justify-center items-center text-center">
+                    {calculated && result ? (
+                       <div className="flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-300">
+                          <div className="flex items-baseline gap-2">
+                             <span className="text-slate-500 text-[16px] font-medium">{formatLabel(variable.symbol || variable.label)} =</span>
+                             <span className="text-[32px] font-black text-brand-primary tracking-tight">{smartFormat(convertFromBase(result.rawValue!, outputUnit))}</span>
+                             <span className="text-slate-500 text-[15px]">{outputUnit}</span>
+                          </div>
+                          {result.secondaryValues && Object.entries(result.secondaryValues).map(([k, v]) => (
+                             <div key={k} className="flex items-baseline gap-2 opacity-80">
+                                <span className="text-slate-500 text-[14px] font-medium">{formatLabel(k)} =</span>
+                                <span className="text-[18px] font-bold text-brand-primary">{v.value}</span>
+                                <span className="text-slate-500 text-[13px]">{v.unit}</span>
+                             </div>
+                          ))}
+                       </div>
+                    ) : (
+                       <p className="text-sm text-slate-500 italic">Enter values and click calculate to see results.</p>
+                    )}
+                 </div>
+                 <div className="mt-4 pt-4 border-t border-border-main text-center">
+                    <p className="text-[13px] text-slate-500 font-medium uppercase tracking-wide">Method Verified: eDrift Engine V2.0</p>
+                 </div>
+              </div>
+           </div>
+        </div>
+
+        {/* Right Interaction Sidebar - History */}
+        <div className="w-full lg:w-[320px] flex flex-col gap-6">
+           <div className="flex gap-2">
+              <button onClick={() => window.print()} className="flex-1 flex items-center justify-center gap-2 h-11 bg-white border border-border-main rounded-lg text-[13px] font-bold text-slate-500 uppercase tracking-wider hover:bg-bg-soft transition-all">
+                 <FileText className="w-4 h-4" /> PDF
+              </button>
+              <button onClick={exportToExcel} className="flex-1 flex items-center justify-center gap-2 h-11 bg-white border border-border-main rounded-lg text-[13px] font-bold text-slate-500 uppercase tracking-wider hover:bg-bg-soft transition-all">
+                 <Table className="w-4 h-4" /> EXCEL
+              </button>
+           </div>
+
+           <div className="flex-1 bg-white p-6 rounded-xl border border-border-main shadow-sm flex flex-col min-h-[400px]">
+              <div className="flex items-center gap-3 mb-6">
+                 <Clock className="w-5 h-5 text-brand-primary" />
+                 <h4 className="font-bold text-lg text-slate-800 font-sans">History</h4>
+              </div>
+
+              <div className="flex-1 overflow-y-auto scrollbar-clean space-y-4 pr-1">
+                 {currentToolHistory.length === 0 ? (
+                    <div className="h-full flex flex-col items-center justify-center text-center opacity-20 py-20">
+                       <Calculator className="w-12 h-12 mb-4" />
+                       <p className="text-xs uppercase font-bold tracking-[0.2em]">Empty History</p>
+                    </div>
+                 ) : (
+                    currentToolHistory.map((item, idx) => (
+                       <div key={idx} className="p-4 bg-slate-50 rounded-lg border border-border-main hover:border-brand-primary/30 transition-all cursor-help group">
+                          <span className="text-[11px] font-bold text-slate-500 uppercase mb-1 block">{item.methodName}</span>
+                          <div className="flex justify-between items-baseline">
+                             <span className="text-xl font-bold text-slate-800 group-hover:text-brand-primary transition-colors">{item.primaryValue}</span>
+                             <span className="text-[12px] font-bold text-brand-primary uppercase">{item.primaryUnit}</span>
+                          </div>
+                       </div>
+                    ))
+                 )}
+              </div>
+           </div>
+        </div>
       </div>
     </div>
   );
