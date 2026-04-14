@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { FloatingSupport } from "@/components/layout/FloatingSupport";
 import { CookieConsent } from "@/components/layout/CookieConsent";
+import { Analytics } from '@vercel/analytics/next';
 
 const geist = Geist({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
         <Footer />
         <FloatingSupport />
         <CookieConsent />
+        <Analytics />
       </body>
     </html>
   );
