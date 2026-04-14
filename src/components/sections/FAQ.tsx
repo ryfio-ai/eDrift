@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
+import { staggerContainer, fadeIn, motionTokens } from "@/lib/motion";
 
 const faqs = [
   {
@@ -35,35 +36,48 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-32 px-6 bg-white overflow-hidden">
+    <section className="py-32 px-6 bg-white overflow-hidden reveal-fade">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-20 text-center">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-20 text-center"
+        >
           <div className="inline-flex items-center gap-4 mb-6">
-            <div className="w-12 h-[2px] bg-brand-primary" />
-            <p className="label-uppercase">Industrial FAQ</p>
-            <div className="w-12 h-[2px] bg-brand-primary" />
+            <div className="w-12 h-[1px] bg-border-subtle" />
+            <p className="label-uppercase">Inquiry / Support</p>
+            <div className="w-12 h-[1px] bg-border-subtle" />
           </div>
-          <h2 className="text-center">
-            Answers for Engineering and <br />
-            <span className="text-brand-primary">Procurement Teams</span>
+          <h2 className="text-center text-text-main">
+            Engineering & Procurement <br />
+            <span className="text-brand-primary">Support FAQ</span>
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="space-y-4">
+        <motion.div 
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="space-y-3"
+        >
           {faqs.map((faq, i) => (
-            <div 
+            <motion.div 
               key={i} 
-              className={`border rounded-2xl transition-all duration-300 ${openIndex === i ? "border-brand-primary/20 bg-bg-subtle shadow-lg" : "border-border-subtle hover:border-slate-200"}`}
+              variants={fadeIn}
+              className={`border transition-all duration-300 rounded-lg ${openIndex === i ? "border-brand-primary/20 bg-bg-main" : "border-border-subtle hover:border-stronger-border"}`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full px-8 py-7 flex items-center justify-between text-left group"
+                className="w-full px-8 py-6 flex items-center justify-between text-left group"
               >
-                <span className={`text-lg font-bold tracking-tight transition-colors ${openIndex === i ? "text-text-main" : "text-text-muted group-hover:text-text-main"}`}>
+                <span className={`text-base font-bold tracking-tight transition-colors ${openIndex === i ? "text-text-main" : "text-text-muted group-hover:text-text-main"}`}>
                   {faq.q}
                 </span>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${openIndex === i ? "bg-brand-primary text-white rotate-180" : "bg-bg-subtle text-text-faint group-hover:bg-slate-100"}`}>
-                  {openIndex === i ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                <div className={`w-6 h-6 rounded flex items-center justify-center transition-all ${openIndex === i ? "bg-brand-primary text-white rotate-180" : "bg-bg-subtle text-text-faint group-hover:bg-slate-200"}`}>
+                  {openIndex === i ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                 </div>
               </button>
               
@@ -73,21 +87,21 @@ export const FAQ = () => {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.32, ease: motionTokens.easeEnter }}
                     className="overflow-hidden"
                   >
                     <div className="px-8 pb-8">
                       <div className="h-px bg-border-subtle mb-6" />
-                      <p className="text-sm font-medium text-text-muted leading-relaxed">
+                      <p className="text-[13px] font-medium text-text-muted leading-relaxed">
                         {faq.a}
                       </p>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

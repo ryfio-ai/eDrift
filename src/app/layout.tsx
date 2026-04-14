@@ -1,19 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { ChatWidget } from "@/components/chatbot/ChatWidget";
+import { FloatingSupport } from "@/components/layout/FloatingSupport";
 
-const inter = Inter({
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-geist",
   display: "swap",
 });
 
@@ -30,7 +24,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
+      className={`${geist.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-white font-sans text-slate-900">
         <Navbar />
@@ -38,7 +32,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        <ChatWidget />
+        <FloatingSupport />
       </body>
     </html>
   );

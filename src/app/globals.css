@@ -1,25 +1,30 @@
+@import "tailwindcss";
+
 @theme {
-  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
-  --font-heading: var(--font-outfit), system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-geist), system-ui, -apple-system, sans-serif;
+  --font-heading: var(--font-geist), system-ui, -apple-system, sans-serif;
   
-  --color-brand-primary: #0098db;
-  --color-brand-secondary: #0F172A;
-  --color-brand-accent: #00F0FF;
+  --color-brand-primary: #1598D1;
+  --color-brand-primary-hover: #0E7FB2;
+  --color-brand-primary-soft: #E8F5FB;
   
-  --color-bg-main: #FFFFFF;
-  --color-bg-subtle: #F8FAFC;
+  --color-brand-secondary: #4F4F54;
+  
+  --color-bg-main: #F8FAFB;
+  --color-bg-subtle: #FFFFFF;
   --color-bg-elevated: #F1F5F9;
   
-  --color-text-main: #0F172A;
-  --color-text-muted: #475569;
+  --color-text-main: #4F4F54;
+  --color-text-muted: #6B6B72;
   --color-text-faint: #94A3B8;
   
-  --color-border-subtle: rgba(15, 23, 42, 0.06);
-  --color-border-strong: rgba(15, 23, 42, 0.12);
+  /* Industrial Border System */
+  --color-border-subtle: #DDE3E8;
+  --color-stronger-border: #CBD5E1;
 
-  --radius-card: 14px;
-  --radius-input: 10px;
-  --radius-button: 10px;
+  --radius-card: 8px;
+  --radius-input: 6px;
+  --radius-button: 6px;
   --radius-pill: 9999px;
 
   /* Spacing Scale */
@@ -39,55 +44,59 @@
     font-feature-settings: "cv11", "tnum", "ss01", "ss03";
   }
 
-  /* Typography Scale */
+  /* Typography Scale - Compact & Professional */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-bold text-text-main tracking-tight leading-[1.15];
+    @apply font-heading font-semibold text-text-main tracking-tight leading-[1.2];
     font-family: var(--font-heading);
   }
 
   h1 {
-    @apply text-[40px] md:text-[56px] lg:text-[64px];
+    @apply text-[32px] md:text-[40px] lg:text-[48px];
   }
 
   h2 {
-    @apply text-3xl md:text-[40px];
+    @apply text-2xl md:text-[32px];
   }
 
   h3 {
-    @apply text-2xl md:text-[28px];
+    @apply text-xl md:text-[24px];
   }
 
   h4 {
-    @apply text-xl md:text-[20px];
+    @apply text-lg md:text-[20px];
   }
 
-  /* Accessibility: Global focus ring for keyboard navigation */
+  /* Accessibility: Global focus ring */
   :focus-visible {
     @apply outline-none ring-2 ring-brand-primary ring-offset-2 transition-all;
   }
 
-  /* Form and interactive elements should inherit font */
-  button, input, select, textarea {
-    font-family: inherit;
+  /* Tabular numbers for technical data */
+  .tech-value {
+    font-feature-settings: "tnum", "lnum";
+    @apply font-medium;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply h-12 px-8 bg-brand-primary text-white font-bold rounded-button transition-all 
-           hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-primary/20 
-           active:scale-95 inline-flex items-center justify-center gap-2 text-sm;
+    @apply h-11 px-6 bg-brand-primary text-white font-semibold rounded-button transition-all 
+           hover:bg-brand-primary-hover hover:shadow-lg hover:shadow-brand-primary/10 
+           active:scale-[0.98] inline-flex items-center justify-center gap-2 text-sm;
+    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   
   .btn-outline {
-    @apply h-12 px-8 bg-white border border-slate-200 text-slate-900 font-bold rounded-button transition-all 
-           hover:border-brand-primary hover:text-brand-primary hover:-translate-y-0.5 
-           active:scale-95 inline-flex items-center justify-center gap-2 text-sm;
+    @apply h-11 px-6 bg-white border border-stronger-border text-text-main font-semibold rounded-button transition-all 
+           hover:border-brand-primary hover:text-brand-primary
+           active:scale-[0.98] inline-flex items-center justify-center gap-2 text-sm;
+    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms cubic-bezier(0.16, 1, 0.3, 1), color 180ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .glass-card {
-    @apply bg-white border border-border-subtle shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300;
+  .enterprise-card {
+    @apply bg-white border border-border-subtle shadow-sm transition-all duration-300;
     border-radius: var(--radius-card);
+    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .section-container {
@@ -95,22 +104,86 @@
   }
 
   .label-uppercase {
-    @apply text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary;
+    @apply text-[10px] font-semibold uppercase tracking-[0.15em] text-text-faint;
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  @apply bg-slate-50;
-}
-::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 rounded-full border-4 border-slate-50 hover:bg-slate-300 transition-colors;
+/* --- Scroll-Driven Animation Specs --- */
+.reveal-fade {
+  opacity: 1;
 }
 
-/* Thin Scrollbar Utility */
+@supports (animation-timeline: view()) {
+  .reveal-fade {
+    opacity: 0;
+    animation: reveal-fade linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 85%;
+  }
+
+  .reveal-clip {
+    clip-path: inset(0 0 100% 0);
+    animation: reveal-clip linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 90%;
+  }
+}
+
+@keyframes reveal-fade {
+  to { opacity: 1; }
+}
+
+@keyframes reveal-clip {
+  to { clip-path: inset(0 0 0 0); }
+}
+
+/* --- Product Card Interaction Spec --- */
+.product-card {
+  transition:
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  @apply border-brand-primary/30 shadow-md;
+}
+
+.product-card:active {
+  transform: translateY(-1px);
+}
+
+.product-card .cta-arrow {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .cta-arrow {
+  transform: translateX(4px);
+}
+
+/* --- Accessibility: Reduced Motion --- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Custom Scrollbar - Industrial Style --- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-bg-main;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full border-2 border-bg-main hover:bg-slate-300 transition-colors;
+}
+
 .thin-scrollbar::-webkit-scrollbar {
   width: 4px;
 }

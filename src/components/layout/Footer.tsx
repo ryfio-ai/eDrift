@@ -4,6 +4,8 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
+import { motion } from "framer-motion";
+import { fadeIn, staggerContainer } from "@/lib/motion";
 
 export default function Footer() {
   const links = {
@@ -31,10 +33,16 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-bg-main border-t border-border-subtle pt-24 pb-12 px-6 font-sans">
+    <footer className="bg-bg-main border-t border-border-subtle pt-24 pb-12 px-6 reveal-fade">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
-          <div className="lg:col-span-1">
+        <motion.div 
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24"
+        >
+          <motion.div variants={fadeIn} className="lg:col-span-1">
              <Link href="/" className="inline-block mb-8">
                 <div className="relative w-40 h-10">
                    <Image 
@@ -51,14 +59,14 @@ export default function Footer() {
              </p>
              <div className="flex gap-4">
                {links.social.map((s, i) => (
-                 <a key={i} href={s.href} target="_blank" className="w-10 h-10 rounded-xl bg-bg-subtle flex items-center justify-center text-text-faint hover:text-brand-primary hover:border-brand-primary/20 transition-all border border-border-subtle">
+                 <a key={i} href={s.href} target="_blank" className="w-10 h-10 rounded bg-white flex items-center justify-center text-text-faint hover:text-brand-primary hover:border-brand-primary/20 transition-all border border-border-subtle">
                     <s.icon className="w-5 h-5" />
                  </a>
                ))}
              </div>
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={fadeIn}>
             <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Product Line</h4>
             <ul className="space-y-4">
               {links.products.map(link => (
@@ -69,9 +77,9 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={fadeIn}>
             <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Resources</h4>
             <ul className="space-y-4">
               {links.resources.map(link => (
@@ -82,9 +90,9 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={fadeIn}>
             <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Global HQ</h4>
             <ul className="space-y-6">
               <li className="flex items-start gap-4">
@@ -93,7 +101,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-4">
                  <Phone className="w-5 h-5 text-brand-primary shrink-0" />
-                 <span className="text-text-muted text-sm font-semibold leading-relaxed">+91 97902 74709</span>
+                 <span className="text-text-muted text-sm font-semibold leading-relaxed tech-value">+91 97902 74709</span>
               </li>
               <li className="flex items-start gap-4">
                  <MapPin className="w-5 h-5 text-brand-primary shrink-0" />
@@ -102,8 +110,8 @@ export default function Footer() {
                  </span>
               </li>
             </ul>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         <div className="pt-12 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-6">
            <p className="text-text-faint text-[9px] font-black uppercase tracking-[0.3em] text-center md:text-left">
@@ -118,4 +126,3 @@ export default function Footer() {
     </footer>
   );
 }
-

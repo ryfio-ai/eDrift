@@ -3,6 +3,7 @@
 import React from "react";
 import { X, Filter, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export interface FilterState {
   category: string[];
@@ -69,10 +70,10 @@ export const FilterSidebar = ({ filters, onChange, onClear }: FilterSidebarProps
     <div className="w-full flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <SlidersHorizontal className="w-5 h-5 text-brand-primary" />
-          <h4 className="text-lg font-semibold text-slate-900 tracking-tight">Technical Filters</h4>
+          <SlidersHorizontal className="w-4 h-4 text-brand-primary" />
+          <h4 className="text-sm font-bold text-text-main uppercase tracking-tight">Technical Filters</h4>
           {activeCount > 0 && (
-            <span className="w-5 h-5 rounded-md bg-brand-primary text-[10px] text-white flex items-center justify-center font-bold">
+            <span className="w-5 h-5 rounded bg-brand-primary text-[10px] text-white flex items-center justify-center font-bold tech-value">
               {activeCount}
             </span>
           )}
@@ -80,7 +81,7 @@ export const FilterSidebar = ({ filters, onChange, onClear }: FilterSidebarProps
         {activeCount > 0 && (
           <button 
             onClick={onClear}
-            className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-brand-primary transition-colors flex items-center gap-1"
+            className="text-[10px] font-bold uppercase tracking-widest text-text-faint hover:text-brand-primary transition-colors flex items-center gap-1"
           >
             Clear All
             <X className="w-3 h-3" />
@@ -88,34 +89,22 @@ export const FilterSidebar = ({ filters, onChange, onClear }: FilterSidebarProps
         )}
       </div>
 
-      <div className="space-y-6 max-h-[calc(100vh-400px)] overflow-y-auto pr-4 -mr-4 group/scroll">
-        <style jsx>{`
-          .group\/scroll::-webkit-scrollbar {
-            width: 4px;
-          }
-          .group\/scroll::-webkit-scrollbar-track {
-            background: transparent;
-          }
-          .group\/scroll::-webkit-scrollbar-thumb {
-            background: #e2e8f0;
-            border-radius: 10px;
-          }
-          .group\/scroll:hover::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-          }
-        `}</style>
+      <div className="space-y-6 max-h-[calc(100vh-320px)] overflow-y-auto pr-4 thin-scrollbar">
         {filterGroups.map((group) => (
-          <div key={group.id} className="space-y-4 border-b border-slate-100 pb-6 last:border-0">
-            <h5 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">
+          <div key={group.id} className="space-y-4 border-b border-border-subtle pb-6 last:border-0">
+            <h5 className="text-[10px] font-bold uppercase tracking-widest text-text-faint mb-3">
               {group.label}
             </h5>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-2.5">
               {group.options.map((option) => {
                 const isChecked = filters[group.id as keyof FilterState].includes(option);
                 return (
                   <label 
                     key={option} 
-                    className={`flex items-center gap-3 cursor-pointer group transition-all duration-300 ${isChecked ? 'translate-x-1' : ''}`}
+                    className={cn(
+                      "flex items-center gap-3 cursor-pointer group transition-all duration-200",
+                      isChecked ? "translate-x-0.5" : ""
+                    )}
                   >
                     <div className="relative">
                       <input
@@ -124,11 +113,14 @@ export const FilterSidebar = ({ filters, onChange, onClear }: FilterSidebarProps
                         checked={isChecked}
                         onChange={() => handleToggle(group.id as keyof FilterState, option)}
                       />
-                      <div className="w-5 h-5 rounded-md border-2 border-slate-200 peer-checked:border-brand-primary peer-checked:bg-brand-primary flex items-center justify-center transition-all">
-                        <div className={`w-1.5 h-1.5 rounded-full bg-white scale-0 transition-transform ${isChecked ? 'scale-100' : ''}`} />
+                      <div className="w-4 h-4 rounded border border-border-strong peer-checked:border-brand-primary peer-checked:bg-brand-primary flex items-center justify-center transition-all group-hover:border-brand-primary/50">
+                        <div className={cn("w-1 h-1 rounded-sm bg-white scale-0 transition-transform", isChecked ? "scale-100" : "")} />
                       </div>
                     </div>
-                    <span className={`text-sm font-medium transition-colors ${isChecked ? 'text-brand-primary font-bold' : 'text-slate-600 group-hover:text-slate-900'}`}>
+                    <span className={cn(
+                       "text-xs font-medium transition-colors tech-value", 
+                       isChecked ? "text-brand-primary font-bold" : "text-text-muted group-hover:text-text-main"
+                    )}>
                       {option}
                     </span>
                   </label>
@@ -139,20 +131,21 @@ export const FilterSidebar = ({ filters, onChange, onClear }: FilterSidebarProps
         ))}
       </div>
 
-      <div className="pt-4">
-        <div className="p-6 rounded-2xl bg-white border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden relative group">
-           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-              <Filter className="w-12 h-12 text-brand-primary" />
+      {/* Support Block */}
+      <div className="pt-2">
+        <div className="p-5 rounded-lg bg-bg-subtle border border-border-subtle relative overflow-hidden group">
+           <div className="absolute -top-2 -right-2 p-4 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
+              <Filter className="w-16 h-16 text-brand-primary" />
            </div>
-           <div className="flex items-center gap-2 mb-4">
-              <div className="w-1.5 h-6 bg-brand-primary rounded-full" />
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Engineering Support</p>
+           <div className="flex items-center gap-2 mb-3">
+              <div className="w-1 h-4 bg-brand-primary rounded-full" />
+              <p className="text-[10px] font-bold uppercase tracking-widest text-text-faint">Support</p>
            </div>
-           <p className="text-sm font-semibold text-slate-900 mb-6 leading-tight">
-              Require custom power <br /> specifications for your project?
+           <p className="text-xs font-bold text-text-main mb-4 leading-normal">
+              Need custom power <br /> specifications?
            </p>
-           <Link href="/contact" className="btn-primary w-full h-11 text-xs font-semibold">
-              Request Custom RFQ
+           <Link href="/contact" className="btn-outline w-full h-9 text-[11px] font-bold uppercase tracking-widest bg-white">
+              Request RFQ
            </Link>
         </div>
       </div>
