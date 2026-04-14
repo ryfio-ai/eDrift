@@ -23,37 +23,33 @@ interface FilterSidebarProps {
 const filterGroups = [
   {
     id: "category",
-    label: "Product Type",
-    options: ["Portable Charger", "On-Board Charger", "Din Rail Power Supply", "Custom PSU"],
+    label: "Product Category",
+    options: [
+      "Portable EV Charger",
+      "On Board Charger",
+      "On Board DC-DC",
+      "2-in-1 Integrated OBC",
+      "Bi-Directional Charger (V2L)"
+    ],
   },
   {
     id: "powerRating",
-    label: "Power Rating",
-    options: ["1-3 kW", "3-6 kW", "6-11 kW", "11 kW+"],
+    label: "Output Power",
+    options: ["< 1kW", "1–2kW", "3.3kW", "7.2kW", "11kW", "20kW"],
   },
   {
     id: "inputType",
-    label: "Input Type",
-    options: ["Single Phase", "Three Phase", "Wide Range"],
+    label: "Input Phase",
+    options: ["Single Phase", "Three Phase", "DC Input"],
   },
   {
     id: "outputVoltage",
-    label: "Output Voltage",
-    options: ["48 V", "72 V", "96 V", "Custom"],
-  },
-  {
-    id: "ipRating",
-    label: "IP Rating",
-    options: ["IP65", "IP67", "IP68"],
-  },
-  {
-    id: "useCase",
-    label: "Use Case",
-    options: ["2W/3W", "4W", "Commercial Fleet", "Industrial Automation"],
+    label: "System Voltage",
+    options: ["14V", "48V", "60V", "72V", "84V", "96V", "400V", "Combo"],
   },
   {
     id: "status",
-    label: "Availability Status",
+    label: "Development Stage",
     options: ["In production", "Customizable", "Sample available"],
   },
 ];
@@ -92,7 +88,22 @@ export const FilterSidebar = ({ filters, onChange, onClear }: FilterSidebarProps
         )}
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 max-h-[calc(100vh-400px)] overflow-y-auto pr-4 -mr-4 group/scroll">
+        <style jsx>{`
+          .group\/scroll::-webkit-scrollbar {
+            width: 4px;
+          }
+          .group\/scroll::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .group\/scroll::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+          }
+          .group\/scroll:hover::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+          }
+        `}</style>
         {filterGroups.map((group) => (
           <div key={group.id} className="space-y-4 border-b border-slate-100 pb-6 last:border-0">
             <h5 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">

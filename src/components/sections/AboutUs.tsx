@@ -27,12 +27,12 @@ export const AboutUs = () => {
             </h2>
             
             <p className="text-lg text-slate-500 leading-relaxed font-semibold mb-10 max-w-xl">
-              Founded in 2022, eDrift Electric builds automotive-grade power electronics for the global EV ecosystem, combining efficiency-focused design with reliability for demanding industrial and commercial deployments.
+              Founded in 2018, eDrift Electric builds automotive-grade power electronics for the global EV ecosystem, combining efficiency-focused design with reliability for demanding industrial and commercial deployments.
             </p>
 
             <div className="flex flex-wrap gap-8 items-center pt-8 border-t border-slate-200">
                <div className="flex flex-col">
-                  <span className="text-2xl font-black text-slate-900 tracking-tighter">Founded 2022</span>
+                  <span className="text-2xl font-black text-slate-900 tracking-tighter">Founded 2018</span>
                   <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Industry Core</span>
                </div>
                <div className="w-px h-10 bg-slate-200 hidden md:block" />

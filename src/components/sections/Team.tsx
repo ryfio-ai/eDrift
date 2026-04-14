@@ -11,7 +11,7 @@ const team = [
     name: "Sankar S",
     role: "Engineering Lead & Founder",
     image: "/images/team/sankar.jpg",
-    bio: "Pioneering high-efficiency power electronics with 15+ years of industrial experience. Led the design of eDrift's flagship 3.3kW OBC series and secured CE certification for the entire product lineup.",
+    bio: "Pioneering high-efficiency power electronics with 15+ years of industrial experience. Led the design of eDrift's flagship Elite series 3.3kW OBC and secured CE certification for the entire product lineup.",
     linkedin: "https://www.linkedin.com/in/sankar-edriftelectric",
     email: "sankar.s@edriftelectric.com"
   },

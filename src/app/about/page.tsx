@@ -42,14 +42,16 @@ export default function AboutPage() {
             <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-6">Our Engineering Mission</div>
             <h1 className="text-4xl md:text-6xl font-semibold text-slate-900 mb-8 leading-tight">
                Redefining EV <br />
-               <span className="text-brand-primary">Charging AI_</span>
+               <span className="text-brand-primary">Hardware Systems_</span>
             </h1>
-            <p className="text-lg text-slate-600 font-medium leading-relaxed mb-10">
-               Founded in **2018**, eDrift Electric is dedicated to providing world-class EV charging 
-               solutions that combine efficiency, reliability, and innovation. With over **15 years** 
-                of industry experience, we are committed to making electric vehicle charging accessible, 
-               safe, and convenient for everyone across the globe.
-            </p>
+            <div className="space-y-6 mb-10">
+              <p className="text-lg text-slate-600 font-medium leading-relaxed">
+                 Edrift Electric Private Limited is a technology-driven company pioneering advanced power electronics solutions for the electric mobility ecosystem. With a strong focus on innovation and engineering excellence, our experienced research and development team is dedicated to designing next-generation EV charging technologies.
+              </p>
+              <p className="text-lg text-slate-600 font-medium leading-relaxed">
+                 At Edrift Electric, we leverage cutting-edge semiconductor technologies such as silicon carbide (SiC) and gallium nitride (GaN) to develop highly efficient, compact, and reliable charging solutions. Our goal is to push the boundaries of power conversion efficiency while delivering products that are practical, scalable, and user-focused.
+              </p>
+            </div>
             <div className="flex flex-wrap gap-6 border-t border-slate-100 pt-10">
                <div className="flex items-center gap-3">
                   <Award className="w-5 h-5 text-brand-primary" />
@@ -75,17 +77,20 @@ export default function AboutPage() {
         <section className="mb-40">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
               <div className="space-y-8">
-                 <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">The Founding Narrative</h2>
-                 <div className="prose prose-slate font-medium text-slate-600 leading-relaxed space-y-6">
-                    <p>
-                       eDrift Electric emerged in 2022 from a core team of power electronics architects who recognized that the global shift towards 800V EV architectures lacked reliable, locally-engineered power conversion hardware. 
-                    </p>
-                    <p>
-                       Our journey began at the R&D labs of IIT Palakkad, where we perfected the interleaved PFC topologies and isolated LLC resonant converters that now power thousands of vehicles across the region.
-                    </p>
-                    <p>
-                       Today, we are a team of 40+ specialized engineers dedicated to one goal: achieving **97.5% efficiency** as an industry baseline, not a peak metric.
-                    </p>
+                 <h2 className="text-3xl font-semibold text-slate-900 tracking-tight">Vision & Mission</h2>
+                 <div className="prose prose-slate font-medium text-slate-600 leading-relaxed space-y-8 mt-6">
+                    <div>
+                       <h3 className="text-xl font-semibold text-slate-800 mb-3">Our Vision</h3>
+                       <p>
+                          To enable a sustainable and energy-efficient mobility ecosystem by developing innovative EV charging technologies that seamlessly integrate vehicles with other vehicles and external loads, empowering vehicles to intelligently consume, share, and utilize energy in everyday life.
+                       </p>
+                    </div>
+                    <div>
+                       <h3 className="text-xl font-semibold text-slate-800 mb-3">Our Mission</h3>
+                       <p>
+                          To design and deliver reliable, efficient, and intelligent EV charging solutions that empower users, accelerate the adoption of electric mobility, and contribute to a cleaner and more sustainable energy future.
+                       </p>
+                    </div>
                  </div>
               </div>
               
@@ -111,24 +116,24 @@ export default function AboutPage() {
            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 text-center px-12">
               <div>
                  <div className="text-5xl md:text-6xl font-semibold text-white mb-4 tracking-tighter">
-                   <Counter value={97.5} suffix="%" />
+                   <Counter value={97} suffix="%" />
                  </div>
-                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Baseline Efficiency</p>
-                 <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Standardized across all SiC/GaN production units.</p>
+                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Peak Efficiency</p>
+                 <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Verified across the Elite series OBC platforms.</p>
               </div>
               <div>
                  <div className="text-5xl md:text-6xl font-semibold text-brand-primary mb-4 tracking-tighter">
                    <Counter value={10000} suffix="+" />
                  </div>
-                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Chargers Delivered</p>
-                 <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Field-verified units across global OEM fleets.</p>
+                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Units Delivered</p>
+                 <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Field-proven engineering deployed globally.</p>
               </div>
               <div>
                  <div className="text-5xl md:text-6xl font-semibold text-white mb-4 tracking-tighter">
                    ASIL-D
                  </div>
-                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Functional Safety</p>
-                 <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">ISO 26262 diagnostic compliance at every stage.</p>
+                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Safety Integrity</p>
+                 <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Hardware diagnostics for mission-critical EV use.</p>
               </div>
            </div>
            {/* Glow */}
@@ -138,27 +143,27 @@ export default function AboutPage() {
         {/* Leadership Section */}
         <section className="mb-40">
            <div className="text-center mb-20">
-              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-4">Engineering Leadership</div>
-              <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">Visionary Power Architecture</h2>
+              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-4">Engineering Focus</div>
+              <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 tracking-tight">Core Product Families</h2>
            </div>
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { 
-                  role: "Executive Leadership", 
-                  title: "Chief Strategic Officer", 
-                  desc: "Former Tier-1 supply chain architect with 20+ years in power electronics management.",
-                  icon: Users 
-                },
-                { 
-                  role: "Principal Power Architect", 
-                  title: "Head of Engineering", 
-                  desc: "Specialized in resonant topologies and SiC component validation at the wafer level.",
+                  role: "Single-Phase OBC", 
+                  title: "Elite & EliteX Series", 
+                  desc: "Flagship 3.3kW to 7.2kW on-board chargers with high-density LLC architecture.",
                   icon: Cpu 
                 },
                 { 
-                  role: "Industrial Innovation", 
-                  title: "Lead Systems Designer", 
-                  desc: "Pioneering GaN integration and high-density thermal management for compact OBCs.",
+                  role: "Three-Phase Systems", 
+                  title: "Ultra & UltraX Series", 
+                  desc: "High-power 11kW to 20kW charging solutions for heavy industrial and fleet platforms.",
+                  icon: Zap 
+                },
+                { 
+                  role: "DC-DC Conversion", 
+                  title: "Delta & DeltaX Series", 
+                  desc: "Robust 750W to 1.5kW power converters for mission-critical auxiliary architectures.",
                   icon: Target 
                 }
               ].map((member, i) => (

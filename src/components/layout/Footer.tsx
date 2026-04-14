@@ -3,19 +3,19 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
 
 export default function Footer() {
   const links = {
     products: [
-      { name: "3.3kW On-Board Charger", href: "/products/ebc-33-sic" },
-      { name: "Portable Fleet Charger", href: "/products/ebc-portable" },
-      { name: "Custom PSU Solution", href: "/products/custom-psu" },
-      { name: "DC Fast Charging", href: "/products/dc-fast-charger" },
+      { name: "Elite Series OBC", href: "/products?category=On+Board+Charger" },
+      { name: "Ultra High-Power OBC", href: "/products?powerRating=11kW&powerRating=20kW" },
+      { name: "Delta DC-DC Converters", href: "/products?category=On+Board+DC-DC" },
+      { name: "Bi-Directional (V2L)", href: "/products?category=Bi-Directional+Charger+(V2L)" },
     ],
     resources: [
-      { name: "Design Calculator", href: "https://edrift-calculator.vercel.app/" },
-      { name: "Spec Catalog", href: "/products" },
+      { name: "Knowledge Hub", href: "/resources" },
+      { name: "TCO Calculator", href: "https://edrift-calculator.vercel.app/" },
       { name: "Case Study Portal", href: "/case-studies" },
       { name: "Engineering Blog", href: "/blog" },
     ],
@@ -31,12 +31,12 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-white border-t border-slate-100 pt-24 pb-12 px-6 font-sans">
+    <footer className="bg-bg-main border-t border-border-subtle pt-24 pb-12 px-6 font-sans">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
           <div className="lg:col-span-1">
              <Link href="/" className="inline-block mb-8">
-                <div className="relative w-48 h-12">
+                <div className="relative w-40 h-10">
                    <Image 
                      src="/images/edrift logo.png" 
                      alt="eDrift Electric" 
@@ -45,13 +45,13 @@ export default function Footer() {
                    />
                 </div>
              </Link>
-             <p className="text-slate-500 text-sm leading-relaxed mb-8 font-medium">
+             <p className="text-text-muted text-sm leading-relaxed mb-8 font-medium">
                 Developing automotive-grade power electronics for the global EV ecosystem. 
                 Efficiency, reliability, and production-scale engineering support.
              </p>
              <div className="flex gap-4">
                {links.social.map((s, i) => (
-                 <a key={i} href={s.href} target="_blank" className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-primary hover:border-brand-primary/20 transition-all border border-slate-100">
+                 <a key={i} href={s.href} target="_blank" className="w-10 h-10 rounded-xl bg-bg-subtle flex items-center justify-center text-text-faint hover:text-brand-primary hover:border-brand-primary/20 transition-all border border-border-subtle">
                     <s.icon className="w-5 h-5" />
                  </a>
                ))}
@@ -59,11 +59,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-slate-900 font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Product Line</h4>
+            <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Product Line</h4>
             <ul className="space-y-4">
               {links.products.map(link => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-slate-500 hover:text-brand-primary text-sm transition-colors font-semibold">
+                  <Link href={link.href} className="text-text-muted hover:text-brand-primary text-sm transition-colors font-semibold">
                     {link.name}
                   </Link>
                 </li>
@@ -72,11 +72,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-slate-900 font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Resources</h4>
+            <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Resources</h4>
             <ul className="space-y-4">
               {links.resources.map(link => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-slate-500 hover:text-brand-primary text-sm transition-colors font-semibold">
+                  <Link href={link.href} className="text-text-muted hover:text-brand-primary text-sm transition-colors font-semibold">
                     {link.name}
                   </Link>
                 </li>
@@ -85,19 +85,19 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-slate-900 font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Global HQ</h4>
+            <h4 className="text-text-main font-bold text-[10px] uppercase tracking-[0.2em] mb-8">Global HQ</h4>
             <ul className="space-y-6">
               <li className="flex items-start gap-4">
                  <Mail className="w-5 h-5 text-brand-primary shrink-0" />
-                 <span className="text-slate-500 text-sm font-semibold leading-relaxed">eng@edriftelectric.com</span>
+                 <span className="text-text-muted text-sm font-semibold leading-relaxed">eng@edriftelectric.com</span>
               </li>
               <li className="flex items-start gap-4">
                  <Phone className="w-5 h-5 text-brand-primary shrink-0" />
-                 <span className="text-slate-500 text-sm font-semibold leading-relaxed">+91 97902 74709</span>
+                 <span className="text-text-muted text-sm font-semibold leading-relaxed">+91 97902 74709</span>
               </li>
               <li className="flex items-start gap-4">
                  <MapPin className="w-5 h-5 text-brand-primary shrink-0" />
-                 <span className="text-slate-500 text-sm font-semibold leading-relaxed">
+                 <span className="text-text-muted text-sm font-semibold leading-relaxed">
                     Hosur, Tamil Nadu / <br/>IIT Palakkad Ecosystem
                  </span>
               </li>
@@ -105,16 +105,17 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
-           <p className="text-slate-400 text-[9px] font-black uppercase tracking-[0.3em] text-center md:text-left">
-              © 2026 eDrift Electric Private Limited. <br className="md:hidden" /> Built for EV engineering, validation, and scale.
+        <div className="pt-12 border-t border-border-subtle flex flex-col md:flex-row justify-between items-center gap-6">
+           <p className="text-text-faint text-[9px] font-black uppercase tracking-[0.3em] text-center md:text-left">
+              © 2026 eDrift Electric. <br className="md:hidden" /> Engineering, validation, and scale.
            </p>
-           <div className="flex gap-8 text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">
-              <Link href="/about" className="hover:text-slate-900 transition-colors">Compliance</Link>
-              <Link href="/contact" className="hover:text-slate-900 transition-colors">Partnerships</Link>
+           <div className="flex gap-8 text-[9px] font-black uppercase tracking-[0.3em] text-text-faint">
+              <Link href="/about" className="hover:text-text-main transition-colors">Compliance</Link>
+              <Link href="/contact" className="hover:text-text-main transition-colors">Partnerships</Link>
            </div>
         </div>
       </div>
     </footer>
   );
 }
+

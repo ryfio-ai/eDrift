@@ -5,16 +5,16 @@ import { motion } from "framer-motion";
 
 export const MetricsSection = () => {
   const metrics = [
-    { label: "Peak Efficiency", val: "97.5%", desc: "Industry-leading power conversion" },
-    { label: "Design Life", val: "10+ Years", desc: "Built for industrial durability" },
-    { label: "Prototyping", val: "4-6 Weeks", desc: "Rapid feasibility to validation" },
-    { label: "Safety Standard", val: "ASIL-D", desc: "Highest functional safety alignment" }
+    { label: "Peak Efficiency", val: "97.5%", desc: "Industry-leading power conversion efficiency." },
+    { label: "Design Life", val: "10+ Years", desc: "Engineered for long-term industrial durability." },
+    { label: "Prototyping", val: "4-6 Weeks", desc: "Rapid feasibility transition to hardware validation." },
+    { label: "Safety Standard", val: "ASIL-D", desc: "Highest functional safety alignment for EV systems." }
   ];
 
   return (
-    <section className="py-20 bg-slate-50 border-y border-slate-100">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
+    <section className="py-24 bg-bg-subtle border-y border-border-subtle">
+      <div className="section-container">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {metrics.map((metric, i) => (
             <motion.div
               key={i}
@@ -22,11 +22,15 @@ export const MetricsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="text-center lg:text-left"
+              className="glass-card p-10 flex flex-col justify-center"
             >
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary mb-3">{metric.label}</p>
-              <h3 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2">{metric.val}</h3>
-              <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest">{metric.desc}</p>
+              <p className="label-uppercase mb-4">{metric.label}</p>
+              <h3 className="text-4xl lg:text-5xl font-bold text-text-main mb-3 tracking-tighter">
+                {metric.val}
+              </h3>
+              <p className="text-sm font-medium text-text-muted leading-relaxed">
+                {metric.desc}
+              </p>
             </motion.div>
           ))}
         </div>

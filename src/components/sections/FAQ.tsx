@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus, ChevronRight } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 const faqs = [
   {
@@ -40,10 +40,10 @@ export const FAQ = () => {
         <div className="mb-20 text-center">
           <div className="inline-flex items-center gap-4 mb-6">
             <div className="w-12 h-[2px] bg-brand-primary" />
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">Industrial FAQ</p>
+            <p className="label-uppercase">Industrial FAQ</p>
             <div className="w-12 h-[2px] bg-brand-primary" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+          <h2 className="text-center">
             Answers for Engineering and <br />
             <span className="text-brand-primary">Procurement Teams</span>
           </h2>
@@ -53,16 +53,16 @@ export const FAQ = () => {
           {faqs.map((faq, i) => (
             <div 
               key={i} 
-              className={`border rounded-2xl transition-all duration-300 ${openIndex === i ? "border-brand-primary/20 bg-slate-50/50 shadow-lg" : "border-slate-100 hover:border-slate-200"}`}
+              className={`border rounded-2xl transition-all duration-300 ${openIndex === i ? "border-brand-primary/20 bg-bg-subtle shadow-lg" : "border-border-subtle hover:border-slate-200"}`}
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full px-8 py-7 flex items-center justify-between text-left group"
               >
-                <span className={`text-lg font-bold tracking-tight transition-colors ${openIndex === i ? "text-slate-900" : "text-slate-600 group-hover:text-slate-900"}`}>
+                <span className={`text-lg font-bold tracking-tight transition-colors ${openIndex === i ? "text-text-main" : "text-text-muted group-hover:text-text-main"}`}>
                   {faq.q}
                 </span>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${openIndex === i ? "bg-brand-primary text-white rotate-180" : "bg-slate-50 text-slate-400 group-hover:bg-slate-100"}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${openIndex === i ? "bg-brand-primary text-white rotate-180" : "bg-bg-subtle text-text-faint group-hover:bg-slate-100"}`}>
                   {openIndex === i ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </div>
               </button>
@@ -77,8 +77,8 @@ export const FAQ = () => {
                     className="overflow-hidden"
                   >
                     <div className="px-8 pb-8">
-                      <div className="h-px bg-slate-100 mb-6" />
-                      <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest leading-relaxed">
+                      <div className="h-px bg-border-subtle mb-6" />
+                      <p className="text-sm font-medium text-text-muted leading-relaxed">
                         {faq.a}
                       </p>
                     </div>

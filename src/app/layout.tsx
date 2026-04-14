@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Poppins, Montserrat, Roboto } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -8,28 +8,18 @@ import { ChatWidget } from "@/components/chatbot/ChatWidget";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
 });
 
-const poppins = Poppins({
-  weight: ["400", "500", "600", "700", "800", "900"],
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-poppins",
-});
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-montserrat",
-});
-
-const roboto = Roboto({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-  variable: "--font-roboto",
+  variable: "--font-outfit",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "eDrift Electric | High-Efficiency EV Charging Solutions",
-  description: "Specialized in automotive-grade On-Board Chargers and Power Conversion Systems. Engineered for efficiency and reliability.",
+  title: "eDrift Electric | Automotive-Grade Power Electronics",
+  description: "Specialized in high-efficiency On-Board Chargers and Power Conversion Systems for the global EV ecosystem.",
 };
 
 export default function RootLayout({
@@ -40,9 +30,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${poppins.variable} ${montserrat.variable} ${roboto.variable} h-full antialiased`}
+      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col pt-0 bg-white font-sans">
+      <body className="min-h-full flex flex-col bg-white font-sans text-slate-900">
         <Navbar />
         <main className="flex-grow">
           {children}
@@ -53,3 +43,4 @@ export default function RootLayout({
     </html>
   );
 }
+
