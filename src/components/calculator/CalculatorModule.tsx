@@ -79,7 +79,7 @@ const CustomDropdown = ({ options, value, onChange, className }: {
         <ChevronDown className={cn("w-4 h-4 text-muted transition-transform", isOpen && "rotate-180")} />
       </div>
       {isOpen && (
-        <div className="absolute z-50 left-0 right-0 mt-1 min-w-max bg-card border border-main rounded-md shadow-lg overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200">
+        <div className="absolute z-50 left-0 right-0 mt-1 min-w-max bg-white border border-border-main rounded-md shadow-lg overflow-hidden animate-in fade-in slide-in-from-top-1 duration-200">
           <ul className="max-h-[200px] overflow-y-auto scrollbar-clean py-1">
             {options.map((option) => (
               <li
@@ -87,7 +87,7 @@ const CustomDropdown = ({ options, value, onChange, className }: {
                 onClick={() => { onChange(option); setIsOpen(false); }}
                 className={cn(
                   "px-4 py-2 text-[14px] cursor-pointer transition-colors",
-                  value === option ? "bg-primary text-white font-semibold" : "text-main hover:bg-primary-soft hover:text-primary"
+                  value === option ? "bg-brand-primary text-white font-semibold" : "text-slate-800 hover:bg-bg-soft hover:text-brand-primary"
                 )}
               >
                 {option}
