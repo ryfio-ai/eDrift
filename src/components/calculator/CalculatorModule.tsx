@@ -5,9 +5,9 @@ import { CalculatorVariable, CalculationResult } from "@/lib/calculator/types";
 import { runCalculation } from "@/lib/calculator/engine";
 import { convertToBase, convertFromBase } from "@/lib/calculator/unitConversions";
 import { FormulaDisplay } from "./FormulaDisplay";
-import { Badge } from "@/components/ui/Badge";
-import { Info, RefreshCw, Zap, Download, History as HistoryIcon } from "lucide-react";
+import { Info, Download, Moon, LayoutGrid, Clock, ChevronDown, FileText, Table } from "lucide-react";
 import { useCalculatorHistory } from "@/lib/calculator/HistoryContext";
+import { cn } from "@/lib/utils";
 import * as XLSX from "xlsx";
 
 interface CalculatorModuleProps {
@@ -23,8 +23,13 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
     topology: "Buck Converter",
   });
 
-  const { addHistoryItem } = useCalculatorHistory();
+  const { addHistoryItem, history } = useCalculatorHistory();
   const activeMethod = variable.methods[methodIndex];
+
+  // Filter history for current tool
+  const currentToolHistory = useMemo(() => {
+    return history.filter(item => item.variableName === variable.name).slice(0, 10);
+  }, [history, variable.name]);
 
   // Initialize defaults
   useEffect(() => {
@@ -44,225 +49,231 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
     return convertToBase(value, unit);
   };
 
-  const result: CalculationResult | null = useMemo(() => {
+  const currentResult: CalculationResult | null = useMemo(() => {
     return runCalculation(variable.name, activeMethod.name, toBase, formData);
   }, [variable.name, activeMethod.name, inputs, units, formData]);
 
-  // Save to History effect
-  useEffect(() => {
-    if (result && result.primaryValue !== "0.000" && result.primaryValue !== "Invalid") {
-      const timer = setTimeout(() => {
-          addHistoryItem({
-            variableName: variable.name,
-            variableLabel: variable.label,
-            methodName: activeMethod.name,
-            primaryValue: result.primaryValue,
-            primaryUnit: result.primaryUnit,
-            inputs: { ...inputs },
-            inputUnits: { ...units },
-            secondaryValues: result.secondaryValues
-          });
-      }, 2000); // Debounce history saves
-      return () => clearTimeout(timer);
+  const handleCalculate = () => {
+    if (currentResult && currentResult.primaryValue !== "0.000" && currentResult.primaryValue !== "Invalid") {
+      addHistoryItem({
+        variableName: variable.name,
+        variableLabel: variable.label,
+        methodName: activeMethod.name,
+        primaryValue: currentResult.primaryValue,
+        primaryUnit: currentResult.primaryUnit,
+        inputs: { ...inputs },
+        inputUnits: { ...units },
+        secondaryValues: currentResult.secondaryValues
+      });
     }
-  }, [result]);
+  };
 
   const exportToExcel = () => {
-    if (!result || result.primaryValue === "Invalid") return;
-
+    if (!currentResult || currentResult.primaryValue === "Invalid") return;
     const data = [
-      { Category: "Property", Value: "Details" },
-      { Category: "Tool", Value: variable.label },
-      { Category: "Method", Value: activeMethod.name },
-      { Category: "Topology", Value: formData.topology },
-      { Category: "TIMESTAMP", Value: new Date().toLocaleString() },
-      { Category: "---", Value: "---" },
-      ...activeMethod.inputFields.map(f => ({
-        Category: `Input: ${f.label}`,
-        Value: `${inputs[f.name]} ${units[f.name]}`
-      })),
-      { Category: "---", Value: "---" },
-      { Category: "RESULT", Value: `${result.primaryValue} ${result.primaryUnit}` },
-      ...(result.secondaryValues ? Object.entries(result.secondaryValues).map(([k, v]) => ({
-        Category: k,
-        Value: `${v.value} ${v.unit}`
-      })) : [])
+      { Property: "Tool", Value: variable.label },
+      { Property: "Method", Value: activeMethod.name },
+      { Property: "Result", Value: `${currentResult.primaryValue} ${currentResult.primaryUnit}` },
+      { Property: "Timestamp", Value: new Date().toLocaleString() }
     ];
-
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Calculation");
+    XLSX.utils.book_append_sheet(wb, ws, "Result");
     XLSX.writeFile(wb, `${variable.name}_report.xlsx`);
   };
 
-  const displayValue = result && result.rawValue 
-    ? convertFromBase(result.rawValue, outputUnit).toFixed(4)
-    : "0.0000";
-
   return (
-    <div className="space-y-12">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-10 border-b border-border-subtle">
-        <div className="max-w-xl">
-           <Badge variant="cyan" className="mb-6 font-semibold">{variable.symbol || "Engineering"}</Badge>
-           <h1 className="text-4xl font-bold text-text-main mb-4 tracking-tight leading-tight">{variable.label}</h1>
-           <p className="text-text-muted font-medium text-lg leading-relaxed">{variable.helptext}</p>
-        </div>
-        <div className="flex flex-col items-end gap-4">
-          <div className="flex bg-bg-main p-1.5 rounded-2xl border border-border-subtle shadow-sm">
-             {variable.methods.map((method, idx) => (
-               <button
-                 key={method.name}
-                 onClick={() => setMethodIndex(idx)}
-                 className={`px-6 py-2.5 rounded-xl font-semibold text-[11px] uppercase tracking-widest transition-all ${
-                   methodIndex === idx 
-                     ? "bg-brand-primary text-white shadow-md shadow-brand-primary/20" 
-                     : "text-text-faint hover:text-text-main"
-                 }`}
-               >
-                 {method.name}
-               </button>
-             ))}
+    <div className="flex flex-col lg:flex-row min-h-screen bg-slate-50/50">
+      {/* Main Area */}
+      <div className="flex-1 px-8 py-10">
+        {/* Top Header Section */}
+        <div className="flex justify-between items-start mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-800 mb-1">{variable.category || "Design Tool"}</h1>
+            <div className="flex items-center gap-2 text-[13px] text-slate-500 font-medium">
+              <span>Calculating</span>
+              <span className="bg-brand-primary/10 text-brand-primary px-2 py-0.5 rounded font-bold">{variable.label}</span>
+              <span className="text-slate-300">•</span>
+              <span>Method: {activeMethod.name}</span>
+            </div>
           </div>
-          <button 
-            onClick={exportToExcel}
-            className="flex items-center gap-2 px-4 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all border border-slate-200"
-          >
-            <Download className="w-3.5 h-3.5" />
-            Export Report
+          <button className="p-2.5 bg-slate-800 text-white rounded-xl shadow-lg shadow-slate-800/20">
+            <Moon className="w-5 h-5" />
           </button>
         </div>
-      </div>
 
-      {/* Formula & Method Description */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 space-y-8">
-           <div className="space-y-4">
-              <p className="text-[10px] font-bold text-text-faint uppercase tracking-[0.2em]">Active Principle_</p>
-              <p className="text-sm font-semibold text-text-muted leading-relaxed italic border-l-2 border-brand-primary/30 pl-4">
-                "{activeMethod.helptext}"
-              </p>
-           </div>
-           
-           <FormulaDisplay formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck Converter"]} />
+        {/* Method Switcher Tabs */}
+        <div className="flex gap-4 mb-8">
+          <div className="flex bg-white p-1 rounded-2xl shadow-sm border border-slate-200 w-fit">
+            {variable.methods.map((method, idx) => (
+              <button
+                key={method.name}
+                onClick={() => setMethodIndex(idx)}
+                className={cn(
+                  "px-8 py-2.5 rounded-xl text-[13px] font-bold transition-all",
+                  methodIndex === idx 
+                    ? "bg-brand-primary text-white shadow-md shadow-brand-primary/20" 
+                    : "text-slate-400 hover:text-slate-600"
+                )}
+              >
+                {method.name}
+              </button>
+            ))}
+          </div>
+        </div>
 
-           {variable.image && (
-             <div className="mt-8 p-6 bg-slate-50 rounded-3xl border border-slate-100 group/img overflow-hidden">
-                <p className="text-[10px] font-bold text-text-faint uppercase tracking-[0.2em] mb-4 group-hover/img:text-brand-primary transition-colors">Circuit Schematic_</p>
-                <img 
-                  src={variable.image} 
-                  alt={`${variable.label} Circuit`} 
-                  className="w-full max-w-lg mx-auto rounded-xl shadow-sm mix-blend-multiply group-hover/img:scale-[1.02] transition-transform duration-500"
-                />
-             </div>
-           )}
+        {/* Hero Formula Display */}
+        <div className="bg-brand-primary/5 border border-brand-primary/10 rounded-[32px] p-12 mb-10 flex flex-col items-center justify-center relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-transparent opacity-50" />
+          <div className="relative z-10 w-full flex flex-col items-center">
+             <FormulaDisplay 
+                formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck"]} 
+             />
+             
+             {/* Large Result Overlay (if calculated) */}
+             {currentResult && currentResult.primaryValue !== "0.000" && (
+                <div className="mt-8 pt-8 border-t border-brand-primary/10 w-full text-center animate-in zoom-in duration-500">
+                   <p className="text-[10px] font-bold text-brand-primary uppercase tracking-[0.3em] mb-2">Calculated Result_</p>
+                   <div className="flex items-center justify-center gap-4">
+                      <span className="text-5xl font-black text-slate-800 tracking-tighter">
+                        {currentResult.primaryValue}
+                      </span>
+                      <span className="text-xl font-bold text-brand-primary bg-brand-primary/10 px-3 py-1 rounded-lg uppercase">
+                        {currentResult.primaryUnit}
+                      </span>
+                   </div>
+                </div>
+             )}
+          </div>
+        </div>
 
-           {/* Input Grid */}
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
-              {activeMethod.inputFields
-                .filter(field => !field.topologyFilter || field.topologyFilter === formData.topology)
-                .map((field) => (
-                <div key={field.name} className="space-y-3">
-                  <div className="flex items-center justify-between px-1">
-                    <label className="text-[11px] font-bold text-text-main uppercase tracking-wider">{field.label}</label>
-                    <div className="group relative">
-                      <Info className="w-3.5 h-3.5 text-text-faint cursor-help" />
-                      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 p-3 bg-slate-900 text-white text-[10px] rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 shadow-xl">
-                        {field.helptext}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex shadow-sm rounded-xl overflow-hidden border border-border-subtle focus-within:ring-2 focus-within:ring-brand-primary/20 transition-all">
-                    <input
-                      type="number"
-                      value={inputs[field.name] || ""}
-                      onChange={(e) => setInputs({ ...inputs, [field.name]: parseFloat(e.target.value) || 0 })}
-                      className="flex-grow bg-white px-4 py-3 text-sm font-bold text-text-main placeholder:text-text-faint outline-none"
-                      placeholder="0.00"
-                    />
+        {/* Input Grid Area */}
+        <div className="bg-white rounded-[32px] p-10 shadow-sm border border-slate-200">
+          {/* Topology Control (If applicable) */}
+          {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
+            <div className="flex items-center justify-between mb-10 pb-10 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-bold text-slate-800">Topology</span>
+                <Info className="w-4 h-4 text-slate-300 cursor-help" />
+              </div>
+              <div className="flex bg-slate-50 p-1 rounded-xl">
+                {["Buck", "Boost"].map((top) => (
+                  <button
+                    key={top}
+                    onClick={() => setFormData({ ...formData, topology: `${top} Converter` })}
+                    className={cn(
+                      "px-8 py-2 rounded-lg text-xs font-bold transition-all",
+                      formData.topology === `${top} Converter` 
+                        ? "bg-brand-primary text-white shadow-sm" 
+                        : "text-slate-400 border-transparent hover:text-slate-600"
+                    )}
+                  >
+                    {top}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            {activeMethod.inputFields
+              .filter(field => !field.topologyFilter || field.topologyFilter === formData.topology)
+              .map((field) => (
+              <div key={field.name} className="space-y-4">
+                <div className="flex items-center gap-2 px-1">
+                  <label className="text-xs font-bold text-slate-800">{field.label}</label>
+                  <Info className="w-3.5 h-3.5 text-slate-300 cursor-help" />
+                </div>
+                <div className="flex bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden focus-within:ring-2 focus-within:ring-brand-primary/20 transition-all shadow-inner">
+                  <input
+                    type="number"
+                    value={inputs[field.name] || ""}
+                    onChange={(e) => setInputs({ ...inputs, [field.name]: parseFloat(e.target.value) || 0 })}
+                    className="flex-grow bg-transparent px-6 py-4 text-sm font-bold text-slate-700 outline-none"
+                    placeholder="0.0"
+                  />
+                  <div className="relative group/unit">
                     <select
                       value={units[field.name]}
                       onChange={(e) => setUnits({ ...units, [field.name]: e.target.value })}
-                      className="bg-slate-50 px-3 py-3 border-l border-border-subtle text-[10px] font-bold text-text-muted outline-none cursor-pointer hover:bg-slate-100 uppercase tracking-widest"
+                      className="bg-white px-6 py-4 border-l border-slate-100 text-[11px] font-bold text-slate-800 outline-none cursor-pointer appearance-none min-w-[100px] text-center uppercase tracking-widest"
                     >
                       {field.units.map((u) => (
                         <option key={u} value={u}>{u}</option>
                       ))}
                     </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
                   </div>
                 </div>
-              ))}
+              </div>
+            ))}
+          </div>
 
-              {/* Generic Topology Toggle */}
-              {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
-                <div className="space-y-3">
-                   <label className="text-[11px] font-bold text-text-main uppercase tracking-wider">Converter Topology</label>
-                   <div className="flex bg-slate-50 p-1 rounded-xl border border-border-subtle">
-                      {["Buck Converter", "Boost Converter"].map((top) => (
-                        <button
-                          key={top}
-                          onClick={() => setFormData({ ...formData, topology: top })}
-                          className={`flex-1 py-2 rounded-lg text-[10px] font-bold transition-all ${
-                            formData.topology === top 
-                              ? "bg-white text-brand-primary shadow-sm" 
-                              : "text-text-faint hover:text-text-main"
-                          }`}
-                        >
-                          {top.split(" ")[0]}
-                        </button>
-                      ))}
-                   </div>
-                </div>
-              )}
-           </div>
+          <button 
+            onClick={handleCalculate}
+            className="w-full mt-12 bg-brand-primary hover:bg-brand-primary/95 text-white py-5 rounded-2xl font-bold text-lg shadow-lg shadow-brand-primary/20 transition-all transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-3"
+          >
+            Calculate System Data
+          </button>
+        </div>
+      </div>
+
+      {/* Right Sidebar - Exports & History */}
+      <div className="w-full lg:w-[380px] px-8 py-10 border-l border-slate-200 bg-white">
+        <div className="grid grid-cols-2 gap-4 mb-10">
+          <button 
+            onClick={() => window.print()}
+            className="flex items-center justify-center gap-2 px-4 py-4 rounded-2xl border border-slate-200 text-[11px] font-bold text-slate-600 hover:bg-slate-50 transition-all uppercase tracking-wider"
+          >
+            <FileText className="w-4 h-4" />
+            PDF Export
+          </button>
+          <button 
+            onClick={exportToExcel}
+            className="flex items-center justify-center gap-2 px-4 py-4 rounded-2xl border border-slate-200 text-[11px] font-bold text-slate-600 hover:bg-slate-50 transition-all uppercase tracking-wider"
+          >
+            <Table className="w-4 h-4" />
+            Excel Export
+          </button>
         </div>
 
-        {/* Results Sidebar */}
+        {/* History Section */}
         <div className="space-y-6">
-           <div className="p-8 bg-slate-900 rounded-[32px] text-white shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-brand-primary/20 blur-[60px] rounded-full -translate-y-1/2 translate-x-1/2" />
-              <div className="relative z-10">
-                 <div className="flex items-center gap-3 mb-8">
-                    <Zap className="w-5 h-5 text-brand-primary" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">Calculated Value</span>
-                 </div>
-                 
-                 <div className="mb-10">
-                    <div className="text-5xl font-bold tracking-tighter mb-2 font-mono">{displayValue}</div>
-                    <div className="flex items-center gap-3">
-                       <span className="text-sm font-bold text-white/40 uppercase tracking-widest">In Units:</span>
-                       <select
-                         value={outputUnit}
-                         onChange={(e) => setOutputUnit(e.target.value)}
-                         className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-[11px] font-bold text-brand-primary outline-none cursor-pointer hover:bg-white/10"
-                       >
-                         {variable.outputUnits.map((u) => (
-                           <option key={u} value={u} className="bg-slate-900">{u}</option>
-                         ))}
-                       </select>
-                    </div>
-                 </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2 text-slate-800">
+               <Clock className="w-5 h-5 text-brand-primary" />
+               <h3 className="font-bold text-lg">History</h3>
+            </div>
+            <div className="flex gap-2">
+               {['Recent', 'All'].map(tab => (
+                 <button key={tab} className={cn(
+                   "text-[10px] font-bold px-3 py-1.5 rounded-lg border",
+                   tab === 'Recent' ? "bg-brand-primary text-white border-brand-primary" : "text-slate-400 border-slate-200"
+                 )}>{tab}</button>
+               ))}
+            </div>
+          </div>
 
-                 {result?.secondaryValues && (
-                   <div className="space-y-4 pt-8 border-t border-white/5">
-                      {Object.entries(result.secondaryValues).map(([label, data]) => (
-                        <div key={label} className="flex justify-between items-center group/item">
-                           <span className="text-[10px] font-semibold text-white/30 uppercase tracking-widest group-hover/item:text-white/50 transition-colors">{label}</span>
-                           <span className="text-sm font-bold font-mono tracking-tight text-white/80">{data.value} {data.unit}</span>
-                        </div>
-                      ))}
+          <div className="space-y-4">
+            {currentToolHistory.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-slate-300">
+                 <LayoutGrid className="w-12 h-12 mb-4 opacity-20" />
+                 <p className="text-xs font-bold uppercase tracking-widest">No calculations yet</p>
+              </div>
+            ) : (
+              currentToolHistory.map((item, idx) => (
+                <div key={idx} className="p-5 bg-slate-50 rounded-2xl border border-slate-100 hover:border-brand-primary/20 transition-all group">
+                   <div className="flex justify-between items-start mb-2">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.methodName}</span>
                    </div>
-                 )}
-              </div>
-           </div>
-
-           <div className="p-6 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl flex items-start gap-4">
-              <RefreshCw className="w-5 h-5 text-emerald-600 mt-1 shrink-0" />
-              <div>
-                 <p className="text-xs font-bold text-emerald-950 mb-1 leading-tight">Verification Successful</p>
-                 <p className="text-[10px] text-emerald-800 font-medium leading-relaxed">Calculation verified against standard IEEE power electronics models.</p>
-              </div>
-           </div>
+                   <div className="flex items-center justify-between">
+                      <span className="text-xl font-bold text-slate-800 tracking-tight group-hover:text-brand-primary transition-colors">{item.primaryValue}</span>
+                      <span className="text-[11px] font-bold text-brand-primary bg-white px-2 py-1 rounded-lg border border-slate-200 uppercase">{item.primaryUnit}</span>
+                   </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>

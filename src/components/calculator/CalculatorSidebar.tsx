@@ -2,59 +2,42 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { calculatorConfig } from "@/lib/calculator/config";
-import { ChevronRight, Calculator, History as HistoryIcon, Clock } from "lucide-react";
+import { HelpCircle, ChevronRight } from "lucide-react";
 import { slugify } from "@/lib/calculator/utils";
-import { useCalculatorHistory } from "@/lib/calculator/HistoryContext";
+import { cn } from "@/lib/utils";
 
 export const CalculatorSidebar: React.FC = () => {
   const params = useParams();
   const slugParam = params?.slug;
-  // If slug is array (catch-all), take first, else it's a string
   const activeSlug = Array.isArray(slugParam) ? slugParam[0] : slugParam;
   
-  const { history } = useCalculatorHistory();
-
   return (
-    <div className="w-80 h-[calc(100vh-120px)] overflow-y-auto pr-4 custom-scrollbar sticky top-24 pb-12">
-      <div className="flex items-center gap-3 mb-10 px-2">
-        <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary">
-          <Calculator className="w-5 h-5" />
-        </div>
-        <div>
-          <h2 className="text-sm font-bold text-text-main tracking-tight">Design Suite_</h2>
-          <p className="text-[10px] text-text-muted font-semibold uppercase tracking-widest">Engineering Tools</p>
+    <div className="w-80 h-full flex flex-col bg-white border-r border-slate-200">
+      {/* Sidebar Header with Logo */}
+      <div className="p-8 pb-4 border-b border-slate-50">
+        <div className="flex items-center gap-3">
+          <div className="relative w-10 h-10">
+            <Image 
+              src="/images/edrift logo.png" 
+              alt="eDrift" 
+              fill 
+              className="object-contain"
+            />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-slate-800 tracking-tight leading-none">eDrift Electric</h2>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1.5">Engineering Suite</p>
+          </div>
         </div>
       </div>
 
-      <nav className="space-y-12">
-        {/* Recent Section */}
-        {history.length > 0 && (
-          <div className="animate-in fade-in slide-in-from-left-4 duration-500">
-             <div className="flex items-center gap-2 mb-4 px-2">
-                <Clock className="w-3.5 h-3.5 text-brand-primary" />
-                <h3 className="text-[10px] font-bold text-text-main uppercase tracking-[0.2em]">Recently Calculated</h3>
-             </div>
-             <div className="space-y-2">
-                {history.slice(0, 3).map((item, idx) => (
-                  <Link
-                    key={`${item.timestamp}-${idx}`}
-                    href={`/design-calculator/${slugify(item.variableLabel)}`}
-                    className="block group px-3 py-3 rounded-xl bg-slate-50 border border-slate-100 hover:border-brand-primary/20 hover:bg-white transition-all duration-300"
-                  >
-                    <div className="text-[10px] font-bold text-text-main group-hover:text-brand-primary transition-colors mb-0.5">{item.variableLabel}</div>
-                    <div className="text-[9px] text-brand-primary font-bold font-mono">{item.primaryValue} {item.primaryUnit}</div>
-                  </Link>
-                ))}
-             </div>
-          </div>
-        )}
-
-        {/* Category Menus */}
+      <nav className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-10">
         {calculatorConfig.categories.map((category) => (
           <div key={category.name}>
-            <h3 className="px-2 text-[10px] font-bold text-brand-primary uppercase tracking-[0.2em] mb-4">
+            <h3 className="px-2 text-[11px] font-bold text-slate-300 uppercase tracking-[0.15em] mb-4">
               {category.name}
             </h3>
             <div className="space-y-1">
@@ -66,14 +49,20 @@ export const CalculatorSidebar: React.FC = () => {
                   <Link
                     key={variable.name}
                     href={`/design-calculator/${slug}`}
-                    className={`group flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-300 font-semibold text-xs border ${
+                    className={cn(
+                      "group flex items-center justify-between px-3 py-3 rounded-xl transition-all duration-300 border-l-4",
                       isActive
-                        ? "bg-brand-primary text-white border-brand-primary shadow-lg shadow-brand-primary/20"
-                        : "text-text-muted hover:text-text-main hover:bg-slate-50 border-transparent"
-                    }`}
+                        ? "bg-brand-primary/5 text-brand-primary border-brand-primary font-bold shadow-sm shadow-brand-primary/5"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-transparent font-medium"
+                    )}
                   >
-                    <span className="truncate">{variable.label}</span>
-                    <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-300 ${isActive ? "translate-x-0" : "-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"}`} />
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-[13px] truncate">{variable.label} {variable.symbol && `(${variable.symbol})`}</span>
+                      <HelpCircle className={cn(
+                        "w-4 h-4 transition-colors",
+                        isActive ? "text-brand-primary/40" : "text-slate-200 group-hover:text-slate-300"
+                      )} />
+                    </div>
                   </Link>
                 );
               })}
