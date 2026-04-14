@@ -2,7 +2,6 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Target, Rocket, ShieldCheck } from "lucide-center";
 import { Target as TargetIcon, Rocket as RocketIcon, ShieldCheck as ShieldIcon } from "lucide-react";
 
 export const MissionVision = () => {
