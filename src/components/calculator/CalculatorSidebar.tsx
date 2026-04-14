@@ -2,10 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useParams } from "next/navigation";
 import { calculatorConfig } from "@/lib/calculator/config";
-import { Calculator, HelpCircle, ChevronRight } from "lucide-react";
+import { HelpCircle, Calculator } from "lucide-react";
 import { slugify } from "@/lib/calculator/utils";
 import { cn } from "@/lib/utils";
 
@@ -16,8 +15,8 @@ export const CalculatorSidebar: React.FC = () => {
   
   return (
     <div className="w-80 h-full flex flex-col bg-white border-r border-slate-200">
-      {/* Sidebar Header - Simplified */}
-      <div className="p-8 pb-4 border-b border-slate-50">
+      {/* Sidebar Header - Simplified as requested */}
+      <div className="p-8 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary">
             <Calculator className="w-5 h-5" />
@@ -29,10 +28,11 @@ export const CalculatorSidebar: React.FC = () => {
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-10">
+      <nav className="flex-1 overflow-y-auto custom-scrollbar p-6 pt-2 space-y-10">
         {calculatorConfig.categories.map((category) => (
           <div key={category.name}>
-            <h3 className="px-2 text-[11px] font-bold text-slate-300 uppercase tracking-[0.15em] mb-4">
+            {/* Professional Section Header */}
+            <h3 className="px-2 text-[10px] font-bold text-slate-300 uppercase tracking-[0.2em] mb-4 border-b border-slate-50 pb-2">
               {category.name}
             </h3>
             <div className="space-y-1">
@@ -45,10 +45,10 @@ export const CalculatorSidebar: React.FC = () => {
                     key={variable.name}
                     href={`/design-calculator/${slug}`}
                     className={cn(
-                      "group flex items-center justify-between px-3 py-3 rounded-xl transition-all duration-300 border-l-4",
+                      "group flex items-center justify-between px-3 py-3 rounded-xl transition-all duration-300",
                       isActive
-                        ? "bg-brand-primary/5 text-brand-primary border-brand-primary font-bold shadow-sm shadow-brand-primary/5"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-transparent font-medium"
+                        ? "bg-brand-primary/5 text-brand-primary font-bold shadow-sm shadow-brand-primary/5 border border-brand-primary/10"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 border border-transparent font-medium"
                     )}
                   >
                     <div className="flex items-center justify-between w-full">
