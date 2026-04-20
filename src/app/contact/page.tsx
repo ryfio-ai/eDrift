@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Metadata } from "next";
