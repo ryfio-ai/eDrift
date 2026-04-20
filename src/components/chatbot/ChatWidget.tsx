@@ -97,13 +97,13 @@ export const ChatWidget = () => {
             {/* Premium Header */}
             <div className="px-6 py-5 bg-white/40 border-b border-slate-100 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center shadow-lg shadow-brand-primary/20">
+                <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center shadow-lg shadow-slate-900/10 border border-white/10">
                    <Image 
                      src="/images/edrift logo.png" 
                      alt="eDrift" 
-                     width={32} 
-                     height={32} 
-                     className="object-contain invert brightness-0"
+                     width={28} 
+                     height={28} 
+                     className="object-contain"
                    />
                 </div>
                 <div>

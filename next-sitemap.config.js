@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://edriftelectric.com',
+  siteUrl: 'https://www.edriftelectric.com',
   generateRobotsTxt: true,
   generateIndexSitemap: false,
   changefreq: 'weekly',

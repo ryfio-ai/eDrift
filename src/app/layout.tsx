@@ -49,6 +49,11 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  icons: {
+    icon: "/images/edrift logo.png",
+    shortcut: "/images/edrift logo.png",
+    apple: "/images/edrift logo.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -86,6 +91,7 @@ export const metadata: Metadata = {
     canonical: SITE_URL,
     languages: {
       "en-US": SITE_URL,
+      "en-IN": "https://www.edriftelectric.in",
     },
   },
 };
@@ -100,6 +106,10 @@ export default function RootLayout({
       lang="en"
       className={`${geist.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="icon" href="/images/edrift logo.png" sizes="any" />
+        <link rel="apple-touch-icon" href="/images/edrift logo.png" />
+      </head>
       <body className="min-h-full flex flex-col bg-white font-sans text-slate-900">
         <OrganizationSchema />
         <Navbar />
