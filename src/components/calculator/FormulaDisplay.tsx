@@ -10,7 +10,7 @@ interface FormulaDisplayProps {
 
 export const FormulaDisplay: React.FC<FormulaDisplayProps> = ({ formula }) => {
   return (
-    <div className="text-brand-primary overflow-x-auto w-full">
+    <div className="text-[#22c55e] overflow-x-auto w-full">
       <BlockMath math={formula} />
     </div>
   );

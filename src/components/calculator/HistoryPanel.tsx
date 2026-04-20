@@ -11,15 +11,14 @@ import {
   ChevronDown, 
   Calendar,
   MoreVertical,
-  X
+  X,
+  FileDown,
+  Printer
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const formatDate = (date: number | Date, formatStr: string) => {
+const formatDate = (date: number | Date) => {
   const d = new Date(date);
-  if (formatStr === "yyyy-MM-dd") {
-    return d.toISOString().split('T')[0];
-  }
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
@@ -32,12 +31,19 @@ const formatDate = (date: number | Date, formatStr: string) => {
 
 interface HistoryPanelProps {
   onReplay?: (item: HistoryItem) => void;
+  onExportPDF?: () => void;
+  onExportExcel?: () => void;
   currentVariableName?: string;
 }
 
 type TimeFilter = "Recent" | "All" | "Today" | "Yesterday";
 
-export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onReplay, currentVariableName }) => {
+export const HistoryPanel: React.FC<HistoryPanelProps> = ({ 
+  onReplay, 
+  onExportPDF,
+  onExportExcel,
+  currentVariableName 
+}) => {
   const { history, deleteHistoryItem, clearHistory } = useCalculatorHistory();
   const [timeFilter, setTimeFilter] = useState<TimeFilter>("Recent");
   const [variableFilter, setVariableFilter] = useState<string>("All Variable");
@@ -72,41 +78,46 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onReplay, currentVar
 
     // Date filtering
     if (dateFilter) {
-      filtered = filtered.filter(h => formatDate(h.timestamp, "yyyy-MM-dd") === dateFilter);
+      filtered = filtered.filter(h => {
+        const d = new Date(h.timestamp);
+        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        return dateStr === dateFilter;
+      });
     }
 
     return filtered;
   }, [history, timeFilter, variableFilter, dateFilter]);
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl border border-border-main shadow-sm overflow-hidden print:hidden">
-      {/* Header */}
-      <div className="p-5 border-b border-border-main flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Clock className="w-5 h-5 text-brand-primary" />
-          <h3 className="font-bold text-slate-800">History</h3>
-        </div>
+    <div className="flex flex-col gap-3 w-full max-w-[340px] mx-auto print:hidden font-sans">
+      {/* 1. Export Buttons - Compact */}
+      <div className="grid grid-cols-2 gap-2">
         <button 
-          onClick={clearHistory}
-          className="text-[11px] font-bold text-slate-400 uppercase tracking-wider hover:text-red-500 transition-colors"
+          onClick={onExportPDF}
+          className="bg-white border border-border-main rounded-lg py-2.5 px-2 text-[13px] font-heading font-bold text-slate-800 shadow-sm hover:shadow-md transition-all active:scale-95 flex items-center justify-center gap-2"
         >
-          Clear History
+          Export as PDF
+        </button>
+        <button 
+          onClick={onExportExcel}
+          className="bg-white border border-border-main rounded-lg py-2.5 px-2 text-[13px] font-heading font-bold text-slate-800 shadow-sm hover:shadow-md transition-all active:scale-95 flex items-center justify-center gap-2"
+        >
+          Export as Excel
         </button>
       </div>
 
-      {/* Filters Toolbar */}
-      <div className="p-3 bg-slate-50/50 border-b border-border-main flex flex-col gap-2">
-        {/* Time Tabs */}
-        <div className="flex bg-white rounded-lg p-1 border border-border-main shadow-sm">
+      {/* 2. Filter Card - Compact */}
+      <div className="bg-white rounded-xl border border-border-main p-3 shadow-sm flex flex-col gap-2">
+        <div className="flex gap-1.5">
           {(["Recent", "All", "Today", "Yesterday"] as TimeFilter[]).map(tab => (
             <button
               key={tab}
               onClick={() => setTimeFilter(tab)}
               className={cn(
-                "flex-1 py-1.5 text-[11px] font-bold uppercase tracking-wider rounded-md transition-all",
+                "flex-1 py-1.5 text-[11px] font-heading font-bold rounded-md transition-all",
                 timeFilter === tab 
-                  ? "bg-brand-primary text-white shadow-sm" 
-                  : "text-slate-500 hover:bg-slate-50"
+                  ? "bg-[#22c55e] text-white shadow-sm" 
+                  : "bg-slate-50 text-slate-600 hover:bg-slate-100"
               )}
             >
               {tab}
@@ -114,19 +125,17 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onReplay, currentVar
           ))}
         </div>
 
-        {/* Dropdowns Row */}
         <div className="flex gap-2">
-          {/* Variable Dropdown */}
           <div className="relative flex-1">
             <button 
               onClick={() => setIsVariableOpen(!isVariableOpen)}
-              className="w-full flex items-center justify-between px-3 py-2 bg-white border border-border-main rounded-lg text-[12px] font-medium text-slate-700 hover:border-brand-primary/30 transition-all"
+              className="w-full flex items-center justify-between px-2.5 py-2 bg-slate-50 border border-border-main rounded-md text-[11px] font-heading font-medium text-slate-700"
             >
               <span className="truncate">{variableFilter}</span>
-              <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", isVariableOpen && "rotate-180")} />
+              <ChevronDown className={cn("w-3.5 h-3.5 text-slate-400 transition-transform", isVariableOpen && "rotate-180")} />
             </button>
             {isVariableOpen && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border-main rounded-lg shadow-xl z-20 max-h-[200px] overflow-y-auto">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border-main rounded-md shadow-xl z-20 max-h-[180px] overflow-y-auto">
                 {uniqueVariables.map(v => (
                   <button
                     key={v}
@@ -135,8 +144,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onReplay, currentVar
                       setIsVariableOpen(false);
                     }}
                     className={cn(
-                      "w-full text-left px-4 py-2 text-[12px] hover:bg-slate-50 transition-colors",
-                      variableFilter === v ? "text-brand-primary font-bold" : "text-slate-600"
+                      "w-full text-left px-3 py-2 text-[12px] font-heading hover:bg-slate-50 transition-colors",
+                      variableFilter === v ? "text-[#22c55e] font-bold" : "text-slate-600"
                     )}
                   >
                     {v}
@@ -146,91 +155,97 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onReplay, currentVar
             )}
           </div>
 
-          {/* Date Picker (Simplified) */}
-          <div className="relative w-32">
-            <Calendar className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+          <div className="relative flex-1 min-w-[100px]">
             <input 
               type="date" 
               value={dateFilter}
               onChange={(e) => setDateFilter(e.target.value)}
-              className="w-full pl-8 pr-2 py-2 bg-white border border-border-main rounded-lg text-[12px] font-medium text-slate-700 outline-none focus:border-brand-primary/30"
+              className={cn(
+                "w-full px-2 py-2 bg-slate-50 border border-border-main rounded-md text-[11px] font-sans font-medium text-slate-700 outline-none appearance-none",
+                !dateFilter && "text-transparent"
+              )}
             />
+            {!dateFilter && (
+              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] font-sans text-slate-400 pointer-events-none">
+                dd-mm-yyyy
+              </span>
+            )}
+            <Calendar className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
           </div>
         </div>
       </div>
 
-      {/* History List */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-clean">
-        {filteredHistory.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 opacity-30">
-            <Filter className="w-10 h-10 mb-3" />
-            <p className="text-[11px] font-bold uppercase tracking-widest">No calculations found</p>
+      {/* 3. History Card - Compact & Scrollable */}
+      <div className="bg-white rounded-xl border border-border-main shadow-sm flex flex-col min-h-[300px] max-h-[calc(100vh-280px)]">
+        <div className="p-4 flex items-center justify-between border-b border-slate-50">
+          <div className="flex items-center gap-2">
+            <Clock className="w-5 h-5 text-[#22c55e]" />
+            <h3 className="text-[16px] font-heading font-medium text-slate-800">History</h3>
           </div>
-        ) : (
-          filteredHistory.map((item) => (
-            <div 
-              key={item.id}
-              className="group relative p-4 bg-white border border-border-main rounded-xl hover:border-brand-primary/30 hover:shadow-md transition-all animate-in fade-in slide-in-from-bottom-2 duration-300"
-            >
-              {/* Category & Date */}
-              <div className="flex justify-between items-start mb-2">
-                <div className="flex flex-col">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{item.categoryName}</span>
-                  <h4 className="text-[14px] font-bold text-brand-primary">{item.variableLabel}</h4>
-                </div>
-                <div className="flex items-center gap-1">
-                   <button 
-                     onClick={() => onReplay?.(item)}
-                     className="p-1.5 text-slate-400 hover:text-brand-primary hover:bg-brand-primary/5 rounded-md transition-all"
-                     title="Replay"
-                   >
-                     <RotateCcw className="w-3.5 h-3.5" />
-                   </button>
-                   <button 
-                     onClick={() => deleteHistoryItem(item.id)}
-                     className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-all"
-                     title="Delete"
-                   >
-                     <Trash2 className="w-3.5 h-3.5" />
-                   </button>
-                </div>
-              </div>
+          <button 
+            onClick={clearHistory}
+            className="text-[12px] font-heading font-medium text-slate-400 hover:text-[#22c55e] transition-colors"
+          >
+            Clear
+          </button>
+        </div>
 
-              {/* Sub-info */}
-              <p className="text-[11px] text-slate-500 mb-3">
-                {item.methodName} • {formatDate(item.timestamp, "MMM d, yyyy, hh:mm a")}
-              </p>
-
-              {/* Result Summary */}
-              <div className="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
-                <span className="text-[11px] font-bold text-slate-400 uppercase">Output</span>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-lg font-black text-slate-800">{item.primaryValue}</span>
-                  <span className="text-[10px] font-bold text-brand-primary uppercase">{item.primaryUnit}</span>
-                </div>
-              </div>
-
-              {/* Input Peek (Optional/Hidden by default) */}
-              <div className="mt-2 pt-2 border-t border-slate-50 opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto overflow-hidden transition-all duration-300">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                   {Object.entries(item.inputs).slice(0, 4).map(([k, v]) => (
-                     <div key={k} className="flex justify-between text-[10px]">
-                        <span className="text-slate-400">{k}:</span>
-                        <span className="font-bold text-slate-600">{v} {item.inputUnits[k]}</span>
-                     </div>
-                   ))}
-                </div>
-              </div>
+        <div className="flex-1 overflow-y-auto p-3 space-y-3 scrollbar-clean">
+          {filteredHistory.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 opacity-10 grayscale">
+              <Filter className="w-12 h-12 mb-3 text-slate-300 stroke-[1]" />
+              <p className="text-[12px] font-heading font-extrabold uppercase tracking-[0.2em] text-slate-400">No data</p>
             </div>
-          ))
-        )}
-      </div>
+          ) : (
+            filteredHistory.map((item) => (
+              <div 
+                key={item.id}
+                className="bg-white border border-border-main rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+              >
+                {/* Item Header */}
+                <div className="bg-[#f0fdf4] px-3 py-2 border-b border-border-main/30">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-[13px] font-heading font-bold text-[#22c55e] truncate pr-2">{item.variableLabel}</h4>
+                    <div className="flex items-center gap-0.5 shrink-0">
+                       <button 
+                         onClick={() => onReplay?.(item)}
+                         className="p-1 text-slate-400 hover:text-[#22c55e] transition-colors"
+                       >
+                         <RotateCcw className="w-3.5 h-3.5" />
+                       </button>
+                       <button 
+                         onClick={() => deleteHistoryItem(item.id)}
+                         className="p-1 text-slate-400 hover:text-red-500 transition-colors"
+                       >
+                         <Trash2 className="w-3.5 h-3.5" />
+                       </button>
+                    </div>
+                  </div>
+                  <p className="text-[10px] font-sans text-slate-400">
+                    {formatDate(item.timestamp)}
+                  </p>
+                </div>
 
-      {/* Footer Info */}
-      <div className="p-3 bg-slate-50/50 border-t border-border-main text-center">
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-          Showing {filteredHistory.length} of {history.length}
-        </p>
+                {/* Simplified Data Row */}
+                <div className="px-3 py-2 bg-slate-50/30">
+                   <div className="flex justify-between items-baseline">
+                      <span className="text-[10px] font-heading font-bold text-slate-400 uppercase">Output</span>
+                      <div className="flex items-baseline gap-1 font-sans">
+                        <span className="text-[15px] font-extrabold text-[#22c55e]">{item.primaryValue}</span>
+                        <span className="text-[#22c55e] text-[11px] font-bold uppercase">{item.primaryUnit}</span>
+                      </div>
+                   </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="p-2 bg-slate-50/50 border-t border-border-main text-center">
+           <p className="text-[9px] font-heading font-bold text-slate-300 uppercase tracking-widest">
+              Latest {filteredHistory.length} calculations
+           </p>
+        </div>
       </div>
     </div>
   );
