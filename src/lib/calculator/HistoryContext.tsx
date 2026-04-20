@@ -1,12 +1,13 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { CalculationResult } from "./types";
 
 export interface HistoryItem {
+  id: string;
   timestamp: number;
   variableName: string;
   variableLabel: string;
+  categoryName: string;
   methodName: string;
   primaryValue: string;
   primaryUnit: string;
@@ -17,7 +18,8 @@ export interface HistoryItem {
 
 interface HistoryContextType {
   history: HistoryItem[];
-  addHistoryItem: (item: Omit<HistoryItem, "timestamp">) => void;
+  addHistoryItem: (item: Omit<HistoryItem, "id" | "timestamp">) => void;
+  deleteHistoryItem: (id: string) => void;
   clearHistory: () => void;
 }
 
@@ -28,7 +30,7 @@ export const HistoryProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Load from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem("edrift_calc_history");
+    const saved = localStorage.getItem("edrift_calc_history_v2");
     if (saved) {
       try {
         setHistory(JSON.parse(saved));
@@ -40,12 +42,20 @@ export const HistoryProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem("edrift_calc_history", JSON.stringify(history));
+    localStorage.setItem("edrift_calc_history_v2", JSON.stringify(history));
   }, [history]);
 
-  const addHistoryItem = (item: Omit<HistoryItem, "timestamp">) => {
-    const newItem: HistoryItem = { ...item, timestamp: Date.now() };
-    setHistory((prev) => [newItem, ...prev].slice(0, 20)); // Keep last 20
+  const addHistoryItem = (item: Omit<HistoryItem, "id" | "timestamp">) => {
+    const newItem: HistoryItem = { 
+      ...item, 
+      id: Math.random().toString(36).substr(2, 9),
+      timestamp: Date.now() 
+    };
+    setHistory((prev) => [newItem, ...prev].slice(0, 50)); // Keep last 50
+  };
+
+  const deleteHistoryItem = (id: string) => {
+    setHistory((prev) => prev.filter(item => item.id !== id));
   };
 
   const clearHistory = () => {
@@ -53,7 +63,7 @@ export const HistoryProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   return (
-    <HistoryContext.Provider value={{ history, addHistoryItem, clearHistory }}>
+    <HistoryContext.Provider value={{ history, addHistoryItem, deleteHistoryItem, clearHistory }}>
       {children}
     </HistoryContext.Provider>
   );

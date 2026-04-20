@@ -38,7 +38,7 @@ export const CalculatorSidebar: React.FC = () => {
   const activeSlug = Array.isArray(slugParam) ? slugParam[0] : slugParam;
   
   return (
-    <div className="flex flex-col h-full bg-white border-r border-[#e5e7eb]">
+    <div className="flex flex-col h-full bg-white border-r border-[#e5e7eb] print:hidden">
       {/* Sidebar Header - Simplified as requested */}
       <div className="py-6 px-5 border-b border-[#e5e7eb] flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
