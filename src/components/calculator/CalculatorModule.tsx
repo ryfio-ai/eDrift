@@ -97,7 +97,7 @@ const CustomDropdown = ({ options, value, onChange, className }: {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between w-full h-[36px] px-3 py-1.5 bg-slate-50 text-slate-700 border border-border-main rounded-lg cursor-pointer transition-all hover:border-brand-primary/30 select-none shadow-sm"
       >
-        <span className="text-[12px] font-heading font-bold uppercase tracking-wider">{value}</span>
+        <span className="text-[12px] font-heading font-bold tracking-wider">{value}</span>
         <ChevronDown className={cn("w-3.5 h-3.5 text-slate-400 transition-transform", isOpen && "rotate-180")} />
       </div>
       {isOpen && (
@@ -326,7 +326,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                          <span className="text-[12px] font-sans text-brand-primary font-bold">{formatLabel(f.label)}</span>
                          <div className="flex items-baseline gap-1 font-sans font-bold">
                             <span className="text-slate-700 text-[13px]">{inputs[f.name] || 0}</span>
-                            <span className="text-slate-400 text-[10px] uppercase">{units[f.name] || f.units[0]}</span>
+                            <span className="text-slate-400 text-[10px]">{units[f.name] || f.units[0]}</span>
                          </div>
                       </div>
                    ))}
@@ -352,7 +352,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                             <span className="text-[36px] font-extrabold text-brand-primary tracking-tighter leading-none">
                                {smartFormat(convertFromBase(result.rawValue!, outputUnit))}
                             </span>
-                            <span className="text-brand-primary text-[16px] font-bold uppercase">{outputUnit}</span>
+                            <span className="text-brand-primary text-[16px] font-bold">{outputUnit}</span>
                          </div>
                       </div>
                    ) : (

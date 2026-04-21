@@ -232,7 +232,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       <span className="text-[10px] font-heading font-bold text-slate-400 uppercase">Output</span>
                       <div className="flex items-baseline gap-1 font-sans">
                         <span className="text-[15px] font-extrabold text-brand-primary">{item.primaryValue}</span>
-                        <span className="text-brand-primary text-[11px] font-bold uppercase">{item.primaryUnit}</span>
+                        <span className="text-brand-primary text-[11px] font-bold">{item.primaryUnit}</span>
                       </div>
                    </div>
                 </div>
