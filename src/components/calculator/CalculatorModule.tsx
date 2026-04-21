@@ -95,7 +95,7 @@ const CustomDropdown = ({ options, value, onChange, className }: {
     <div className={cn("relative w-full", className)} ref={ref}>
       <div 
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full h-[36px] px-3 py-1.5 bg-slate-50 text-slate-700 border border-border-main rounded-lg cursor-pointer transition-all hover:border-[#22c55e]/30 select-none shadow-sm"
+        className="flex items-center justify-between w-full h-[36px] px-3 py-1.5 bg-slate-50 text-slate-700 border border-border-main rounded-lg cursor-pointer transition-all hover:border-brand-primary/30 select-none shadow-sm"
       >
         <span className="text-[12px] font-heading font-bold uppercase tracking-wider">{value}</span>
         <ChevronDown className={cn("w-3.5 h-3.5 text-slate-400 transition-transform", isOpen && "rotate-180")} />
@@ -109,7 +109,7 @@ const CustomDropdown = ({ options, value, onChange, className }: {
                 onClick={() => { onChange(option); setIsOpen(false); }}
                 className={cn(
                   "px-4 py-2 text-[12px] font-heading font-medium cursor-pointer transition-colors",
-                  value === option ? "bg-[#22c55e] text-white" : "text-slate-600 hover:bg-slate-50 hover:text-[#22c55e]"
+                  value === option ? "bg-brand-primary text-white" : "text-slate-600 hover:bg-slate-50 hover:text-brand-primary"
                 )}
               >
                 {option}
@@ -238,7 +238,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
             {categoryName}
           </h1>
           <p className="text-[13px] font-sans text-slate-400 font-medium mt-1">
-            Calculating <span className="text-[#22c55e] font-heading font-bold">{variable.label}</span> • {activeMethod.name}
+            Calculating <span className="text-brand-primary font-heading font-bold">{variable.label}</span> • {activeMethod.name}
           </p>
         </div>
         <div className="flex gap-2">
@@ -249,7 +249,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
               className={cn(
                 "px-4 py-1.5 rounded-lg text-[11px] font-heading font-bold uppercase tracking-wider transition-all shadow-sm active:scale-95",
                 methodIndex === index 
-                  ? "bg-[#22c55e] text-white" 
+                  ? "bg-brand-primary text-white" 
                   : "bg-white text-slate-400 border border-border-main hover:text-slate-600"
               )}
             >
@@ -264,7 +264,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
         <div className="flex-1 min-w-0 flex flex-col gap-4">
           
           {/* Formula Card - Compact */}
-          <motion.div variants={itemVariants} className="bg-[#f0fdf4] border border-[#22c55e]/10 rounded-[20px] p-4 flex items-center justify-center min-h-[70px] shadow-sm">
+          <motion.div variants={itemVariants} className="bg-brand-primary-soft border border-brand-primary/10 rounded-[20px] p-4 flex items-center justify-center min-h-[70px] shadow-sm">
              <div className="scale-110 transform origin-center">
                 <FormulaDisplay formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck Converter"]} />
              </div>
@@ -288,7 +288,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                               value={inputs[field.name] || ""}
                               onChange={(e) => setInputs({ ...inputs, [field.name]: parseFloat(e.target.value) || 0 })}
                               placeholder="0.0"
-                              className="w-full bg-slate-50 border border-border-main rounded-lg px-3 py-2 text-[14px] font-sans font-bold outline-none hover:border-slate-300 focus:border-[#22c55e] focus:bg-white transition-all text-slate-800 shadow-inner"
+                              className="w-full bg-slate-50 border border-border-main rounded-lg px-3 py-2 text-[14px] font-sans font-bold outline-none hover:border-slate-300 focus:border-brand-primary focus:bg-white transition-all text-slate-800 shadow-inner"
                             />
                          </div>
                          {field.units[0] !== "" && (
@@ -308,7 +308,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
              <div className="flex justify-end">
                 <button 
                   onClick={handleCalculate}
-                  className="px-10 py-3 bg-[#22c55e] hover:bg-[#22c55e]/90 text-white font-heading font-extrabold rounded-lg shadow-lg shadow-[#22c55e]/10 transition-all flex items-center justify-center gap-3 active:scale-95"
+                  className="px-10 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-heading font-extrabold rounded-lg shadow-lg shadow-brand-primary/10 transition-all flex items-center justify-center gap-3 active:scale-95"
                 >
                    <span className="uppercase tracking-widest text-[12px]">Calculate</span>
                 </button>
@@ -323,7 +323,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                 <div className="space-y-2">
                    {activeMethod.inputFields.map(f => (
                       <div key={f.name} className="flex justify-between items-center pb-1.5 border-b border-slate-50/50 last:border-0">
-                         <span className="text-[12px] font-sans text-[#22c55e] font-bold">{formatLabel(f.label)}</span>
+                         <span className="text-[12px] font-sans text-brand-primary font-bold">{formatLabel(f.label)}</span>
                          <div className="flex items-baseline gap-1 font-sans font-bold">
                             <span className="text-slate-700 text-[13px]">{inputs[f.name] || 0}</span>
                             <span className="text-slate-400 text-[10px] uppercase">{units[f.name] || f.units[0]}</span>
@@ -349,10 +349,10 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                    {calculated && result ? (
                       <div className="flex flex-col items-center gap-0.5 w-full">
                          <div className="flex items-baseline justify-center gap-1.5 font-sans">
-                            <span className="text-[36px] font-extrabold text-[#22c55e] tracking-tighter leading-none">
+                            <span className="text-[36px] font-extrabold text-brand-primary tracking-tighter leading-none">
                                {smartFormat(convertFromBase(result.rawValue!, outputUnit))}
                             </span>
-                            <span className="text-[#22c55e] text-[16px] font-bold uppercase">{outputUnit}</span>
+                            <span className="text-brand-primary text-[16px] font-bold uppercase">{outputUnit}</span>
                          </div>
                       </div>
                    ) : (

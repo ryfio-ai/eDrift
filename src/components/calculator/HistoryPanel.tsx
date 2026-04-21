@@ -116,7 +116,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
               className={cn(
                 "flex-1 py-1.5 text-[11px] font-heading font-bold rounded-md transition-all",
                 timeFilter === tab 
-                  ? "bg-[#22c55e] text-white shadow-sm" 
+                  ? "bg-brand-primary text-white shadow-sm" 
                   : "bg-slate-50 text-slate-600 hover:bg-slate-100"
               )}
             >
@@ -145,7 +145,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     }}
                     className={cn(
                       "w-full text-left px-3 py-2 text-[12px] font-heading hover:bg-slate-50 transition-colors",
-                      variableFilter === v ? "text-[#22c55e] font-bold" : "text-slate-600"
+                      variableFilter === v ? "text-brand-primary font-bold" : "text-slate-600"
                     )}
                   >
                     {v}
@@ -179,12 +179,12 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
       <div className="bg-white rounded-xl border border-border-main shadow-sm flex flex-col min-h-[300px] max-h-[calc(100vh-280px)]">
         <div className="p-4 flex items-center justify-between border-b border-slate-50">
           <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-[#22c55e]" />
+            <Clock className="w-5 h-5 text-brand-primary" />
             <h3 className="text-[16px] font-heading font-medium text-slate-800">History</h3>
           </div>
           <button 
             onClick={clearHistory}
-            className="text-[12px] font-heading font-medium text-slate-400 hover:text-[#22c55e] transition-colors"
+            className="text-[12px] font-heading font-medium text-slate-400 hover:text-brand-primary transition-colors"
           >
             Clear
           </button>
@@ -203,13 +203,13 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 className="bg-white border border-border-main rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
               >
                 {/* Item Header */}
-                <div className="bg-[#f0fdf4] px-3 py-2 border-b border-border-main/30">
+                <div className="bg-brand-primary-soft px-3 py-2 border-b border-border-main/30">
                   <div className="flex justify-between items-center">
-                    <h4 className="text-[13px] font-heading font-bold text-[#22c55e] truncate pr-2">{item.variableLabel}</h4>
+                    <h4 className="text-[13px] font-heading font-bold text-brand-primary truncate pr-2">{item.variableLabel}</h4>
                     <div className="flex items-center gap-0.5 shrink-0">
                        <button 
                          onClick={() => onReplay?.(item)}
-                         className="p-1 text-slate-400 hover:text-[#22c55e] transition-colors"
+                         className="p-1 text-slate-400 hover:text-brand-primary transition-colors"
                        >
                          <RotateCcw className="w-3.5 h-3.5" />
                        </button>
@@ -231,8 +231,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                    <div className="flex justify-between items-baseline">
                       <span className="text-[10px] font-heading font-bold text-slate-400 uppercase">Output</span>
                       <div className="flex items-baseline gap-1 font-sans">
-                        <span className="text-[15px] font-extrabold text-[#22c55e]">{item.primaryValue}</span>
-                        <span className="text-[#22c55e] text-[11px] font-bold uppercase">{item.primaryUnit}</span>
+                        <span className="text-[15px] font-extrabold text-brand-primary">{item.primaryValue}</span>
+                        <span className="text-brand-primary text-[11px] font-bold uppercase">{item.primaryUnit}</span>
                       </div>
                    </div>
                 </div>
