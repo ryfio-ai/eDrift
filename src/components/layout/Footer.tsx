@@ -4,10 +4,16 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { fadeIn, staggerContainer } from "@/lib/motion";
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isCalculator = pathname?.startsWith("/design-calculator");
+
+  if (isCalculator) return null;
+
   const links = {
     products: [
       { name: "Elite Series OBC", href: "/products?category=On+Board+Charger" },

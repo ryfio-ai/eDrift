@@ -231,7 +231,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col gap-6 print:hidden w-full max-h-screen font-sans"
+      className="flex flex-col gap-6 print:hidden w-full font-sans"
     >
       {/* 1. Header Section - Reorganized for prominent labels */}
       <motion.div variants={itemVariants} className="relative flex flex-col gap-1 pb-4 border-b border-slate-50">
