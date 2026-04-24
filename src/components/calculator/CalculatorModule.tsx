@@ -16,7 +16,9 @@ import {
   RotateCcw,
   Printer,
   FileDown,
-  Info
+  Info,
+  FileText,
+  ExternalLink
 } from "lucide-react";
 import { useCalculatorHistory, HistoryItem } from "@/lib/calculator/HistoryContext";
 import { HistoryPanel } from "./HistoryPanel";
@@ -229,70 +231,114 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col gap-4 print:hidden w-full max-h-screen font-sans"
+      className="flex flex-col gap-6 print:hidden w-full max-h-screen font-sans"
     >
-      {/* 1. Header Section - Compact */}
-      <motion.div variants={itemVariants} className="flex justify-between items-end pb-2 border-b border-slate-50">
-        <div className="flex flex-col">
-          <h1 className="text-[28px] font-heading font-extrabold text-slate-800 tracking-tight leading-none">
-            {categoryName}
-          </h1>
-          <p className="text-[13px] font-sans text-slate-400 font-medium mt-1">
-            Calculating <span className="text-brand-primary font-heading font-bold">{variable.label}</span> • {activeMethod.name}
-          </p>
-        </div>
-        <div className="flex gap-2">
-          {variable.methods.map((method, index) => (
-            <button
-              key={method.name}
-              onClick={() => setMethodIndex(index)}
-              className={cn(
-                "px-4 py-1.5 rounded-lg text-[11px] font-heading font-bold uppercase tracking-wider transition-all shadow-sm active:scale-95",
-                methodIndex === index 
-                  ? "bg-brand-primary text-white" 
-                  : "bg-white text-slate-400 border border-border-main hover:text-slate-600"
-              )}
-            >
-              {method.name.startsWith("M") ? `M${method.name.replace("M", "")}` : method.name}
-            </button>
-          ))}
-        </div>
+      {/* 1. Header Section - Reorganized for prominent labels */}
+      <motion.div variants={itemVariants} className="relative flex flex-col gap-1 pb-4 border-b border-slate-50">
+        <h1 className="text-[32px] font-heading font-extrabold text-slate-800 tracking-tight leading-none text-center">
+          {categoryName}
+        </h1>
+        <p className="text-[14px] font-sans text-slate-400 font-medium text-center">
+          Calculating <span className="text-brand-primary font-heading font-bold">{variable.label}</span> • {activeMethod.name}
+        </p>
+
+        {/* Derivation Link - Added based on request */}
+        {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
+          <a 
+            href={variable.name === "Inductance" ? "/materials/Inductance derivation.pdf" : "/materials/Derivations.pdf"} 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute top-0 right-0 hidden md:flex items-center gap-2 px-4 py-2 bg-[#f8fafc] border border-slate-200 rounded-lg text-[11px] font-heading font-bold text-brand-primary hover:bg-brand-primary/5 hover:border-brand-primary/20 transition-all shadow-sm active:scale-95"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>Click here for derivation</span>
+            <ExternalLink className="w-3 h-3 opacity-40" />
+          </a>
+        )}
       </motion.div>
 
-      <div className="flex flex-col xl:flex-row gap-6 items-start">
+      {/* 2. Method Selection - Centralized Tabs as requested */}
+      {variable.methods.length > 1 && (
+        <motion.div variants={itemVariants} className="flex justify-center -mb-2">
+          <div className="flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200">
+            {variable.methods.map((method, index) => (
+              <button
+                key={method.name}
+                onClick={() => setMethodIndex(index)}
+                className={cn(
+                  "px-8 py-2.5 rounded-lg text-[13px] font-heading font-bold transition-all active:scale-95",
+                  methodIndex === index 
+                    ? "bg-white text-brand-primary shadow-md border border-slate-100" 
+                    : "text-slate-400 hover:text-slate-600"
+                )}
+              >
+                {method.name.startsWith("M") ? `Method ${method.name.replace("M", "")}` : method.name}
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      <div className="flex flex-col xl:flex-row gap-8 items-start">
         {/* Left Content Area */}
-        <div className="flex-1 min-w-0 flex flex-col gap-4">
+        <div className="flex-1 min-w-0 flex flex-col gap-6">
           
-          {/* Formula Card - Compact */}
-          <motion.div variants={itemVariants} className="bg-brand-primary-soft border border-brand-primary/10 rounded-[20px] p-4 flex items-center justify-center min-h-[70px] shadow-sm">
-             <div className="scale-110 transform origin-center">
+          {/* Formula Card - Prompt and Centered */}
+          <motion.div variants={itemVariants} className="bg-brand-primary-soft border border-brand-primary/10 rounded-[24px] p-6 flex items-center justify-center min-h-[100px] shadow-sm">
+             <div className="scale-125 transform origin-center">
                 <FormulaDisplay formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck Converter"]} />
              </div>
           </motion.div>
 
-          {/* Main Input Grid Section - Compact */}
-          <motion.div variants={itemVariants} className="bg-white p-5 rounded-[24px] border border-border-main shadow-sm flex flex-col gap-4">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+          {/* Main Input Grid Section */}
+          <motion.div variants={itemVariants} className="bg-white p-6 rounded-[28px] border border-border-main shadow-sm flex flex-col gap-6">
+             {/* Topology Selector - Added based on request */}
+             {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
+                <div className="flex flex-col gap-3 pb-4 border-b border-slate-50">
+                   <div className="flex items-center gap-1.5 ml-1">
+                      <label className="text-[12px] font-heading font-bold text-slate-400 uppercase tracking-widest">Topology</label>
+                      <HelpCircle className="w-3.5 h-3.5 text-slate-300" />
+                   </div>
+                   <div className="flex gap-3">
+                      {["Buck Converter", "Boost Converter"].map(top => (
+                         <button 
+                           key={top}
+                           onClick={() => setFormData({ ...formData, topology: top })}
+                           className={cn(
+                             "flex-1 py-3 rounded-xl text-[13px] font-heading font-bold border transition-all active:scale-95",
+                             (formData.topology || "Buck Converter") === top
+                               ? "bg-brand-primary/5 border-brand-primary text-brand-primary shadow-sm"
+                               : "bg-white border-slate-100 text-slate-400 hover:border-slate-200"
+                           )}
+                         >
+                            {top.split(" ")[0]}
+                         </button>
+                      ))}
+                   </div>
+                </div>
+             )}
+
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
                 {activeMethod.inputFields.map((field) => (
-                   <div key={field.name} className="flex flex-col gap-1 group">
-                      <div className="flex items-center gap-1 px-1">
-                         <label className="text-[11px] font-heading font-bold text-slate-400 uppercase tracking-tight group-hover:text-slate-600 transition-colors">
+                   <div key={field.name} className="flex flex-col gap-1.5 group">
+                      <div className="flex items-center gap-1.5 px-1.5">
+                         <label className="text-[12px] font-heading font-bold text-slate-400 uppercase tracking-tight group-hover:text-slate-700 transition-colors">
                             {formatLabel(field.label)}
                          </label>
-                         <HelpCircle className="w-3 h-3 text-slate-300 cursor-help" />
+                         <HelpCircle className="w-3.5 h-3.5 text-slate-300 cursor-help" />
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3">
                          <div className="relative flex-1">
                             <input 
                               type="number"
                               value={inputs[field.name] || ""}
                               onChange={(e) => setInputs({ ...inputs, [field.name]: parseFloat(e.target.value) || 0 })}
                               placeholder="0.0"
-                              className="w-full bg-slate-50 border border-border-main rounded-lg px-3 py-2 text-[14px] font-sans font-bold outline-none hover:border-slate-300 focus:border-brand-primary focus:bg-white transition-all text-slate-800 shadow-inner"
+                              className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-[15px] font-sans font-bold outline-none hover:border-slate-300 focus:border-brand-primary focus:bg-white transition-all text-slate-800 shadow-inner"
                             />
                          </div>
                          {field.units[0] !== "" && (
-                            <div className="w-[80px] shrink-0">
+                            <div className="w-[100px] shrink-0">
                                <CustomDropdown 
                                   options={field.units} 
                                   value={units[field.name] || field.units[0]} 
@@ -305,28 +351,35 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                 ))}
              </div>
 
-             <div className="flex justify-end">
+             <div className="flex justify-end pt-2">
                 <button 
                   onClick={handleCalculate}
-                  className="px-10 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-heading font-extrabold rounded-lg shadow-lg shadow-brand-primary/10 transition-all flex items-center justify-center gap-3 active:scale-95"
+                  className="px-12 py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-heading font-extrabold rounded-xl shadow-xl shadow-brand-primary/20 transition-all flex items-center justify-center gap-3 active:scale-95 group"
                 >
-                   <span className="uppercase tracking-widest text-[12px]">Calculate</span>
+                   <Check className="w-5 h-5 text-white/50 group-hover:text-white transition-colors" />
+                   <span className="uppercase tracking-widest text-[13px]">Calculate Result</span>
                 </button>
              </div>
           </motion.div>
 
-          {/* Bottom Split - Compact */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Bottom Split - Summary and Results side by side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              {/* Left: Current Inputs Summary */}
-             <motion.div variants={itemVariants} className="bg-white p-5 rounded-[24px] border border-border-main shadow-sm flex flex-col gap-4">
-                <h3 className="text-[12px] font-heading font-extrabold text-slate-800 uppercase tracking-widest border-b border-slate-50 pb-2">Current Inputs</h3>
-                <div className="space-y-2">
+             <motion.div variants={itemVariants} className="bg-white p-6 rounded-[28px] border border-border-main shadow-sm flex flex-col gap-4">
+                <h3 className="text-[13px] font-heading font-extrabold text-slate-800 uppercase tracking-widest border-b border-slate-50 pb-3">Current Configuration</h3>
+                <div className="space-y-3">
+                   {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
+                      <div className="flex justify-between items-center pb-2 border-b border-slate-50/50">
+                         <span className="text-[13px] font-sans text-brand-primary font-bold">Topology</span>
+                         <span className="text-slate-700 text-[13px] font-bold">{formData.topology || "Buck Converter"}</span>
+                      </div>
+                   )}
                    {activeMethod.inputFields.map(f => (
-                      <div key={f.name} className="flex justify-between items-center pb-1.5 border-b border-slate-50/50 last:border-0">
-                         <span className="text-[12px] font-sans text-brand-primary font-bold">{formatLabel(f.label)}</span>
-                         <div className="flex items-baseline gap-1 font-sans font-bold">
-                            <span className="text-slate-700 text-[13px]">{inputs[f.name] || 0}</span>
-                            <span className="text-slate-400 text-[10px]">{units[f.name] || f.units[0]}</span>
+                      <div key={f.name} className="flex justify-between items-center pb-2 border-b border-slate-50/50 last:border-0">
+                         <span className="text-[13px] font-sans text-brand-primary font-bold">{formatLabel(f.label)}</span>
+                         <div className="flex items-baseline gap-1.5 font-sans font-bold text-slate-700">
+                            <span className="text-[14px]">{inputs[f.name] || 0}</span>
+                            <span className="text-slate-400 text-[11px]">{units[f.name] || f.units[0]}</span>
                          </div>
                       </div>
                    ))}
@@ -334,37 +387,45 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
              </motion.div>
 
              {/* Right: Calculated Result */}
-             <motion.div variants={itemVariants} className="bg-white p-5 rounded-[24px] border border-border-main shadow-sm flex flex-col gap-4">
-                <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                   <h3 className="text-[12px] font-heading font-extrabold text-slate-800 uppercase tracking-widest">Result</h3>
+             <motion.div variants={itemVariants} className="bg-white p-6 rounded-[28px] border border-border-main shadow-sm flex flex-col gap-4">
+                <div className="flex justify-between items-center border-b border-slate-50 pb-3">
+                   <h3 className="text-[13px] font-heading font-extrabold text-slate-800 uppercase tracking-widest">Calculated Result</h3>
                    <CustomDropdown 
                       options={variable.outputUnits} 
                       value={outputUnit} 
                       onChange={setOutputUnit} 
-                      className="w-[85px]"
+                      className="w-[100px]"
                    />
                 </div>
 
-                <div className="flex-1 flex flex-col justify-center items-center text-center py-4 min-h-[80px]">
+                <div className="flex-grow flex flex-col justify-center items-center text-center py-6 min-h-[120px]">
                    {calculated && result ? (
-                      <div className="flex flex-col items-center gap-0.5 w-full">
-                         <div className="flex items-baseline justify-center gap-1.5 font-sans">
-                            <span className="text-[36px] font-extrabold text-brand-primary tracking-tighter leading-none">
+                      <div className="flex flex-col items-center gap-1 w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
+                         <div className="flex items-baseline justify-center gap-2 font-sans">
+                            <span className="text-[44px] font-extrabold text-brand-primary tracking-tighter leading-none">
                                {smartFormat(convertFromBase(result.rawValue!, outputUnit))}
                             </span>
-                            <span className="text-brand-primary text-[16px] font-bold">{outputUnit}</span>
+                            <span className="text-brand-primary text-[18px] font-bold">{outputUnit}</span>
+                         </div>
+                         <div className="mt-2 py-1 px-4 rounded-full bg-slate-50 border border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                            Valid result generated
                          </div>
                       </div>
                    ) : (
-                      <p className="text-[11px] font-sans text-slate-400 italic">Click calculate to see results.</p>
+                      <div className="flex flex-col items-center gap-3">
+                         <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-200">
+                            <Zap className="w-6 h-6 fill-slate-50" />
+                         </div>
+                         <p className="text-[12px] font-sans text-slate-400 font-medium">Click calculate to see technical results.</p>
+                      </div>
                    )}
                 </div>
              </motion.div>
           </div>
         </div>
 
-        {/* Sidebar */}
-        <motion.div variants={itemVariants} className="w-full xl:w-[320px] shrink-0 sticky top-4">
+        {/* Sidebar - History */}
+        <motion.div variants={itemVariants} className="w-full xl:w-[340px] shrink-0 sticky top-4">
            <HistoryPanel 
              onReplay={handleReplay}
              onExportPDF={exportToPDF}
