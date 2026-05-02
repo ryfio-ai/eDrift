@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CalculatorVariable, CalculationResult } from "@/lib/calculator/types";
 import { runCalculation } from "@/lib/calculator/engine";
 import { convertToBase, convertFromBase } from "@/lib/calculator/unitConversions";
+import { BlockMath, InlineMath } from "react-katex";
+import "katex/dist/katex.min.css";
 import { FormulaDisplay } from "./FormulaDisplay";
 import { 
   HelpCircle, 
@@ -18,37 +20,44 @@ import {
   FileDown,
   Info,
   FileText,
-  ExternalLink
+  ExternalLink,
+  AlertCircle,
+  Wrench
 } from "lucide-react";
+import { slugify } from "@/lib/calculator/utils";
 import { useCalculatorHistory, HistoryItem } from "@/lib/calculator/HistoryContext";
 import { HistoryPanel } from "./HistoryPanel";
 import { calculatorConfig } from "@/lib/calculator/config";
 import { cn } from "@/lib/utils";
-import * as XLSX from "xlsx";
+import * as math from "mathjs";
 
 // --- HELPERS ---
 
-const formatLabel = (label: string) => {
-  if (!label) return label;
-  if (label.includes("_")) {
+const formatLabelToLatex = (label: string): string => {
+  if (!label) return "";
+  
+  // If it's already complex or has special chars, wrap it
+  let latex = label;
+  
+  // Handle subscripts if not already in LaTeX
+  if (label.includes("_") && !label.includes("\\")) {
     const parts = label.split("_");
-    return (
-      <span className="inline-flex items-baseline">
-        {parts[0]}
-        <sub className="ml-[1px]" style={{ fontSize: '0.7em', bottom: '-0.2em' }}>{parts[1]}</sub>
-      </span>
-    );
+    latex = `${parts[0]}_{${parts[1]}}`;
   }
-  const match = label.match(/^([A-ZΔ])(in|out|peak|rms|max)$/);
-  if (match) {
-    return (
-      <span className="inline-flex items-baseline">
-        {match[1]}
-        <sub className="ml-[1px]" style={{ fontSize: '0.7em', bottom: '-0.2em' }}>{match[2]}</sub>
-      </span>
-    );
-  }
-  return label;
+  
+  // Handle Greek characters if they are literals
+  latex = latex.replace(/μ/g, "\\mu ");
+  latex = latex.replace(/Δ/g, "\\Delta ");
+  latex = latex.replace(/Φ/g, "\\Phi ");
+  latex = latex.replace(/η/g, "\\eta ");
+  latex = latex.replace(/π/g, "\\pi ");
+  latex = latex.replace(/%/g, "\\% ");
+
+  return latex;
+};
+
+const formatLabel = (label: string) => {
+  return <InlineMath math={formatLabelToLatex(label)} />;
 };
 
 const smartFormat = (val: number | string) => {
@@ -93,6 +102,8 @@ const CustomDropdown = ({ options, value, onChange, className }: {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  if (options.length === 0 || (options.length === 1 && options[0] === "")) return null;
+
   return (
     <div className={cn("relative w-full", className)} ref={ref}>
       <div 
@@ -128,58 +139,139 @@ interface CalculatorModuleProps {
   variable: CalculatorVariable;
 }
 
+// Performance Optimization: Disabled heavy transitions for instant switching (<100ms)
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { 
     opacity: 1,
-    transition: { 
-      duration: 0.3,
-      when: "beforeChildren",
-      staggerChildren: 0.1
-    }
+    transition: { duration: 0 }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 15 },
+  hidden: { opacity: 0 },
   visible: { 
     opacity: 1, 
-    y: 0,
-    transition: { duration: 0.4 }
+    transition: { duration: 0 }
   }
 };
 
 export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) => {
   const [methodIndex, setMethodIndex] = useState(0);
+  const [inputStrings, setInputStrings] = useState<Record<string, string>>({});
   const [inputs, setInputs] = useState<Record<string, number>>({});
   const [units, setUnits] = useState<Record<string, string>>({});
   const [outputUnit, setOutputUnit] = useState(variable.outputUnits[0]);
   const [formData, setFormData] = useState<Record<string, any>>({ topology: "Buck Converter" });
   const [calculated, setCalculated] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [manualDutyCycle, setManualDutyCycle] = useState(false);
+  const [customFormulaStr, setCustomFormulaStr] = useState("x * y + z");
+  const [customVariables, setCustomVariables] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [persistedResult, setPersistedResult] = useState<CalculationResult | null>(null);
 
   const { history, addHistoryItem } = useCalculatorHistory();
   const activeMethod = variable.methods[methodIndex];
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const categoryName = useMemo(() => {
-    const cat = calculatorConfig.categories.find(c => c.variables.some(v => v.name === variable.name));
-    return cat?.name || "Calculation";
+  const category = useMemo(() => {
+    return calculatorConfig.categories.find(c => c.variables.some(v => v.name === variable.name));
   }, [variable.name]);
 
-  // Sync state initially
+  const categoryName = category?.name || "Calculation";
+  const isUnderDevelopment = category?.underDevelopment;
+
+  const stateKey = `edrift_${variable.name}_${formData.topology || 'default'}`;
+
+  // Load from local storage
   useEffect(() => {
-    const initialUnits: Record<string, string> = {};
-    activeMethod.inputFields.forEach(f => {
-      if (!units[f.name]) initialUnits[f.name] = f.units[0];
-    });
-    setUnits(prev => ({ ...initialUnits, ...prev }));
-    setOutputUnit(variable.outputUnits[0]);
-    setCalculated(false);
-  }, [activeMethod, variable.name]);
+    setMounted(true);
+    const saved = localStorage.getItem(stateKey);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.methodIndex !== undefined && parsed.methodIndex < variable.methods.length) {
+           setMethodIndex(parsed.methodIndex);
+        }
+        setInputs(parsed.inputs || {});
+        setInputStrings(parsed.inputStrings || {});
+        setUnits(parsed.units || {});
+        if (parsed.customFormulaStr) setCustomFormulaStr(parsed.customFormulaStr);
+        if (parsed.manualDutyCycle) setManualDutyCycle(parsed.manualDutyCycle);
+        if (parsed.result) {
+          setCalculated(true);
+          setPersistedResult(parsed.result);
+        } else {
+          setCalculated(false);
+          setPersistedResult(null);
+        }
+      } catch (e) {
+        console.error("Failed to parse state", e);
+      }
+    } else {
+      setInputs({});
+      setInputStrings({});
+      setCalculated(false);
+      setPersistedResult(null);
+      // Initialize units
+      const initialUnits: Record<string, string> = {};
+      activeMethod.inputFields.forEach(f => {
+        initialUnits[f.name] = f.units[0] || "";
+      });
+      setUnits(initialUnits);
+      setOutputUnit(variable.outputUnits[0]);
+    }
+    setValidationErrors({});
+  }, [stateKey, variable.name]); // Reload state when topology or variable changes
+
+  // Save to local storage (debounced)
+  useEffect(() => {
+    if (!mounted) return;
+    const timer = setTimeout(() => {
+      localStorage.setItem(stateKey, JSON.stringify({
+        methodIndex,
+        inputs,
+        inputStrings,
+        units,
+        customFormulaStr,
+        manualDutyCycle,
+        result: calculated ? persistedResult : null
+      }));
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [methodIndex, inputs, inputStrings, units, customFormulaStr, manualDutyCycle, calculated, persistedResult, stateKey, mounted]);
+
+  // Extract variables for custom formula
+  useEffect(() => {
+    if (activeMethod.customFormulaInput) {
+       try {
+          const node = math.parse(customFormulaStr);
+          const vars = node.filter(n => (n as any).isSymbolNode && (n as any).name !== 'pi' && (n as any).name !== 'e').map(n => (n as any).name);
+          setCustomVariables(Array.from(new Set(vars)));
+       } catch (e) {
+          // invalid formula, just keep previous variables
+       }
+    }
+  }, [customFormulaStr, activeMethod]);
+
+  // Auto-calculate Duty Cycle
+  useEffect(() => {
+    if (manualDutyCycle || activeMethod.customFormulaInput) return;
+    const vin = inputs["Vin"];
+    const vout = inputs["Vout"];
+    if (vin > 0 && vout > 0) {
+      let newD = 0;
+      if (formData.topology === "Buck Converter" && vin > vout) {
+        newD = vout / vin;
+      } else if (formData.topology === "Boost Converter" && vout > vin) {
+        newD = 1 - (vin / vout);
+      }
+      if (newD > 0 && Math.abs((inputs["D"] || 0) - newD) > 0.001) {
+         setInputs(prev => ({ ...prev, D: newD }));
+         setInputStrings(prev => ({ ...prev, D: smartFormatText(newD) }));
+      }
+    }
+  }, [inputs["Vin"], inputs["Vout"], formData.topology, manualDutyCycle, activeMethod]);
 
   const toBase = (fieldName: string) => {
     const val = inputs[fieldName] || 0;
@@ -187,23 +279,87 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
     return convertToBase(val, unit);
   };
 
-  const result: CalculationResult | null = useMemo(() => {
-    return runCalculation(variable.name, activeMethod.name, toBase, formData);
-  }, [variable.name, activeMethod.name, inputs, units, formData]);
+  const validate = () => {
+    const errors: Record<string, string> = {};
+    if (formData.topology === "Buck Converter") {
+      if (inputs["Vin"] !== undefined && inputs["Vout"] !== undefined && inputs["Vin"] <= inputs["Vout"]) {
+        errors["Vout"] = "Buck Converter: Vout must be less than Vin";
+      }
+    } else if (formData.topology === "Boost Converter") {
+      if (inputs["Vin"] !== undefined && inputs["Vout"] !== undefined && inputs["Vout"] <= inputs["Vin"]) {
+        errors["Vout"] = "Boost Converter: Vout must be greater than Vin";
+      }
+    }
+    
+    // Check required dynamic variables if custom formula
+    if (activeMethod.customFormulaInput) {
+       try {
+         math.parse(customFormulaStr);
+       } catch (e) {
+         errors["formula"] = "Invalid formula syntax.";
+       }
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleInputChange = (key: string, value: string) => {
+    setInputStrings(prev => ({ ...prev, [key]: value }));
+    const parsed = parseFloat(value);
+    if (!isNaN(parsed)) {
+      setInputs(prev => ({ ...prev, [key]: parsed }));
+    } else if (value === "") {
+      setInputs(prev => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+    }
+  };
 
   const handleCalculate = () => {
-    setCalculated(true);
-    if (result && result.primaryValue !== "0.000" && result.primaryValue !== "Invalid") {
+    if (!validate()) {
+       setCalculated(false);
+       return;
+    }
+    
+    let res: CalculationResult | null = null;
+    
+    if (activeMethod.customFormulaInput) {
+       try {
+         const scope: Record<string, number> = {};
+         customVariables.forEach(v => {
+            scope[v] = inputs[v] || 0;
+         });
+         const evaluated = math.evaluate(customFormulaStr, scope);
+         res = {
+           primaryValue: smartFormatText(evaluated),
+           rawValue: evaluated,
+           primaryUnit: outputUnit || ""
+         };
+       } catch (e) {
+         setValidationErrors({ formula: "Error evaluating formula." });
+         setCalculated(false);
+         return;
+       }
+    } else {
+       res = runCalculation(variable.name, activeMethod.name, toBase, formData);
+    }
+    
+    if (res && res.primaryValue !== "0.000" && res.primaryValue !== "Invalid") {
+      setCalculated(true);
+      setPersistedResult(res);
       addHistoryItem({
         variableName: variable.name,
         variableLabel: variable.label,
         categoryName: categoryName,
         methodName: activeMethod.name.startsWith("M") ? `Method ${activeMethod.name.replace("M", "")}` : activeMethod.name,
-        primaryValue: smartFormatText(convertFromBase(result.rawValue!, outputUnit)),
+        primaryValue: smartFormatText(convertFromBase(res.rawValue!, outputUnit)),
         primaryUnit: outputUnit,
         inputs: { ...inputs },
         inputUnits: { ...units },
-        secondaryValues: result.secondaryValues
+        secondaryValues: res.secondaryValues
       });
     }
   };
@@ -216,14 +372,25 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
     if (mIdx !== -1) setMethodIndex(mIdx);
     
     setInputs(item.inputs);
+    const newStrs: Record<string, string> = {};
+    Object.keys(item.inputs).forEach(k => newStrs[k] = String(item.inputs[k]));
+    setInputStrings(newStrs);
     setUnits(item.inputUnits);
     setOutputUnit(item.primaryUnit);
     setCalculated(true);
+    // Recalculate to set the exact result matching this replay
+    setTimeout(() => handleCalculate(), 50);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const exportToPDF = () => { /* ... */ };
   const exportToExcel = () => { /* ... */ };
+
+  const currentInputFields = activeMethod.customFormulaInput 
+    ? customVariables.map(v => ({ name: v, label: v, helptext: `Variable ${v}`, units: [""] }))
+    : activeMethod.inputFields.filter(field => !field.topologyFilter || field.topologyFilter === formData.topology);
+
+  if (!mounted) return null;
 
   return (
     <motion.div 
@@ -231,18 +398,21 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col gap-6 print:hidden w-full font-sans"
+      className="flex flex-col gap-4 print:hidden w-full font-sans"
     >
-      {/* 1. Header Section - Reorganized for prominent labels */}
-      <motion.div variants={itemVariants} className="relative flex flex-col gap-1 pb-4 border-b border-slate-50">
-        <h1 className="text-[32px] font-heading font-extrabold text-slate-800 tracking-tight leading-none text-center">
+      {/* 1. Header Section */}
+      <motion.div variants={itemVariants} className="relative flex flex-col gap-0.5 pb-2 border-b border-slate-50 items-center text-center">
+        <h1 className="text-[26px] font-heading font-extrabold text-slate-800 tracking-tight leading-none flex items-center justify-center gap-3">
           {categoryName}
+          {isUnderDevelopment && (
+             <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-md tracking-wider uppercase">Under Development</span>
+          )}
         </h1>
-        <p className="text-[14px] font-sans text-slate-400 font-medium text-center">
+        <p className="text-[13px] font-sans text-slate-400 font-medium text-center">
           Calculating <span className="text-brand-primary font-heading font-bold">{variable.label}</span> • {activeMethod.name}
         </p>
 
-        {/* Derivation Link - Added based on request */}
+        {/* Derivation Link */}
         {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
           <a 
             href={variable.name === "Inductance" ? "/materials/Inductance derivation.pdf" : "/materials/Derivations.pdf"} 
@@ -257,16 +427,16 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
         )}
       </motion.div>
 
-      {/* 2. Method Selection - Centralized Tabs as requested */}
+      {/* 2. Method Selection - Left Aligned Tabs */}
       {variable.methods.length > 1 && (
-        <motion.div variants={itemVariants} className="flex justify-center -mb-2">
-          <div className="flex bg-slate-100 p-1 rounded-xl shadow-inner border border-slate-200">
+        <motion.div variants={itemVariants} className="flex justify-start -mb-3">
+          <div className="flex bg-slate-100 p-0.5 rounded-xl shadow-inner border border-slate-200">
             {variable.methods.map((method, index) => (
               <button
                 key={method.name}
                 onClick={() => setMethodIndex(index)}
                 className={cn(
-                  "px-8 py-2.5 rounded-lg text-[13px] font-heading font-bold transition-all active:scale-95",
+                  "px-6 py-2 rounded-lg text-[12px] font-heading font-bold transition-all active:scale-95",
                   methodIndex === index 
                     ? "bg-white text-brand-primary shadow-md border border-slate-100" 
                     : "text-slate-400 hover:text-slate-600"
@@ -279,33 +449,82 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
         </motion.div>
       )}
 
-      <div className="flex flex-col xl:flex-row gap-8 items-start">
+      <div className="flex flex-col xl:flex-row gap-4 items-start">
         {/* Left Content Area */}
-        <div className="flex-1 min-w-0 flex flex-col gap-6">
+        <div className="flex-1 min-w-0 flex flex-col gap-4 relative">
           
-          {/* Formula Card - Prompt and Centered */}
-          <motion.div variants={itemVariants} className="bg-brand-primary-soft border border-brand-primary/10 rounded-[24px] p-6 flex items-center justify-center min-h-[100px] shadow-sm">
-             <div className="scale-125 transform origin-center">
-                <FormulaDisplay formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck Converter"]} />
+          {isUnderDevelopment && (
+             <div className="absolute inset-0 z-50 flex items-start justify-center pt-8">
+               <div className="bg-white p-8 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col items-center w-[360px] max-w-[95%] text-center border border-slate-100">
+                  <div className="w-12 h-12 bg-[#e8f5e9] rounded-full flex items-center justify-center mb-4">
+                     <Wrench className="w-5 h-5 text-[#4caf50]" />
+                  </div>
+                  <h2 className="text-[18px] font-heading font-extrabold text-slate-800 mb-1 tracking-tight">Coming Soon</h2>
+                  <p className="text-[13px] text-slate-400 mb-6 font-sans">
+                     The <strong className="text-slate-600">{categoryName}</strong> module is under development.
+                  </p>
+                  <p className="text-[10px] font-heading font-bold text-slate-400 uppercase tracking-widest mb-3">Available Tools</p>
+                  <div className="flex flex-col w-full gap-2">
+                     {calculatorConfig.categories.filter(c => !c.underDevelopment && c.name !== "Custom Formulas").map(c => (
+                        <a key={c.name} href={`/design-calculator/${slugify(c.variables[0].label)}`} className="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[12px] font-heading font-bold rounded-xl text-center transition-colors">
+                           {c.name}
+                        </a>
+                     ))}
+                  </div>
+               </div>
              </div>
-          </motion.div>
+          )}
+
+          {isUnderDevelopment ? (
+             <div className="flex flex-col gap-4 w-full opacity-40 select-none pointer-events-none">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   <div className="h-[85px] bg-slate-100 rounded-[20px]" />
+                   <div className="h-[85px] bg-slate-100 rounded-[20px]" />
+                </div>
+                <div className="h-[220px] bg-slate-100 rounded-[24px]" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                   <div className="h-[140px] bg-slate-100 rounded-[20px]" />
+                   <div className="h-[140px] bg-slate-100 rounded-[20px]" />
+                </div>
+             </div>
+          ) : (
+            <>
+              {/* Formula and Image Card */}
+          <div className={cn("grid gap-3", variable.image ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
+            <motion.div variants={itemVariants} className="bg-brand-primary-soft border border-brand-primary/10 rounded-[20px] p-3 flex items-center justify-center min-h-[85px] shadow-sm overflow-hidden">
+               <div className="w-full overflow-x-auto py-2 flex justify-center scrollbar-none">
+                  <div className="scale-110 transform origin-center transition-transform duration-300 whitespace-nowrap px-4">
+                     {activeMethod.customFormulaInput ? (
+                        <span className="font-heading font-bold text-brand-primary text-lg">Custom Equation Evaluator</span>
+                     ) : (
+                        <FormulaDisplay formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck Converter"]} />
+                     )}
+                  </div>
+               </div>
+            </motion.div>
+            {variable.image && (
+               <motion.div variants={itemVariants} className="bg-white border border-border-main rounded-[20px] p-3 flex items-center justify-center min-h-[85px] shadow-sm">
+                  <img src={variable.image} alt={variable.label} className="max-w-full max-h-[120px] object-contain" />
+               </motion.div>
+            )}
+          </div>
 
           {/* Main Input Grid Section */}
-          <motion.div variants={itemVariants} className="bg-white p-6 rounded-[28px] border border-border-main shadow-sm flex flex-col gap-6">
-             {/* Topology Selector - Added based on request */}
+          <motion.div variants={itemVariants} className="bg-white p-4 rounded-[24px] border border-border-main shadow-sm flex flex-col gap-4">
+             {/* Topology Selector - Left Aligned */}
              {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
-                <div className="flex flex-col gap-3 pb-4 border-b border-slate-50">
+                <div className="flex flex-col gap-2 pb-2 border-b border-slate-50 items-start">
                    <div className="flex items-center gap-1.5 ml-1">
-                      <label className="text-[12px] font-heading font-bold text-slate-400 uppercase tracking-widest">Topology</label>
+                      <label className="text-[11px] font-heading font-bold text-slate-400 uppercase tracking-widest">Topology</label>
                       <HelpCircle className="w-3.5 h-3.5 text-slate-300" />
                    </div>
-                   <div className="flex gap-3">
+                   <div className="flex gap-2">
                       {["Buck Converter", "Boost Converter"].map(top => (
                          <button 
                            key={top}
-                           onClick={() => setFormData({ ...formData, topology: top })}
+                           onClick={() => { setFormData({ ...formData, topology: top }); setCalculated(false); }}
                            className={cn(
-                             "flex-1 py-3 rounded-xl text-[13px] font-heading font-bold border transition-all active:scale-95",
+                             "px-5 py-2 rounded-xl text-[12px] font-heading font-bold border transition-all active:scale-95",
                              (formData.topology || "Buck Converter") === top
                                ? "bg-brand-primary/5 border-brand-primary text-brand-primary shadow-sm"
                                : "bg-white border-slate-100 text-slate-400 hover:border-slate-200"
@@ -317,27 +536,66 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                    </div>
                 </div>
              )}
+             
+             {/* Custom Formula Input Block */}
+             {activeMethod.customFormulaInput && (
+                <div className="flex flex-col gap-3 pb-4 border-b border-slate-50">
+                    <label className="text-[12px] font-heading font-bold text-slate-400 uppercase tracking-widest">Enter Expression</label>
+                    <input 
+                       type="text"
+                       value={customFormulaStr}
+                       onChange={(e) => setCustomFormulaStr(e.target.value)}
+                       placeholder="e.g. x * y + z"
+                       className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-[15px] font-sans outline-none focus:border-brand-primary transition-all text-slate-800 shadow-inner"
+                    />
+                    {validationErrors["formula"] && (
+                       <span className="text-red-500 text-xs font-bold flex items-center gap-1 mt-1">
+                          <AlertCircle className="w-3 h-3" /> {validationErrors["formula"]}
+                       </span>
+                    )}
+                </div>
+             )}
 
              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
-                {activeMethod.inputFields.map((field) => (
+                {currentInputFields.map((field) => {
+                   const isDutyCycleField = field.name === "D";
+                   return (
                    <div key={field.name} className="flex flex-col gap-1.5 group">
-                      <div className="flex items-center gap-1.5 px-1.5">
-                         <label className="text-[12px] font-heading font-bold text-slate-400 uppercase tracking-tight group-hover:text-slate-700 transition-colors">
-                            {formatLabel(field.label)}
-                         </label>
-                         <HelpCircle className="w-3.5 h-3.5 text-slate-300 cursor-help" />
+                      <div className="flex items-center justify-between px-1.5">
+                         <div className="flex items-center gap-1.5">
+                            <label className="text-[14px] font-heading font-bold text-slate-500 group-hover:text-slate-800 transition-colors">
+                               {formatLabel(field.label)}
+                            </label>
+                            <HelpCircle className="w-3.5 h-3.5 text-slate-300 cursor-help" />
+                         </div>
+                         {isDutyCycleField && (
+                            <label className="flex items-center gap-1.5 cursor-pointer">
+                               <input 
+                                 type="checkbox" 
+                                 checked={manualDutyCycle} 
+                                 onChange={(e) => setManualDutyCycle(e.target.checked)} 
+                                 className="w-3 h-3 rounded border-slate-300 text-brand-primary focus:ring-brand-primary"
+                               />
+                               <span className="text-[10px] text-slate-400 font-bold uppercase">Manual</span>
+                            </label>
+                         )}
                       </div>
                       <div className="flex items-center gap-3">
                          <div className="relative flex-1">
                             <input 
                               type="number"
-                              value={inputs[field.name] || ""}
-                              onChange={(e) => setInputs({ ...inputs, [field.name]: parseFloat(e.target.value) || 0 })}
+                              value={inputStrings[field.name] !== undefined ? inputStrings[field.name] : ""}
+                              onChange={(e) => handleInputChange(field.name, e.target.value)}
+                              disabled={isDutyCycleField && !manualDutyCycle}
                               placeholder="0.0"
-                              className="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-[15px] font-sans font-bold outline-none hover:border-slate-300 focus:border-brand-primary focus:bg-white transition-all text-slate-800 shadow-inner"
+                              className={cn(
+                                "w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-[15px] font-sans font-bold outline-none focus:bg-white transition-all text-slate-800 shadow-inner",
+                                validationErrors[field.name] ? "border-red-400 focus:border-red-500" : "hover:border-slate-300 focus:border-brand-primary",
+                                isDutyCycleField && !manualDutyCycle && "opacity-60 cursor-not-allowed"
+                              )}
                             />
                          </div>
-                         {field.units[0] !== "" && (
+                         {field.units && field.units.length > 0 && field.units[0] !== "" && (
                             <div className="w-[100px] shrink-0">
                                <CustomDropdown 
                                   options={field.units} 
@@ -347,26 +605,31 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                             </div>
                          )}
                       </div>
+                      {validationErrors[field.name] && (
+                         <span className="text-red-500 text-xs font-bold flex items-center gap-1 mt-0.5 ml-1">
+                            <AlertCircle className="w-3 h-3" /> {validationErrors[field.name]}
+                         </span>
+                      )}
                    </div>
-                ))}
+                )})}
              </div>
 
-             <div className="flex justify-end pt-2">
+             <div className="flex justify-end pt-1">
                 <button 
                   onClick={handleCalculate}
-                  className="px-12 py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-heading font-extrabold rounded-xl shadow-xl shadow-brand-primary/20 transition-all flex items-center justify-center gap-3 active:scale-95 group"
+                  className="px-10 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-heading font-extrabold rounded-xl shadow-lg shadow-brand-primary/20 transition-all flex items-center justify-center gap-3 active:scale-95 group"
                 >
-                   <Check className="w-5 h-5 text-white/50 group-hover:text-white transition-colors" />
-                   <span className="uppercase tracking-widest text-[13px]">Calculate Result</span>
+                   <Check className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
+                   <span className="uppercase tracking-widest text-[12px]">Calculate Result</span>
                 </button>
              </div>
           </motion.div>
 
           {/* Bottom Split - Summary and Results side by side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
              {/* Left: Current Inputs Summary */}
-             <motion.div variants={itemVariants} className="bg-white p-6 rounded-[28px] border border-border-main shadow-sm flex flex-col gap-4">
-                <h3 className="text-[13px] font-heading font-extrabold text-slate-800 uppercase tracking-widest border-b border-slate-50 pb-3">Current Configuration</h3>
+             <motion.div variants={itemVariants} className="bg-white p-4 rounded-[20px] border border-border-main shadow-sm flex flex-col gap-3 text-center">
+                <h3 className="text-[11px] font-heading font-extrabold text-slate-800 uppercase tracking-widest border-b border-slate-50 pb-2">Current Configuration</h3>
                 <div className="space-y-3">
                    {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
                       <div className="flex justify-between items-center pb-2 border-b border-slate-50/50">
@@ -374,12 +637,12 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                          <span className="text-slate-700 text-[13px] font-bold">{formData.topology || "Buck Converter"}</span>
                       </div>
                    )}
-                   {activeMethod.inputFields.map(f => (
+                   {currentInputFields.map(f => (
                       <div key={f.name} className="flex justify-between items-center pb-2 border-b border-slate-50/50 last:border-0">
-                         <span className="text-[13px] font-sans text-brand-primary font-bold">{formatLabel(f.label)}</span>
+                         <span className="text-[14px] font-sans text-brand-primary font-bold flex items-center">{formatLabel(f.label)}</span>
                          <div className="flex items-baseline gap-1.5 font-sans font-bold text-slate-700">
-                            <span className="text-[14px]">{inputs[f.name] || 0}</span>
-                            <span className="text-slate-400 text-[11px]">{units[f.name] || f.units[0]}</span>
+                            <span className="text-[15px]">{inputStrings[f.name] || 0}</span>
+                            <span className="text-slate-400 text-[11px]">{units[f.name] || (f.units && f.units[0]) || ""}</span>
                          </div>
                       </div>
                    ))}
@@ -387,23 +650,27 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
              </motion.div>
 
              {/* Right: Calculated Result */}
-             <motion.div variants={itemVariants} className="bg-white p-6 rounded-[28px] border border-border-main shadow-sm flex flex-col gap-4">
-                <div className="flex justify-between items-center border-b border-slate-50 pb-3">
-                   <h3 className="text-[13px] font-heading font-extrabold text-slate-800 uppercase tracking-widest">Calculated Result</h3>
-                   <CustomDropdown 
-                      options={variable.outputUnits} 
-                      value={outputUnit} 
-                      onChange={setOutputUnit} 
-                      className="w-[100px]"
-                   />
+             <motion.div variants={itemVariants} className="bg-white p-4 rounded-[20px] border border-border-main shadow-sm flex flex-col gap-3 text-center">
+                <div className="flex justify-between items-center border-b border-slate-50 pb-2 relative">
+                   <h3 className="text-[11px] font-heading font-extrabold text-slate-800 uppercase tracking-widest">Calculated Result</h3>
+                   {variable.outputUnits && variable.outputUnits.length > 0 && variable.outputUnits[0] !== "" && (
+                     <div className="shrink-0">
+                        <CustomDropdown 
+                           options={variable.outputUnits} 
+                           value={outputUnit} 
+                           onChange={setOutputUnit} 
+                           className="w-[80px]"
+                        />
+                     </div>
+                   )}
                 </div>
 
-                <div className="flex-grow flex flex-col justify-center items-center text-center py-6 min-h-[120px]">
-                   {calculated && result ? (
-                      <div className="flex flex-col items-center gap-1 w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-                         <div className="flex items-baseline justify-center gap-2 font-sans">
-                            <span className="text-[44px] font-extrabold text-brand-primary tracking-tighter leading-none">
-                               {smartFormat(convertFromBase(result.rawValue!, outputUnit))}
+                <div className="flex-grow flex flex-col justify-center items-center text-center py-2 min-h-[80px]">
+                   {calculated && persistedResult ? (
+                      <div className="flex flex-col items-center gap-1 w-full animate-in fade-in slide-in-from-bottom-2 duration-200">
+                         <div className="flex items-baseline justify-center gap-1 font-sans">
+                            <span className="text-[36px] font-extrabold text-brand-primary tracking-tighter leading-none">
+                               {smartFormat(convertFromBase(persistedResult.rawValue!, outputUnit))}
                             </span>
                             <span className="text-brand-primary text-[18px] font-bold">{outputUnit}</span>
                          </div>
@@ -422,6 +689,8 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                 </div>
              </motion.div>
           </div>
+            </>
+          )}
         </div>
 
         {/* Sidebar - History */}

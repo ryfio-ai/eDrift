@@ -23,6 +23,7 @@ export interface CalculationMethod {
   formula: string | Record<string, string>;
   inputFields: InputField[];
   constraints?: Constraint[];
+  customFormulaInput?: boolean;
 }
 
 export interface CalculatorVariable {
@@ -39,6 +40,7 @@ export interface CalculatorVariable {
 export interface CalculatorCategory {
   name: string;
   variables: CalculatorVariable[];
+  underDevelopment?: boolean;
 }
 
 export interface CalculatorConfig {

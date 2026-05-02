@@ -196,8 +196,8 @@ export const calculatorConfig: CalculatorConfig = {
           name: "Flux",
           label: "Flux (Φ)",
           helptext: "Calculate magnetic flux (Φ)",
-          unit: "Wb",
-          outputUnits: ["Wb", "mWb", "µWb"],
+          unit: "µWb",
+          outputUnits: ["µWb", "mWb", "Wb"],
           symbol: "Φ",
           methods: [
             {
@@ -436,6 +436,7 @@ export const calculatorConfig: CalculatorConfig = {
     },
     {
       name: "Transformer Design",
+      underDevelopment: true,
       variables: [
         {
           name: "TurnsRatio",
@@ -502,6 +503,7 @@ export const calculatorConfig: CalculatorConfig = {
     },
     {
       name: "Filter Design",
+      underDevelopment: true,
       variables: [
         {
           name: "CornerFreq",
