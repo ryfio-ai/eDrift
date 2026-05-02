@@ -81,7 +81,7 @@ export const calculatorConfig: CalculatorConfig = {
           helptext: "Calculates output voltage of a resistive divider",
           unit: "V",
           outputUnits: ["V", "kV", "mV"],
-          symbol: "",
+          symbol: "V_{out}",
           image: "/images/PotentialDividerCircuit.png",
           methods: [
             {
@@ -108,7 +108,7 @@ export const calculatorConfig: CalculatorConfig = {
       variables: [
         {
           name: "Inductance",
-          label: "Inductance",
+          label: "Inductance (L)",
           helptext: "Calculate required inductance for a converter",
           unit: "µH",
           outputUnits: ["µH", "mH", "H"],
@@ -118,8 +118,8 @@ export const calculatorConfig: CalculatorConfig = {
               name: "M1",
               helptext: "Buck or Boost Inductance Calculation",
               formula: {
-                "Buck Converter": "L = \\frac{(V_{in} - V_{out}) \\cdot D}{\\Delta I_L \\cdot f_s}",
-                "Boost Converter": "L = \\frac{V_{in} \\cdot D}{f_{sw} \\cdot \\Delta I_L}"
+                "Buck Converter": "L = \\frac{(V_{in} - V_{out}) \\cdot D}{\\Delta I_L \\cdot f_s} \\quad \\text{where } D = \\frac{V_{out}}{V_{in}}",
+                "Boost Converter": "L = \\frac{V_{in} \\cdot D}{f_{sw} \\cdot \\Delta I_L} \\quad \\text{where } D = 1 - \\frac{V_{in}}{V_{out}}"
               },
               inputFields: [
                 { name: "Vin", label: "Vin", helptext: "Input voltage", units: ["V", "kV", "mV"] },
@@ -127,13 +127,19 @@ export const calculatorConfig: CalculatorConfig = {
                 { name: "deltaIl", label: "ΔI_L", helptext: "Ripple current", units: ["A", "mA"] },
                 { name: "Fsw", label: "Fsw", helptext: "Switching frequency", units: ["kHz", "Hz", "MHz"] },
               ],
+              constraints: [
+                { type: "nonzero", field: "Vin", message: "Vin cannot be zero" },
+                { type: "nonzero", field: "Vout", message: "Vout cannot be zero" },
+                { type: "nonzero", field: "deltaIl", message: "Ripple current cannot be zero" },
+                { type: "nonzero", field: "Fsw", message: "Frequency cannot be zero" },
+              ],
             },
             {
               name: "M2",
               helptext: "Using ripple percentage and output power",
               formula: {
-                "Buck Converter": "L = \\frac{(V_{in} - V_{out}) \\cdot D}{f_{sw} \\cdot (\\%ripple \\cdot \\frac{P_{out}}{V_{out}})}",
-                "Boost Converter": "L = \\frac{V_{in} \\cdot D}{f_{sw} \\cdot (\\%ripple \\cdot \\frac{P_{out}}{V_{in} \\cdot \\eta})}"
+                "Buck Converter": "L = \\frac{(V_{in} - V_{out}) \\cdot D}{f_{sw} \\cdot (\\%ripple \\cdot \\frac{P_{out}}{V_{out}})} \\quad \\text{where } \\Delta I_L = \\%ripple \\cdot \\frac{P_{out}}{V_{out}}, D = \\frac{V_{out}}{V_{in}}",
+                "Boost Converter": "L = \\frac{V_{in} \\cdot D}{f_{sw} \\cdot (\\%ripple \\cdot \\frac{P_{out}}{V_{in} \\cdot \\eta})} \\quad \\text{where } \\Delta I_L = \\%ripple \\cdot \\frac{P_{out}}{V_{in} \\cdot \\eta}, D = 1 - \\frac{V_{in}}{V_{out}}"
               },
               inputFields: [
                 { name: "Vin", label: "Vin", helptext: "Input voltage", units: ["V", "kV", "mV"] },
@@ -141,14 +147,21 @@ export const calculatorConfig: CalculatorConfig = {
                 { name: "Fsw", label: "Fsw", helptext: "Switching frequency", units: ["kHz", "Hz", "MHz"] },
                 { name: "ripple_pct", label: "% Ripple", helptext: "Ripple percentage", units: ["%"] },
                 { name: "Pout", label: "Pout", helptext: "Output power", units: ["W", "kW"] },
-                { name: "eta", label: "η", helptext: "Efficiency (%)", units: ["%"], topologyFilter: "Boost Converter" },
+                { name: "eta", label: "Efficiency (η)", helptext: "Efficiency (%)", units: ["%"] },
+              ],
+              constraints: [
+                { type: "nonzero", field: "Vin", message: "Vin cannot be zero" },
+                { type: "nonzero", field: "Vout", message: "Vout cannot be zero" },
+                { type: "nonzero", field: "ripple_pct", message: "Ripple % cannot be zero" },
+                { type: "nonzero", field: "Pout", message: "Pout cannot be zero" },
+                { type: "nonzero", field: "Fsw", message: "Frequency cannot be zero" },
               ],
             },
           ],
         },
         {
           name: "InductanceFactor",
-          label: "Inductance Factor",
+          label: "Inductance Factor (A_L)",
           helptext: "Calculates AL given L and N, or core properties",
           unit: "nH/N²",
           outputUnits: ["nH/N²"],
@@ -162,11 +175,15 @@ export const calculatorConfig: CalculatorConfig = {
                 { name: "L", label: "L", helptext: "Inductance", units: ["µH", "mH", "H"] },
                 { name: "N", label: "N", helptext: "Number of turns", units: ["Turns"] },
               ],
+              constraints: [
+                { type: "nonzero", field: "L", message: "Inductance cannot be zero" },
+                { type: "nonzero", field: "N", message: "Turns cannot be zero" },
+              ],
             },
             {
               name: "M2",
               helptext: "AL from core material properties",
-              formula: "A_L = \\frac{\\mu_0 \\cdot \\mu_r \\cdot A_c}{l_e}",
+              formula: "A_L = \\frac{\\mu_0 \\cdot \\mu_r \\cdot A_c}{l_e} \\quad \\text{where } \\mu_0 = 4\\pi \\times 10^{-7} \\text{ H/m}",
               inputFields: [
                 { name: "mu_r", label: "μ_r", helptext: "Relative permeability", units: [""] },
                 { name: "Ac", label: "A_c", helptext: "Core area", units: ["mm²", "cm²", "m²"] },
@@ -177,10 +194,10 @@ export const calculatorConfig: CalculatorConfig = {
         },
         {
           name: "Flux",
-          label: "Flux",
+          label: "Flux (Φ)",
           helptext: "Calculate magnetic flux (Φ)",
-          unit: "Wb",
-          outputUnits: ["Wb", "mWb", "µWb"],
+          unit: "µWb",
+          outputUnits: ["µWb", "mWb", "Wb"],
           symbol: "Φ",
           methods: [
             {
@@ -207,7 +224,7 @@ export const calculatorConfig: CalculatorConfig = {
         },
         {
           name: "MaxFluxDensity",
-          label: "Maximum Flux Density",
+          label: "Maximum Flux Density (B_max)",
           helptext: "Determine max flux density to avoid saturation",
           unit: "T",
           outputUnits: ["T", "mT", "µT"],
@@ -237,7 +254,7 @@ export const calculatorConfig: CalculatorConfig = {
         },
         {
           name: "AreaProduct",
-          label: "Area Product",
+          label: "Area Product (A_p)",
           helptext: "Area product approach for core size selection",
           unit: "cm⁴",
           outputUnits: ["cm⁴", "mm⁴", "m⁴"],
@@ -246,12 +263,12 @@ export const calculatorConfig: CalculatorConfig = {
             {
               name: "M1",
               helptext: "A_p = (L * Ipeak * Irms * 10^4) / (Ku * J * Bmax)",
-              formula: "A_p = \\frac{L \\cdot I_{peak} \\cdot I_{rms} \\cdot 10^4}{K_u \\cdot J \\cdot B_{max}}",
+              formula: "A_p = \\frac{L \\cdot I_{peak} \\cdot I_{rms} \\cdot 10^4}{K_u \\cdot J \\cdot B_{max}} \\quad \\text{where } K_u = \\text{Window Util.}, J = \\text{Curr. Density}, B_{max} = \\text{Flux Density}",
               inputFields: [
                 { name: "L", label: "L", helptext: "Inductance", units: ["µH", "mH", "H"] },
-                { name: "Ipeak", label: "I_peak", helptext: "Peak current", units: ["A"] },
-                { name: "Irms", label: "I_rms", helptext: "RMS current", units: ["A"] },
-                { name: "Bmax", label: "B_max", helptext: "Operating flux density", units: ["T"] },
+                { name: "Ipeak", label: "I_{peak}", helptext: "Peak current", units: ["A"] },
+                { name: "Irms", label: "I_{rms}", helptext: "RMS current", units: ["A"] },
+                { name: "Bmax", label: "B_{max}", helptext: "Operating flux density", units: ["T"] },
                 { name: "J", label: "J", helptext: "Current density", units: ["A/m²", "A/cm²"] },
                 { name: "Ku", label: "K_u", helptext: "Window utilization", units: [""] },
               ],
@@ -280,7 +297,7 @@ export const calculatorConfig: CalculatorConfig = {
               },
               inputFields: [
                 { name: "Iout", label: "I_out", helptext: "Output current", units: ["A", "mA"], topologyFilter: "Buck Converter" },
-                { name: "D", label: "D", helptext: "Duty cycle", units: ["%"] },
+                { name: "D", label: "Duty Cycle", helptext: "Duty cycle", units: ["%"] },
                 { name: "deltaIl", label: "ΔI_L", helptext: "Inductor ripple current", units: ["A", "mA"] },
               ],
             },
@@ -293,7 +310,7 @@ export const calculatorConfig: CalculatorConfig = {
               },
               inputFields: [
                 { name: "Iout", label: "I_out", helptext: "Output current", units: ["A", "mA"], topologyFilter: "Boost Converter" },
-                { name: "D", label: "D", helptext: "Duty cycle", units: ["%"], topologyFilter: "Boost Converter" },
+                { name: "D", label: "Duty Cycle", helptext: "Duty cycle", units: ["%"], topologyFilter: "Boost Converter" },
                 { name: "deltaIl", label: "ΔI_L", helptext: "Inductor ripple current", units: ["A", "mA"] },
               ],
             },
@@ -316,7 +333,7 @@ export const calculatorConfig: CalculatorConfig = {
               },
               inputFields: [
                 { name: "Iout", label: "I_out", helptext: "Output current", units: ["A", "mA"], topologyFilter: "Buck Converter" },
-                { name: "D", label: "D", helptext: "Duty cycle", units: ["%"] },
+                { name: "D", label: "Duty Cycle", helptext: "Duty cycle", units: ["%"] },
                 { name: "f", label: "f", helptext: "Switching frequency", units: ["kHz", "Hz"] },
                 { name: "deltaVin", label: "ΔV_in", helptext: "Input voltage ripple", units: ["V", "mV"] },
                 { name: "deltaIl", label: "ΔI_L", helptext: "Inductor ripple current", units: ["A", "mA"], topologyFilter: "Boost Converter" },
@@ -331,7 +348,7 @@ export const calculatorConfig: CalculatorConfig = {
               },
               inputFields: [
                 { name: "Iout", label: "I_out", helptext: "Output current", units: ["A", "mA"], topologyFilter: "Boost Converter" },
-                { name: "D", label: "D", helptext: "Duty cycle", units: ["%"], topologyFilter: "Boost Converter" },
+                { name: "D", label: "Duty Cycle", helptext: "Duty cycle", units: ["%"], topologyFilter: "Boost Converter" },
                 { name: "f", label: "f", helptext: "Switching frequency", units: ["kHz", "Hz"] },
                 { name: "deltaVout", label: "ΔV_out", helptext: "Output voltage ripple", units: ["V", "mV"] },
                 { name: "deltaIl", label: "ΔI_L", helptext: "Inductor ripple current", units: ["A", "mA"], topologyFilter: "Buck Converter" },
@@ -364,7 +381,7 @@ export const calculatorConfig: CalculatorConfig = {
             {
               name: "Switching Loss",
               helptext: "Psw = 4 * 0.5 * Vin * Id * (tr + tf) * fsw",
-              formula: "P_{sw} = 2 \\cdot V_{in} \\cdot I_D \\cdot (t_r + t_f) \\cdot f_{sw}",
+              formula: "P_{sw} = 4 \\cdot \\frac{1}{2} \\cdot V_{in} \\cdot I_D \\cdot (t_r + t_f) \\cdot f_{sw}",
               inputFields: [
                 { name: "Vin", label: "V_in", helptext: "Bus voltage", units: ["V", "kV"] },
                 { name: "Id", label: "I_D", helptext: "Drain current", units: ["A", "mA"] },
@@ -389,7 +406,7 @@ export const calculatorConfig: CalculatorConfig = {
               formula: "P_{cond} = I_{out}^2 \\cdot D \\cdot R_{DS(on)}",
               inputFields: [
                 { name: "Iout", label: "I_out", helptext: "Output current", units: ["A", "mA"] },
-                { name: "D", label: "D", helptext: "Duty cycle", units: ["%"] },
+                { name: "D", label: "Duty Cycle", helptext: "Duty cycle", units: ["%"] },
                 { name: "Rds_on", label: "R_{DS(on)}", helptext: "ON resistance", units: ["mΩ", "Ω"] },
               ],
             },
@@ -409,7 +426,7 @@ export const calculatorConfig: CalculatorConfig = {
               formula: "P_{cond} = I_{in}^2 \\cdot D \\cdot R_{DS(on)}",
               inputFields: [
                 { name: "Iin", label: "I_in", helptext: "Input current", units: ["A", "mA"] },
-                { name: "D", label: "D", helptext: "Duty cycle", units: ["%"] },
+                { name: "D", label: "Duty Cycle", helptext: "Duty cycle", units: ["%"] },
                 { name: "Rds_on", label: "R_{DS(on)}", helptext: "ON resistance", units: ["mΩ", "Ω"] },
               ],
             },
@@ -419,6 +436,7 @@ export const calculatorConfig: CalculatorConfig = {
     },
     {
       name: "Transformer Design",
+      underDevelopment: true,
       variables: [
         {
           name: "TurnsRatio",
@@ -485,6 +503,7 @@ export const calculatorConfig: CalculatorConfig = {
     },
     {
       name: "Filter Design",
+      underDevelopment: true,
       variables: [
         {
           name: "CornerFreq",
@@ -540,6 +559,28 @@ export const calculatorConfig: CalculatorConfig = {
                 { name: "Ztarget", label: "Z_target", helptext: "Target impedance", units: ["Ω"] },
                 { name: "L", label: "L", helptext: "Inductance", units: ["µH", "mH", "H"] },
               ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Custom Formulas",
+      variables: [
+        {
+          name: "CustomFormula",
+          label: "Custom Formula",
+          helptext: "Evaluate custom equations with dynamic variables",
+          unit: "",
+          outputUnits: [""],
+          symbol: "Result",
+          methods: [
+            {
+              name: "Formula Editor",
+              helptext: "Enter your formula below (e.g. L = (Vin - Vout) * D / (f * dI))",
+              formula: "y = x",
+              inputFields: [],
+              customFormulaInput: true,
             },
           ],
         },

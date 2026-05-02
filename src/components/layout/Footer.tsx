@@ -3,11 +3,21 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+<<<<<<< HEAD
 import { Mail, Phone, MapPin, Linkedin, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+=======
+import { Mail, Phone, MapPin, Linkedin } from "lucide-react";
+import { usePathname } from "next/navigation";
+>>>>>>> 403da316e1d8ab88ec8f9bb982f9ee48d0c80f2a
 import { motion } from "framer-motion";
 import { fadeIn, staggerContainer } from "@/lib/motion";
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isCalculator = pathname?.startsWith("/design-calculator");
+
+  if (isCalculator) return null;
+
   const links = {
     products: [
       { name: "Portable EV Charger", href: "/products?category=Portable+EV+Charger" },

@@ -82,7 +82,7 @@ export function calculateInductance(method: string, toBase: (f: string) => numbe
       L = (Vin * D) / (Fsw * deltaIL);
     }
   } else {
-    const ripple = toBase("ripple_pct") / 100;
+    const ripple = toBase("ripple_pct");
     const Pout = toBase("Pout");
     if (ripple === 0 || Pout === 0) return { primaryValue: "Invalid", rawValue: NaN, primaryUnit: "µH" };
 
@@ -91,7 +91,7 @@ export function calculateInductance(method: string, toBase: (f: string) => numbe
       deltaIL = ripple * (Pout / Vout);
       L = ((Vin - Vout) * D) / (Fsw * deltaIL);
     } else {
-      const eta = toBase("eta") / 100 || 0.9;
+      const eta = toBase("eta") || 0.9;
       D = 1 - (Vin / Vout);
       deltaIL = ripple * (Pout / (Vin * eta));
       L = (Vin * D) / (Fsw * deltaIL);
@@ -129,7 +129,7 @@ export function calculateInductanceFactor(method: string, toBase: (f: string) =>
 export function calculateFlux(method: string, toBase: (f: string) => number): CalculationResult {
   let flux = 0;
   if (method === "M1") {
-    flux = (toBase("AL") * 1e-9) * toBase("N") * toBase("I");
+    flux = toBase("AL") * toBase("N") * toBase("I");
   } else {
     const L = toBase("L");
     const I = toBase("I");
@@ -183,7 +183,7 @@ export function calculateCapIcrms(method: string, toBase: (f: string) => number,
   if (method === "Input Capacitor") {
     if (topology === "Buck Converter") {
       const Iout = toBase("Iout");
-      const D = toBase("D") / 100;
+      const D = toBase("D"); // Already converted to decimal by toBase
       result = Math.sqrt(Iout * Iout * D * (1 - D) + (deltaIL * deltaIL / 12) * D);
     } else {
       result = deltaIL / Math.sqrt(12);
@@ -193,7 +193,7 @@ export function calculateCapIcrms(method: string, toBase: (f: string) => number,
       result = deltaIL / Math.sqrt(12);
     } else {
       const Iout = toBase("Iout");
-      const D = toBase("D") / 100;
+      const D = toBase("D"); // Already converted to decimal by toBase
       if (D >= 1) return { primaryValue: "Invalid", rawValue: NaN, primaryUnit: "A" };
       result = Math.sqrt((Iout * Iout * D) / (1 - D) + (deltaIL * deltaIL / 12) * (1 - D));
     }
@@ -209,7 +209,7 @@ export function calculateCapCmin(method: string, toBase: (f: string) => number, 
   let C = 0;
   if (method === "Input Capacitor") {
     if (topology === "Buck Converter") {
-      const Iout = toBase("Iout"), D = toBase("D") / 100, deltaVin = toBase("deltaVin");
+      const Iout = toBase("Iout"), D = toBase("D"), deltaVin = toBase("deltaVin");
       if (deltaVin === 0) return { primaryValue: "Invalid", rawValue: NaN, primaryUnit: "µF" };
       C = (Iout * D * (1 - D)) / (f * deltaVin);
     } else {
@@ -223,7 +223,7 @@ export function calculateCapCmin(method: string, toBase: (f: string) => number, 
       if (deltaVout === 0) return { primaryValue: "Invalid", rawValue: NaN, primaryUnit: "µF" };
       C = deltaIL / (8 * f * deltaVout);
     } else {
-      const Iout = toBase("Iout"), D = toBase("D") / 100, deltaVout = toBase("deltaVout");
+      const Iout = toBase("Iout"), D = toBase("D"), deltaVout = toBase("deltaVout");
       if (deltaVout === 0) return { primaryValue: "Invalid", rawValue: NaN, primaryUnit: "µF" };
       C = (Iout * D) / (f * deltaVout);
     }
@@ -257,7 +257,7 @@ export function calculateFullBridgeLoss(method: string, toBase: (f: string) => n
 export function calculateBuckBoostLoss(method: string, toBase: (f: string) => number, variableName: string): CalculationResult {
   const Rds = toBase("Rds_on");
   const I = variableName === "BuckLoss" ? toBase("Iout") : toBase("Iin");
-  const D = toBase("D") / 100;
+  const D = toBase("D");
   const Ploss = I * I * D * Rds;
   return { primaryValue: format(Ploss, 3), rawValue: Ploss, primaryUnit: "W" };
 }
