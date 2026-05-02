@@ -11,6 +11,21 @@ const nextConfig: import('next').NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'edriftelectric.com',
+          },
+        ],
+        destination: 'https://www.edriftelectric.com/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

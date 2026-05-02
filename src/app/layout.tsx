@@ -20,6 +20,7 @@ export const viewport: Viewport = {
   themeColor: "#0F172A",
   width: "device-width",
   initialScale: 1,
+  maximumScale: 5,
 };
 
 export const metadata: Metadata = {
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     default: "eDrift Electric | Automotive-Grade Power Electronics",
     template: "%s | eDrift Electric",
   },
-  description: "Specialized in high-efficiency On-Board Chargers, DC-DC Converters, and Power Conversion Systems for the global EV ecosystem. Engineering-first solutions for modern electrification.",
+  description: "High-efficiency On-Board Chargers, DC-DC Converters, and Power Conversion Systems for the global EV ecosystem.",
   keywords: [
     "EV Power Electronics",
     "On-Board Charger",
@@ -90,7 +91,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
     languages: {
-      "en-US": SITE_URL,
+      "x-default": SITE_URL,
+      "en": SITE_URL,
       "en-IN": "https://www.edriftelectric.in",
     },
   },

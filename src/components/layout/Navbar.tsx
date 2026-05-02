@@ -22,7 +22,6 @@ export const Navbar = () => {
 
   const navLinks = [
     { name: "Products", href: "/products" },
-    { name: "Design Calculator", href: "/design-calculator" },
     { name: "Resources", href: "/resources" },
     { name: "About", href: "/about" },
     { name: "Team", href: "/team" },
@@ -84,18 +83,20 @@ export const Navbar = () => {
               )}
             </Link>
           ))}
-          <Link href="/contact" className="btn-primary h-9 px-5 text-[18px]">
-            Talk to Engineering
+          <Link href="/design-calculator" className="btn-primary h-9 px-5 text-[18px]">
+            Design Calculator
           </Link>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          className="lg:hidden p-2 text-text-muted"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        {/* Mobile Actions */}
+        <div className="flex items-center gap-4 lg:hidden">
+          <button
+            className="p-2 text-text-muted"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -124,11 +125,11 @@ export const Navbar = () => {
                 </Link>
               ))}
               <Link
-                href="/contact"
+                href="/design-calculator"
                 onClick={() => setMobileMenuOpen(false)}
                 className="btn-primary w-full py-3 mt-2"
               >
-                Talk to Engineering
+                Design Calculator
               </Link>
             </div>
           </motion.div>

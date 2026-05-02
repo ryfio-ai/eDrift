@@ -46,7 +46,7 @@ export const products: Product[] = [
     metadata: { sku: "PT48-50", datasheetUrl: "/docs/datasheet-PT48-50.pdf" },
     specs: ELITE_SPECS,
     badges: ["In production", "Customizable"],
-    image: "/images/products/portable-elite.jpg"
+    image: "/images/Product Image/PT48-50 Portable Charger.png"
   },
   {
     id: "pt96-50",
@@ -63,7 +63,7 @@ export const products: Product[] = [
     metadata: { sku: "PT96-50", datasheetUrl: "/docs/datasheet-PT96-50.pdf" },
     specs: ELITE_SPECS,
     badges: ["In production", "Customizable"],
-    image: "/images/products/portable-elite.jpg"
+    image: "/images/Product Image/PT96-50 Portable Charger.png"
   },
   // ELITE SERIES - OBC
   {
@@ -81,7 +81,7 @@ export const products: Product[] = [
     metadata: { sku: "OBC48-50", datasheetUrl: "/docs/datasheet-OBC48-50.pdf" },
     specs: ELITE_SPECS,
     badges: ["In production", "Customizable"],
-    image: "/images/products/obc-elite.jpg"
+    image: "/images/Product Image/OBC48-50 On-Board Charger.png"
   },
   {
     id: "obc60-50",
@@ -98,7 +98,7 @@ export const products: Product[] = [
     metadata: { sku: "OBC60-50", datasheetUrl: "/docs/datasheet-OBC60-50.pdf" },
     specs: ELITE_SPECS,
     badges: ["In production"],
-    image: "/images/products/obc-elite.jpg"
+    image: "/images/Product Image/OBC60-50 On-Board Charger.png"
   },
   {
     id: "obc72-50",
@@ -115,7 +115,7 @@ export const products: Product[] = [
     metadata: { sku: "OBC72-50", datasheetUrl: "/docs/datasheet-OBC72-50.pdf" },
     specs: ELITE_SPECS,
     badges: ["In production", "Customizable"],
-    image: "/images/products/obc-elite.jpg"
+    image: "/images/Product Image/OBC72-50 On-Board Charger.png"
   },
   {
     id: "obc84-50",
@@ -132,7 +132,7 @@ export const products: Product[] = [
     metadata: { sku: "OBC84-50", datasheetUrl: "/docs/datasheet-OBC84-50.pdf" },
     specs: ELITE_SPECS,
     badges: ["In production"],
-    image: "/images/products/obc-elite.jpg"
+    image: "/images/Product Image/OBC84-50 On-Board Charger.png"
   },
   {
     id: "obc96-50",
@@ -149,7 +149,7 @@ export const products: Product[] = [
     metadata: { sku: "OBC96-50", datasheetUrl: "/docs/datasheet-OBC96-50.pdf" },
     specs: ELITE_SPECS,
     badges: ["In production", "Customizable"],
-    image: "/images/products/obc-elite.jpg"
+    image: "/images/Product Image/OBC96-50 On-Board Charger.png"
   },
   {
     id: "obc400-10",
@@ -166,7 +166,7 @@ export const products: Product[] = [
     metadata: { sku: "OBC400-10", datasheetUrl: "/docs/datasheet-OBC400-10.pdf" },
     specs: ELITE_SPECS,
     badges: ["In production", "Sample available"],
-    image: "/images/products/obc-elite.jpg"
+    image: "/images/Product Image/OBC400-10 On-Board Charger.png"
   },
   // ELITEX SERIES
   {
@@ -188,7 +188,7 @@ export const products: Product[] = [
       { label: "IP Rating", value: "IP67", notes: "Industrial Grade" }
     ],
     badges: ["In production", "Sample available"],
-    image: "/images/products/obc-elitex.jpg"
+    image: "/images/Product Image/OBC400-20 High-Power OBC.png"
   },
   // ULTRA SERIES
   {
@@ -210,7 +210,7 @@ export const products: Product[] = [
       { label: "IP Rating", value: "IP67", notes: "Ruggedized" }
     ],
     badges: ["Sample available"],
-    image: "/images/products/obc-ultra.jpg"
+    image: "/images/Product Image/OBC96-120 Three-Phase OBC.png"
   },
   {
     id: "obc400-30",
@@ -231,7 +231,7 @@ export const products: Product[] = [
       { label: "IP Rating", value: "IP67", notes: "Automotive Grade" }
     ],
     badges: ["Sample available"],
-    image: "/images/products/obc-ultra.jpg"
+    image: "/images/Product Image/OBC400-30 Three-Phase OBC.png"
   },
   // ULTRAX SERIES
   {
@@ -253,7 +253,7 @@ export const products: Product[] = [
       { label: "Max Current", value: "50A", notes: "@400V" }
     ],
     badges: ["Customizable", "Sample available"],
-    image: "/images/products/obc-ultra.jpg"
+    image: "/images/Product Image/OBC400-50 Ultra-High Power OBC.png"
   },
   // DELTA SERIES - DC-DC
   {
@@ -275,7 +275,7 @@ export const products: Product[] = [
       { label: "Efficiency", value: "≥94%", notes: "Peak" }
     ],
     badges: ["In production"],
-    image: "/images/products/dcdc-delta.jpg"
+    image: "/images/Product Image/DC12-50 On-Board DC-DC.png"
   },
   {
     id: "dc12-100",
@@ -296,7 +296,7 @@ export const products: Product[] = [
       { label: "IP Rating", value: "IP67", notes: "Ruggedized" }
     ],
     badges: ["In production", "Customizable"],
-    image: "/images/products/dcdc-delta.jpg"
+    image: "/images/Product Image/DC12-100 High-Current DC-DC.png"
   },
   // COMBO SERIES
   {
@@ -318,7 +318,7 @@ export const products: Product[] = [
       { label: "Integration", value: "2-in-1 System", notes: "Space Saving" }
     ],
     badges: ["Customizable", "Sample available"],
-    image: "/images/products/combo-series.jpg"
+    image: "/images/Product Image/C96-100 2-in-1 Integrated Platform.png"
   },
   // MAGNA SERIES
   {
@@ -340,6 +340,6 @@ export const products: Product[] = [
       { label: "Efficiency", value: "≥96%", notes: "Dual Flow" }
     ],
     badges: ["Sample available", "Customizable"],
-    image: "/images/products/magna-series.jpg"
+    image: "/images/Product Image/BD96-50 Bi-Directional (V2L).png"
   }
 ];

@@ -1,206 +1,196 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Phone, MapPin, Clock, ShieldCheck, ArrowRight, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
+import { Phone, Clock, Mail, ChevronDown, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { staggerContainer, fadeIn, tabPanel, motionTokens } from "@/lib/motion";
 
 export const ContactSection = () => {
-  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    company: "",
+    businessType: "",
+    product: "",
+    message: "",
+  });
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
-  const nextStep = () => setStep(2);
-  const prevStep = () => setStep(1);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    // Enforce 250 character limit on message
+    if (name === "message" && value.length > 250) return;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(r => setTimeout(r, 2000));
-    setIsSubmitting(false);
-    setSubmitted(true);
+    setSubmitStatus("idle");
+
+    try {
+      const response = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          mobile: formData.phone,
+          product: { name: formData.product || "General Inquiry", sku: formData.businessType || "N/A" },
+          description: `Name: ${formData.name}\nCompany: ${formData.company}\n\nMessage:\n${formData.message}`,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to submit");
+      setSubmitStatus("success");
+    } catch (error) {
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <section id="contact" className="py-32 px-6 bg-white overflow-hidden relative border-t border-border-subtle reveal-fade">
-      <div className="section-container">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
+    <section id="contact" className="py-24 bg-white overflow-hidden relative">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 mb-24">
           
-          {/* Left Side: Contact Information */}
-          <motion.div 
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            className="flex flex-col"
-          >
-            <motion.div variants={fadeIn} className="flex items-center gap-4 mb-8">
-               <div className="w-12 h-[1px] bg-brand-primary" />
-               <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-primary">Technical Engagement</div>
-            </motion.div>
-            <motion.h2 variants={fadeIn} className="mb-8 text-text-main">
-               Talk to our <br />
-               <span className="text-brand-primary">Technical Team</span>
-            </motion.h2>
-            <motion.p variants={fadeIn} className="text-lg text-text-muted font-medium leading-relaxed mb-12 max-w-lg">
-               Connect with eDrift for feasibility reviews, system-level discussions, custom specifications, and RFQ planning for production programs.
-            </motion.p>
-
-            <motion.div variants={staggerContainer} className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
-               {[
-                 { icon: Mail, label: "Technical Support", val: "eng@edriftelectric.com" },
-                 { icon: Phone, label: "Business Development", val: "+91 97902 74709" },
-                 { icon: MapPin, label: "Engineering Base", val: "Hosur, Tamil Nadu / IIT Palakkad Ecosystem" }
-               ].map((item, i) => (
-                 <motion.div 
-                    key={i} 
-                    variants={fadeIn}
-                    className={cn(
-                      "p-8 bg-bg-main rounded-lg border border-border-subtle transition-all duration-300 hover:border-brand-primary/20 hover:shadow-sm",
-                      i === 2 ? "sm:col-span-2" : ""
-                    )}
-                 >
-                    <item.icon className="w-5 h-5 text-brand-primary mb-6" />
-                    <div>
-                        <p className="text-[10px] uppercase tracking-widest text-text-faint font-bold mb-2">{item.label}</p>
-                        <p className="text-sm font-bold text-text-main tech-value">{item.val}</p>
-                    </div>
-                 </motion.div>
-               ))}
-            </motion.div>
-
-            <motion.p variants={fadeIn} className="text-[10px] text-text-faint font-bold uppercase tracking-widest flex items-center gap-3 mt-auto">
-              <Clock className="w-4 h-4 text-brand-primary" />
-              Initial response within 1 business day for qualified inquiries
-            </motion.p>
-          </motion.div>
-
-          {/* Right Side: Progressive RFQ Form */}
-          <div className="relative">
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="bg-white p-8 lg:p-12 rounded-lg border border-border-subtle shadow-sm"
-            >
-              <div className="mb-10 text-center">
-                 <h3 className="text-xl font-bold text-text-main mb-3">Initiate Technical RFQ</h3>
-                 <p className="text-[10px] font-bold text-text-faint uppercase tracking-widest">
-                    {step === 1 ? "Step 1: Application" : "Step 2: Project Details"}
-                 </p>
-                 <div className="flex gap-1.5 mt-5 justify-center">
-                    <div className={cn("h-1 rounded-full transition-all duration-500", step === 1 ? "w-8 bg-brand-primary" : "w-4 bg-bg-main")} />
-                    <div className={cn("h-1 rounded-full transition-all duration-500", step === 2 ? "w-8 bg-brand-primary" : "w-4 bg-bg-main")} />
-                 </div>
-              </div>
-
-              {submitted ? (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="py-16 text-center"
-                >
-                  <div className="w-16 h-16 bg-brand-primary text-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg shadow-brand-primary/10">
-                    <ShieldCheck className="w-8 h-8" />
+          {/* Left Column: Contact Info */}
+          <div className="lg:col-span-4 flex flex-col gap-12 pt-8">
+             {/* Customer Service */}
+             <div>
+                <h3 className="text-[13px] font-bold text-text-main mb-6 uppercase tracking-wider">Customer Service</h3>
+                <div className="space-y-5">
+                  <div className="flex items-center gap-4">
+                     <Phone className="w-5 h-5 text-brand-primary shrink-0" />
+                     <span className="text-text-muted font-medium text-[15px]">+91 97902 74709</span>
                   </div>
-                  <h3 className="text-xl font-bold text-text-main mb-3">Transmission Successful</h3>
-                  <p className="text-text-muted text-sm font-medium mb-8">Our engineering lead will contact you within 24 hours.</p>
-                  <button onClick={() => { setSubmitted(false); setStep(1); }} className="btn-outline w-full text-xs">Initiate New Inquiry</button>
-                </motion.div>
-              ) : (
-                <div className="relative min-h-[400px]">
-                   <AnimatePresence mode="wait" custom={step}>
-                      {step === 1 ? (
-                        <motion.div 
-                          key="step-1"
-                          custom={step}
-                          variants={tabPanel}
-                          initial="enter"
-                          animate="center"
-                          exit="exit"
-                          className="space-y-6"
-                        >
-                          <div className="space-y-2">
-                            <label className="text-[11px] font-semibold tracking-wider text-text-main">Organization Name</label>
-                            <input required className="w-full bg-bg-main border border-border-subtle h-11 rounded-input px-4 outline-none focus:border-brand-primary transition-all text-sm font-medium text-text-main" placeholder="OEM / Industrial Partner" />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-[11px] font-semibold tracking-wider text-text-main">Work Email</label>
-                            <input required type="email" className="w-full bg-bg-main border border-border-subtle h-11 rounded-input px-4 outline-none focus:border-brand-primary transition-all text-sm font-medium text-text-main" placeholder="engineering@company.com" />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-[11px] font-semibold tracking-wider text-text-main">Product Category</label>
-                            <div className="relative">
-                              <select className="w-full bg-bg-main border border-border-subtle h-11 rounded-input px-4 outline-none focus:border-brand-primary transition-all text-sm font-medium text-text-main appearance-none cursor-pointer">
-                                <option>3.3kW On-Board Charger</option>
-                                <option>Portable EV Fleet Charger</option>
-                                <option>Bi-Directional PSU (V2L)</option>
-                                <option>Integrated 2-in-1 OBC + DC-DC</option>
-                              </select>
-                              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-faint pointer-events-none" />
-                            </div>
-                          </div>
-                          <div className="space-y-2 pb-4">
-                            <label className="text-[11px] font-semibold tracking-wider text-text-main">Projected Annual Volume</label>
-                            <input required className="w-full bg-bg-main border border-border-subtle h-11 rounded-input px-4 outline-none focus:border-brand-primary transition-all text-sm font-medium text-text-main tech-value" placeholder="e.g. 5,000 units / year" />
-                          </div>
-                          <button type="button" onClick={nextStep} className="btn-primary w-full group">
-                            Next: Project Details
-                            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                          </button>
-                        </motion.div>
-                      ) : (
-                        <motion.div 
-                          key="step-2"
-                          custom={step}
-                          variants={tabPanel}
-                          initial="enter"
-                          animate="center"
-                          exit="exit"
-                          className="space-y-6"
-                        >
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <label className="text-[11px] font-semibold tracking-wider text-text-main">Full Name</label>
-                              <input required className="w-full bg-bg-main border border-border-subtle h-11 rounded-input px-4 outline-none focus:border-brand-primary transition-all text-sm font-medium text-text-main" placeholder="John Doe" />
-                            </div>
-                            <div className="space-y-2">
-                              <label className="text-[11px] font-semibold tracking-wider text-text-main">Job Title</label>
-                              <input required className="w-full bg-bg-main border border-border-subtle h-11 rounded-input px-4 outline-none focus:border-brand-primary transition-all text-sm font-medium text-text-main" placeholder="Engineering Lead" />
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-[11px] font-bold uppercase tracking-wider text-text-main">Requirement Brief</label>
-                            <textarea required rows={4} className="w-full bg-bg-main border border-border-subtle rounded-input px-4 py-3 outline-none focus:border-brand-primary transition-all text-sm font-medium text-text-main resize-none" placeholder="Share power architecture requirements, voltage ranges, and deployment scope..." />
-                          </div>
-                          <div className="flex gap-4 pt-4">
-                            <button type="button" onClick={prevStep} className="btn-outline flex-1 text-xs">Back</button>
-                            <button type="submit" onClick={handleSubmit} className="btn-primary flex-[2] group" disabled={isSubmitting}>
-                              {isSubmitting ? "Routing..." : "Submit RFQ"}
-                              <ArrowRight className={`ml-2 w-4 h-4 ${isSubmitting ? '' : 'group-hover:translate-x-1 transition-transform'}`} />
-                            </button>
-                          </div>
-                        </motion.div>
-                      )}
-                   </AnimatePresence>
+                  <div className="flex items-center gap-4">
+                     <Clock className="w-5 h-5 text-brand-primary shrink-0" />
+                     <span className="text-text-muted font-medium text-[15px]">24*7 (Mon-Sun)</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                     <Mail className="w-5 h-5 text-brand-primary shrink-0" />
+                     <span className="text-text-muted font-medium text-[15px]">support@edriftelectric.com</span>
+                  </div>
                 </div>
-              )}
-              
-              <div className="mt-8 pt-6 border-t border-border-subtle flex items-center justify-center gap-6">
-                 <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-3.5 h-3.5 text-brand-primary" />
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-text-faint">NDA Protected</span>
+             </div>
+          </div>
+
+          {/* Right Column: Form */}
+          <div className="lg:col-span-8 bg-slate-50/70 p-8 lg:p-12 rounded-xl">
+            <h2 className="text-3xl font-bold text-text-main mb-8">
+              How Can We <span className="text-brand-primary">Assist You Today?</span>
+            </h2>
+
+            {submitStatus === "success" ? (
+               <motion.div 
+                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                 className="flex flex-col items-center justify-center py-16 text-center"
+               >
+                 <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
+                   <CheckCircle2 className="w-8 h-8" />
                  </div>
-                 <div className="w-px h-3 bg-border-subtle" />
-                 <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-text-faint">Secure Routing</span>
-                 </div>
-              </div>
-            </motion.div>
+                 <h3 className="text-2xl font-bold text-text-main mb-3">Request Received!</h3>
+                 <p className="text-text-muted">Our team will get back to you within 24 hours.</p>
+                 <button 
+                   onClick={() => { setSubmitStatus("idle"); setFormData({ name: "", email: "", phone: "", company: "", businessType: "", product: "", message: "" }) }}
+                   className="mt-8 text-brand-primary font-bold hover:underline"
+                 >
+                   Submit another inquiry
+                 </button>
+               </motion.div>
+            ) : (
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                {submitStatus === "error" && (
+                  <div className="bg-red-50 text-red-600 p-4 rounded-md flex items-start gap-3 border border-red-100">
+                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                    <p>There was an error sending your request. Please try again.</p>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <input required type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
+                  <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
+                  <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Company Name (Optional)" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
+                </div>
+
+                <div className="relative">
+                  <select required name="businessType" value={formData.businessType} onChange={handleChange} className={cn("w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm appearance-none cursor-pointer", formData.businessType ? "text-text-main" : "text-text-faint")}>
+                    <option value="" disabled hidden>Type of Business</option>
+                    <option value="Residential Welfare Associations">Residential Welfare Associations/Community Charging</option>
+                    <option value="Builders/Developers">Builders/Developers/New Construction</option>
+                    <option value="Hotels/Resorts">Hotels/Resorts/Hospitality</option>
+                    <option value="Retail Business/Garages">Retail Business/Garages</option>
+                    <option value="Highway/Pitstop Charging">Highway/Pitstop Charging</option>
+                    <option value="Distribution/Channel Partnership">Distribution/Channel Partnership</option>
+                    <option value="OEM Partnership">OEM Partnership</option>
+                    <option value="Fleet Partnerships">Fleet Partnerships</option>
+                    <option value="Workplaces/Corporate Parks">Workplaces/Corporate Parks</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-faint pointer-events-none" />
+                </div>
+
+                <div className="relative">
+                  <select required name="product" value={formData.product} onChange={handleChange} className={cn("w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm appearance-none cursor-pointer", formData.product ? "text-text-main" : "text-text-faint")}>
+                    <option value="" disabled hidden>What products are you interested in?</option>
+                    <option value="Portable EV Charger">Portable EV Charger</option>
+                    <option value="On Board Charger">On Board Charger</option>
+                    <option value="On Board DC-DC">On Board DC-DC</option>
+                    <option value="2-in-1 Integrated OBC">2-in-1 Integrated OBC</option>
+                    <option value="Bi-Directional Charger (V2L)">Bi-Directional Charger (V2L)</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-faint pointer-events-none" />
+                </div>
+
+                <div>
+                  <textarea 
+                    name="message" 
+                    value={formData.message} 
+                    onChange={handleChange} 
+                    rows={4} 
+                    className="w-full bg-white border border-border-strong rounded-md px-4 py-3 outline-none focus:border-brand-primary transition-all text-sm resize-none placeholder:text-text-faint" 
+                  />
+                  <div className="flex justify-end mt-1.5">
+                    <span className="text-[11px] text-text-muted font-medium">{formData.message.length} / 250</span>
+                  </div>
+                </div>
+
+                <div className="flex justify-end mt-2">
+                  <button type="submit" disabled={isSubmitting} className="w-full md:w-[140px] bg-brand-primary hover:bg-brand-primary/90 text-white h-[42px] rounded-full font-bold text-sm flex items-center justify-center transition-colors shadow-sm">
+                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit"}
+                  </button>
+                </div>
+
+                <p className="text-[9px] text-text-muted mt-6 leading-relaxed text-justify opacity-80">
+                  By filling out this form, you consent to your personal data being processed by eDrift Electric. This data will be communicated to the respective departments of the organization depending on the nature of the inquiry. This data will be kept in the organization for a period of 10 years. If you wish to withdraw your consent or wish to access more information on how your data is being processed, <a href="#" className="text-brand-primary hover:underline">please review our Privacy Policy</a>.
+                </p>
+              </form>
+            )}
           </div>
         </div>
+      </div>
+
+      {/* Map Section */}
+      <div className="w-full h-[450px] bg-slate-100 relative mt-12 border-t border-border-subtle">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3891.818267384132!2d77.85720227022637!3d12.72527579278043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae772f630ebaa3%3A0x582a98a4412b5169!2sFORT.Hosur!5e0!3m2!1sen!2sin!4v1777737111460!5m2!1sen!2sin" 
+          width="100%" 
+          height="100%" 
+          style={{ border: 0 }} 
+          allowFullScreen={true}
+          loading="lazy" 
+          referrerPolicy="no-referrer-when-downgrade"
+          className="absolute inset-0"
+          title="Google Map"
+        />
       </div>
     </section>
   );

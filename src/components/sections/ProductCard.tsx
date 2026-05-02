@@ -1,113 +1,139 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Zap, Cpu, Gauge, Layers } from "lucide-react";
+import { ArrowRight, Zap, Cpu, Gauge, Layers, ZoomIn } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { Product } from "@/data/products";
 import { gridItem } from "@/lib/motion";
+import { ImageLightbox } from "@/components/ui/ImageLightbox";
+import { QuoteModal } from "@/components/ui/QuoteModal";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  return (
-    <motion.div
-      variants={gridItem}
-      className="product-card group flex flex-col bg-white border border-border-subtle rounded-lg overflow-hidden h-full relative"
-    >
-      {/* Product Image / Technical Rendering */}
-      <div className="block aspect-[16/9] relative overflow-hidden bg-bg-main border-b border-border-subtle">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-cover transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-        
-        {/* Status Chips */}
-        <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
-          <span className="px-2 py-0.5 bg-brand-primary text-white text-[9px] font-semibold tracking-wider rounded-sm">
-            {product.series}
-          </span>
-          {product.badges.map((badge, idx) => (
-            <span 
-              key={idx} 
-              className="px-2 py-0.5 bg-white/90 backdrop-blur-sm text-text-main text-[9px] font-semibold tracking-wider rounded-sm border border-border-subtle"
-            >
-              {badge}
-            </span>
-          ))}
-        </div>
-      </div>
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
-      <div className="p-6 flex-grow flex flex-col">
-        {/* Product Identity */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-[10px] font-semibold tracking-widest text-text-faint">
-               {product.category}
-            </p>
-            <span className="text-[10px] font-bold text-brand-primary tech-value">
-               {product.metadata.sku}
-            </span>
+  return (
+    <>
+      <motion.div
+        variants={gridItem}
+        className="group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden h-full relative hover:shadow-xl hover:border-brand-primary/30 transition-all duration-300"
+      >
+        {/* Product Image Area */}
+        <div 
+          className="block aspect-[4/3] relative overflow-hidden bg-slate-50 cursor-pointer group/image border-b border-border-subtle/50"
+          onClick={() => setIsLightboxOpen(true)}
+        >
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-contain p-8 transition-transform duration-700 ease-out group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+          
+          {/* Zoom icon overlay on hover */}
+          <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/5 transition-colors z-20 flex items-center justify-center">
+             <div className="opacity-0 group-hover/image:opacity-100 bg-white text-text-main p-2.5 rounded-full shadow-xl transform translate-y-4 group-hover/image:translate-y-0 transition-all duration-300">
+               <ZoomIn className="w-5 h-5" />
+             </div>
           </div>
           
-          <h3 className="text-xl font-bold text-text-main mb-2 tracking-tight group-hover:text-brand-primary transition-colors">
-            {product.name}
-          </h3>
-          
-          <p className="text-text-muted text-[13px] leading-relaxed line-clamp-2">
-            {product.tagline}
-          </p>
+          {/* Status Chips */}
+          <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
+            <span className="px-3 py-1 bg-brand-primary text-white text-[10px] font-bold tracking-wider rounded-full uppercase shadow-sm">
+              {product.series}
+            </span>
+          </div>
         </div>
 
-        {/* Technical Specification Grid - Industrial Layout */}
-        <div className="grid grid-cols-2 gap-px bg-border-subtle border border-border-subtle rounded overflow-hidden mb-6">
-           <div className="bg-bg-main p-3">
-              <p className="text-[9px] font-bold text-text-faint uppercase tracking-widest mb-1">Power Output</p>
-              <div className="flex items-center gap-2">
-                 <Zap className="w-3 h-3 text-brand-primary/40" />
-                 <p className="text-xs font-bold text-text-main tech-value">{product.powerRating}</p>
-              </div>
-           </div>
-           <div className="bg-bg-main p-3">
-              <p className="text-[9px] font-bold text-text-faint uppercase tracking-widest mb-1">Voltage Range</p>
-              <div className="flex items-center gap-2">
-                 <Cpu className="w-3 h-3 text-brand-primary/40" />
-                 <p className="text-xs font-bold text-text-main tech-value">{product.voltageRange}</p>
-              </div>
-           </div>
-           <div className="bg-bg-main p-3">
-              <p className="text-[9px] font-bold text-text-faint uppercase tracking-widest mb-1">Peak Current</p>
-              <div className="flex items-center gap-2">
-                 <Gauge className="w-3 h-3 text-brand-primary/40" />
-                 <p className="text-xs font-bold text-text-main tech-value">{product.maxCurrent}</p>
-              </div>
-           </div>
-           <div className="bg-bg-main p-3">
-              <p className="text-[9px] font-bold text-text-faint uppercase tracking-widest mb-1">Form Factor</p>
-              <div className="flex items-center gap-2">
-                 <Layers className="w-3 h-3 text-brand-primary/40" />
-                 <p className="text-xs font-bold text-text-main truncate tech-value">{product.inputSpecs.split(' (')[0]}</p>
-              </div>
-           </div>
-        </div>
+        {/* Content Area */}
+        <div className="p-6 flex-grow flex flex-col">
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <span className="px-2 py-1 bg-slate-100 text-text-muted text-[10px] font-bold tracking-widest uppercase rounded">
+                {product.category}
+              </span>
+              <span className="text-[10px] font-bold text-text-faint tracking-widest uppercase">
+                {product.metadata.sku}
+              </span>
+            </div>
+            
+            <h3 className="text-xl font-bold text-text-main mb-2 tracking-tight">
+              {product.name}
+            </h3>
+            
+            <p className="text-text-muted text-sm leading-relaxed line-clamp-2">
+              {product.tagline}
+            </p>
+          </div>
 
-        {/* Primary Action */}
-        <div className="mt-auto pt-4 border-t border-border-subtle">
-          <Link 
-            href="/contact" 
-            className="w-full h-11 bg-bg-main text-text-main border border-border-strong text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 rounded transition-all group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary"
-          >
-            Technical RFQ
-            <ArrowUpRight className="w-4 h-4 cta-arrow" />
-          </Link>
+          {/* Clean Specs List */}
+          <div className="grid grid-cols-2 gap-y-5 gap-x-3 mb-8">
+             <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 text-text-faint">
+                  <Zap className="w-3.5 h-3.5 text-brand-primary/60" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Output Power</span>
+                </div>
+                <p className="text-sm font-bold text-text-main">{product.powerRating}</p>
+             </div>
+             
+             <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 text-text-faint">
+                  <Cpu className="w-3.5 h-3.5 text-brand-primary/60" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Voltage</span>
+                </div>
+                <p className="text-sm font-bold text-text-main">{product.voltageRange}</p>
+             </div>
+             
+             <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 text-text-faint">
+                  <Gauge className="w-3.5 h-3.5 text-brand-primary/60" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Current</span>
+                </div>
+                <p className="text-sm font-bold text-text-main">{product.maxCurrent}</p>
+             </div>
+             
+             <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-1.5 text-text-faint">
+                  <Layers className="w-3.5 h-3.5 text-brand-primary/60" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider">Input</span>
+                </div>
+                <p className="text-sm font-bold text-text-main truncate" title={product.inputSpecs}>
+                  {product.inputSpecs.split(' (')[0]}
+                </p>
+             </div>
+          </div>
+
+          {/* Primary Action */}
+          <div className="mt-auto">
+            <button 
+              onClick={() => setIsQuoteModalOpen(true)}
+              className="w-full h-12 bg-white text-brand-primary border-2 border-brand-primary font-bold tracking-wide rounded-lg flex items-center justify-center gap-2 transition-all hover:bg-brand-primary hover:text-white group/btn shadow-sm hover:shadow-md"
+            >
+              Request Quote
+              <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" />
+            </button>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+
+      <ImageLightbox 
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        imageSrc={product.image}
+        imageAlt={product.name}
+      />
+
+      <QuoteModal
+        isOpen={isQuoteModalOpen}
+        onClose={() => setIsQuoteModalOpen(false)}
+        product={product}
+      />
+    </>
   );
 };
