@@ -392,24 +392,31 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
 
   if (!mounted) return null;
 
+  const baseName = variable.label.includes("(") ? variable.label.split("(")[0].trim() : variable.label;
+  const showSymbol = variable.symbol && variable.symbol.toLowerCase() !== baseName.toLowerCase();
+
   return (
     <motion.div 
       key={variable.name}
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="flex flex-col gap-4 print:hidden w-full font-sans"
+      className="flex flex-col gap-2 print:hidden w-full font-sans"
     >
       {/* 1. Header Section */}
-      <motion.div variants={itemVariants} className="relative flex flex-col gap-0.5 pb-2 border-b border-slate-50 items-center text-center">
-        <h1 className="text-[26px] font-heading font-extrabold text-slate-800 tracking-tight leading-none flex items-center justify-center gap-3">
-          {categoryName}
+      <motion.div variants={itemVariants} className="relative flex flex-col pb-1 border-b border-slate-50 items-center text-center">
+        <h1 className="text-[22px] font-heading font-extrabold text-slate-800 tracking-tight leading-none flex items-center justify-center gap-2">
+          <div className="flex items-center gap-1">
+            <span>{baseName}</span>
+            {showSymbol && <span>({formatLabel(variable.symbol!)})</span>}
+          </div>
+          <span>Calculator</span>
           {isUnderDevelopment && (
              <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-md tracking-wider uppercase">Under Development</span>
           )}
         </h1>
         <p className="text-[13px] font-sans text-slate-400 font-medium text-center">
-          Calculating <span className="text-brand-primary font-heading font-bold">{variable.label}</span> • {activeMethod.name}
+          <span className="text-brand-primary font-heading font-bold">{categoryName}</span> • {activeMethod.name}
         </p>
 
         {/* Derivation Link */}
@@ -429,7 +436,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
 
       {/* 2. Method Selection - Left Aligned Tabs */}
       {variable.methods.length > 1 && (
-        <motion.div variants={itemVariants} className="flex justify-start -mb-3">
+        <motion.div variants={itemVariants} className="flex justify-start z-10 relative">
           <div className="flex bg-slate-100 p-0.5 rounded-xl shadow-inner border border-slate-200">
             {variable.methods.map((method, index) => (
               <button
@@ -449,9 +456,9 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
         </motion.div>
       )}
 
-      <div className="flex flex-col xl:flex-row gap-4 items-start">
+      <div className="flex flex-col xl:flex-row gap-3 items-start">
         {/* Left Content Area */}
-        <div className="flex-1 min-w-0 flex flex-col gap-4 relative">
+        <div className="flex-1 min-w-0 flex flex-col gap-3 relative">
           
           {isUnderDevelopment && (
              <div className="absolute inset-0 z-50 flex items-start justify-center pt-8">
@@ -490,27 +497,32 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
           ) : (
             <>
               {/* Formula and Image Card */}
-          <div className={cn("grid gap-3", variable.image ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
-            <motion.div variants={itemVariants} className="bg-brand-primary-soft border border-brand-primary/10 rounded-[20px] p-3 flex items-center justify-center min-h-[85px] shadow-sm overflow-hidden">
-               <div className="w-full overflow-x-auto py-2 flex justify-center scrollbar-none">
-                  <div className="scale-110 transform origin-center transition-transform duration-300 whitespace-nowrap px-4">
+          <div className={cn("grid gap-2", variable.image ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
+            <motion.div variants={itemVariants} className="bg-brand-primary-soft border border-brand-primary/10 rounded-[16px] p-2 flex items-center justify-center min-h-[60px] shadow-sm overflow-hidden">
+               <div className="hide-scroll w-full overflow-x-auto py-3" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+                  <style dangerouslySetInnerHTML={{ __html: `
+                    .hide-scroll::-webkit-scrollbar { display: none; }
+                  `}} />
+                  <div className="min-w-full w-max text-center px-4">
+                     <div className="inline-block text-[1.1em]">
                      {activeMethod.customFormulaInput ? (
                         <span className="font-heading font-bold text-brand-primary text-lg">Custom Equation Evaluator</span>
                      ) : (
                         <FormulaDisplay formula={typeof activeMethod.formula === "string" ? activeMethod.formula : activeMethod.formula[formData.topology || "Buck Converter"]} />
                      )}
+                     </div>
                   </div>
                </div>
             </motion.div>
             {variable.image && (
-               <motion.div variants={itemVariants} className="bg-white border border-border-main rounded-[20px] p-3 flex items-center justify-center min-h-[85px] shadow-sm">
-                  <img src={variable.image} alt={variable.label} className="max-w-full max-h-[120px] object-contain" />
+               <motion.div variants={itemVariants} className="bg-white border border-border-main rounded-[16px] p-2 flex items-center justify-center min-h-[60px] shadow-sm">
+                  <img src={variable.image} alt={variable.label} className="max-w-full max-h-[80px] object-contain" />
                </motion.div>
             )}
           </div>
 
           {/* Main Input Grid Section */}
-          <motion.div variants={itemVariants} className="bg-white p-4 rounded-[24px] border border-border-main shadow-sm flex flex-col gap-4">
+          <motion.div variants={itemVariants} className="bg-white p-3 rounded-[20px] border border-border-main shadow-sm flex flex-col gap-3">
              {/* Topology Selector - Left Aligned */}
              {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
                 <div className="flex flex-col gap-2 pb-2 border-b border-slate-50 items-start">
@@ -617,18 +629,18 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
              <div className="flex justify-end pt-1">
                 <button 
                   onClick={handleCalculate}
-                  className="px-10 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-heading font-extrabold rounded-xl shadow-lg shadow-brand-primary/20 transition-all flex items-center justify-center gap-3 active:scale-95 group"
+                  className="px-8 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white font-heading font-extrabold rounded-xl shadow-lg shadow-brand-primary/20 transition-all flex items-center justify-center gap-2 active:scale-95 group"
                 >
                    <Check className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
-                   <span className="uppercase tracking-widest text-[12px]">Calculate Result</span>
+                   <span className="uppercase tracking-widest text-[11px]">Calculate Result</span>
                 </button>
              </div>
           </motion.div>
 
           {/* Bottom Split - Summary and Results side by side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
              {/* Left: Current Inputs Summary */}
-             <motion.div variants={itemVariants} className="bg-white p-4 rounded-[20px] border border-border-main shadow-sm flex flex-col gap-3 text-center">
+             <motion.div variants={itemVariants} className="bg-white p-3 rounded-[16px] border border-border-main shadow-sm flex flex-col gap-2 text-center">
                 <h3 className="text-[11px] font-heading font-extrabold text-slate-800 uppercase tracking-widest border-b border-slate-50 pb-2">Current Configuration</h3>
                 <div className="space-y-3">
                    {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
@@ -650,7 +662,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
              </motion.div>
 
              {/* Right: Calculated Result */}
-             <motion.div variants={itemVariants} className="bg-white p-4 rounded-[20px] border border-border-main shadow-sm flex flex-col gap-3 text-center">
+             <motion.div variants={itemVariants} className="bg-white p-3 rounded-[16px] border border-border-main shadow-sm flex flex-col gap-2 text-center">
                 <div className="flex justify-between items-center border-b border-slate-50 pb-2 relative">
                    <h3 className="text-[11px] font-heading font-extrabold text-slate-800 uppercase tracking-widest">Calculated Result</h3>
                    {variable.outputUnits && variable.outputUnits.length > 0 && variable.outputUnits[0] !== "" && (

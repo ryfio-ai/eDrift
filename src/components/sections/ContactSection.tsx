@@ -179,18 +179,20 @@ export const ContactSection = () => {
       </div>
 
       {/* Map Section */}
-      <div className="w-full h-[450px] bg-slate-100 relative mt-12 border-t border-border-subtle">
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3891.818267384132!2d77.85720227022637!3d12.72527579278043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae772f630ebaa3%3A0x582a98a4412b5169!2sFORT.Hosur!5e0!3m2!1sen!2sin!4v1777737111460!5m2!1sen!2sin" 
-          width="100%" 
-          height="100%" 
-          style={{ border: 0 }} 
-          allowFullScreen={true}
-          loading="lazy" 
-          referrerPolicy="no-referrer-when-downgrade"
-          className="absolute inset-0"
-          title="Google Map"
-        />
+      <div className="max-w-6xl mx-auto px-6 pb-12 flex justify-center">
+        <div className="w-full max-w-[600px] h-[450px] bg-slate-100 relative rounded-2xl overflow-hidden shadow-md border border-slate-200">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3891.818267384132!2d77.85720227022637!3d12.72527579278043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae772f630ebaa3%3A0x582a98a4412b5169!2sFORT.Hosur!5e0!3m2!1sen!2sin!4v1777785953434!5m2!1sen!2sin" 
+            width="100%" 
+            height="100%" 
+            style={{ border: 0 }} 
+            allowFullScreen={true}
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            className="absolute inset-0"
+            title="Google Map"
+          />
+        </div>
       </div>
     </section>
   );

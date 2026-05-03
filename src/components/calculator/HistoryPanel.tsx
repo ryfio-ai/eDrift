@@ -202,11 +202,11 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
       </div>
 
       {/* 3. History Section */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col min-h-[400px]">
-        <div className="p-5 flex items-center justify-between border-b border-slate-50">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col flex-1 min-h-[250px] max-h-[calc(100vh-280px)]">
+        <div className="p-4 flex items-center justify-between border-b border-slate-50">
           <div className="flex items-center gap-2">
-            <Clock className="w-6 h-6 text-brand-primary" />
-            <h3 className="text-[28px] font-heading font-medium text-slate-800">History</h3>
+            <Clock className="w-5 h-5 text-brand-primary" />
+            <h3 className="text-[20px] font-heading font-medium text-slate-800">History</h3>
           </div>
           <button 
             onClick={clearHistory}

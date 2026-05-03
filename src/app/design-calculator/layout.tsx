@@ -30,8 +30,8 @@ export default function CalculatorLayout({
 
         {/* Main Application Area - Optimized Max Width for Calculator Grid */}
         <main className="flex-1 w-full flex flex-col items-center">
-          <div className="w-full max-w-[1200px] p-6 lg:p-10 flex-1">
-             <div className="bg-white/40 rounded-[32px] p-0 md:p-4 backdrop-blur-sm border border-white/20">
+          <div className="w-full max-w-[1200px] p-4 lg:p-4 flex-1">
+             <div className="bg-white/40 rounded-[32px] p-0 md:p-2 backdrop-blur-sm border border-white/20">
                 {children}
              </div>
           </div>

@@ -71,6 +71,7 @@ export const CalculatorSEO: React.FC<CalculatorSEOProps> = ({ variable }) => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
       />
+      
     </>
   );
 };

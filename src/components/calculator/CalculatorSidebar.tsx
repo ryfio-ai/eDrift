@@ -16,7 +16,7 @@ const formatLabel = (label: string) => {
     return (
       <>
         {parts[0]}
-        <sub style={{ letterSpacing: "-0.5px" }}>{parts[1]}</sub>
+        <sub style={{ letterSpacing: "-0.5px" }}>{parts[1].replace(/{|}/g, '')}</sub>
       </>
     );
   }
@@ -39,14 +39,14 @@ export const CalculatorSidebar: React.FC = () => {
   
   return (
     <div className="flex flex-col h-full bg-white border-r border-[#e5e7eb] print:hidden">
-      {/* Sidebar Header - Simplified as requested */}
-      <div className="py-6 px-5 border-b border-[#e5e7eb] flex items-center justify-between shrink-0">
+      {/* Sidebar Header - Compacted */}
+      <div className="py-3 px-4 border-b border-[#e5e7eb] flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#0086c1]/10 flex items-center justify-center text-[#0086c1]">
-            <Calculator className="w-5 h-5" />
+          <div className="w-8 h-8 rounded-xl bg-[#0086c1]/10 flex items-center justify-center text-[#0086c1]">
+            <Calculator className="w-4 h-4" />
           </div>
           <div className="flex flex-col">
-            <h1 className="text-[25px] leading-none text-[#1e293b] tracking-tight">
+            <h1 className="text-[18px] leading-none text-[#1e293b] tracking-tight">
                Design Calculator
             </h1>
             <p className="text-[12px] text-[#64748b] font-bold tracking-widest mt-1 uppercase">
@@ -57,13 +57,13 @@ export const CalculatorSidebar: React.FC = () => {
       </div>
 
       <div className="flex-1 min-h-0 flex flex-col">
-        <div className="flex-1 overflow-y-auto scrollbar-clean py-6 pr-1">
+        <div className="flex-1 overflow-y-auto scrollbar-clean py-3 pr-1">
           {calculatorConfig.categories.map((category) => (
-            <div key={category.name} className="mb-5">
-              <h2 className="text-[15px] font-semibold text-[#64748b] mb-2 px-6 capitalize tracking-normal">
+            <div key={category.name} className="mb-2">
+              <h2 className="text-[12px] font-semibold text-[#64748b] mb-1 px-4 capitalize tracking-normal">
                 {category.name.toLowerCase()}
               </h2>
-              <ul className="flex flex-col relative space-y-0.5">
+              <ul className="flex flex-col relative space-y-0">
                 {category.variables.map((variable) => {
                   const slug = slugify(variable.label);
                   const isActive = activeSlug === slug;
@@ -77,11 +77,11 @@ export const CalculatorSidebar: React.FC = () => {
                     variable.symbol.toLowerCase() !== baseName.toLowerCase();
 
                   return (
-                    <li key={variable.name} className="relative px-1 pl-5">
+                    <li key={variable.name} className="relative px-1 pl-3">
                       <Link
                         href={`/design-calculator/${slug}`}
                         className={cn(
-                          "w-full flex items-center justify-between px-3 py-2 text-[14px] md:text-[15px] rounded transition-all duration-200 hover:translate-x-0.5 cursor-pointer",
+                          "w-full flex items-center justify-between px-2 py-1 text-[14px] rounded transition-all duration-200 hover:translate-x-0.5 cursor-pointer",
                           isActive
                             ? "bg-[#ebf5fa] text-[#0086c1] font-semibold shadow-sm"
                             : "text-[#1e293b] hover:bg-[#ebf5fa] bg-transparent font-medium"
@@ -114,7 +114,7 @@ export const CalculatorSidebar: React.FC = () => {
         </div>
 
         {/* Bottom space with line to stop scrollbar short of the bottom */}
-        <div className="px-6 pb-12 shrink-0">
+        <div className="px-4 pb-4 shrink-0 mt-2">
           <div className="border-t border-gray-400 opacity-20"></div>
         </div>
       </div>

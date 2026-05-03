@@ -33,6 +33,7 @@ export interface CalculatorVariable {
   unit: string;
   outputUnits: Unit[];
   symbol: string;
+  seoDescription?: string;
   image?: string;
   methods: CalculationMethod[];
 }
