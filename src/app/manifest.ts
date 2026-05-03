@@ -1,14 +1,14 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'eDrift Electric',
     short_name: 'eDrift',
-    description: 'Premium automotive-grade power electronics for the EV ecosystem.',
+    description: 'Advanced Power Electronics for the EV Ecosystem.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#0086c1',
+    background_color: '#0B1120',
+    theme_color: '#0A4FCC',
     icons: [
       {
         src: '/images/edrift logo.png',
@@ -16,5 +16,5 @@ export default function manifest(): MetadataRoute.Manifest {
         type: 'image/png',
       },
     ],
-  }
+  };
 }

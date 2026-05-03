@@ -123,6 +123,85 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/images/edrift logo.png" sizes="any" />
         <link rel="apple-touch-icon" href="/images/edrift logo.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "eDrift Electric",
+                "url": SITE_URL,
+                "logo": `${SITE_URL}/images/edrift logo.png`,
+                "contactPoint": {
+                  "@type": "ContactPoint",
+                  "telephone": "+91-9790274709",
+                  "contactType": "customer service",
+                  "email": "technical@edriftelectric.com",
+                  "areaServed": "IN",
+                  "availableLanguage": "en"
+                },
+                "sameAs": [
+                  "https://www.linkedin.com/company/edriftelectric",
+                  "https://twitter.com/edriftelectric"
+                ]
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "url": SITE_URL,
+                "potentialAction": {
+                  "@type": "SearchAction",
+                  "target": `${SITE_URL}/products?q={search_term_string}`,
+                  "query-input": "required name=search_term_string"
+                }
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "name": "Main Navigation",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "item": {
+                      "@type": "WebPage",
+                      "@id": `${SITE_URL}/products`,
+                      "name": "Product Catalogue"
+                    }
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "item": {
+                      "@type": "WebPage",
+                      "@id": `${SITE_URL}/careers`,
+                      "name": "Engineering Careers"
+                    }
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "item": {
+                      "@type": "WebPage",
+                      "@id": `${SITE_URL}/blog`,
+                      "name": "Technical Blog"
+                    }
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "item": {
+                      "@type": "WebPage",
+                      "@id": `${SITE_URL}/contact`,
+                      "name": "Contact Us"
+                    }
+                  }
+                ]
+              }
+            ])
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-white font-sans text-slate-900">
         <ScrollAnimationProvider />
