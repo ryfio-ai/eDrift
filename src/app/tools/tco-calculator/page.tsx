@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { motion } from "framer-motion";
 import { 
   Calculator, 
   Zap, 
@@ -138,10 +137,7 @@ export default function TCOCalculator() {
           {/* Right: Output Visualization */}
           <div className="lg:col-span-8 space-y-8">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <motion.div 
-                   key={results.costSaved}
-                   initial={{ opacity: 0, scale: 0.95 }}
-                   animate={{ opacity: 1, scale: 1 }}
+                <div 
                    className="p-10 bg-brand-primary rounded-[48px] text-white overflow-hidden relative"
                 >
                    <div className="relative z-10">
@@ -151,7 +147,7 @@ export default function TCOCalculator() {
                       <p className="text-xs font-bold text-white/50 uppercase tracking-widest">Across {analysisYears} Years of Operation</p>
                    </div>
                    <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-white/5 blur-[60px] rounded-full" />
-                </motion.div>
+                </div>
 
                 <div className="p-10 bg-slate-900 rounded-[48px] text-white overflow-hidden relative">
                    <div className="relative z-10">

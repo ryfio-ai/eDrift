@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { FileText, Download, Shield, ExternalLink, ArrowRight } from "lucide-react";
 import { ContactSection } from "@/components/sections/ContactSection";
+import Link from "next/link";
 
 const resourceCategories = [
   {
@@ -38,7 +38,7 @@ const resourceCategories = [
 
 export default function ResourcesPage() {
   return (
-    <main className="pt-32 bg-white min-h-screen">
+    <main className="pt-10 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-6">
         {/* Hero */}
         <div className="mb-20">
@@ -56,16 +56,9 @@ export default function ResourcesPage() {
         </div>
 
         {/* Resources Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-32" data-animate-stagger>
           {resourceCategories.map((category, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="space-y-8"
-            >
+            <div key={idx} className="space-y-8">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-lg bg-bg-main border border-border-subtle flex items-center justify-center text-brand-primary">
                   <category.icon className="w-6 h-6" />
@@ -90,7 +83,7 @@ export default function ResourcesPage() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
@@ -103,14 +96,13 @@ export default function ResourcesPage() {
                  <p className="text-white/60 font-medium leading-relaxed mb-10">
                     Run complex calculations for Total Cost of Ownership, charging times, and system efficiency based on your specific application requirements.
                  </p>
-                 <a 
-                   href="https://edrift-calculator.vercel.app/" 
-                   target="_blank" 
+                 <Link 
+                   href="/design-calculator" 
                    className="btn-primary px-8"
                  >
                     Launch Engineering Tool
                     <ExternalLink className="w-4 h-4 ml-2" />
-                 </a>
+                 </Link>
               </div>
               <div className="w-full lg:w-1/3 aspect-video bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center">
                  <div className="text-center p-8">

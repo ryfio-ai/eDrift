@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface GlowButtonProps extends HTMLMotionProps<"button"> {
+interface GlowButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "outline" | "ghost" | "cyan" | "purple";
   size?: "sm" | "md" | "lg";
   children: React.ReactNode;
@@ -32,18 +31,19 @@ export const GlowButton = ({
   };
 
   return (
-    <motion.button
-      whileHover={{ scale: 1.02, y: -2 }}
-      whileTap={{ scale: 0.98 }}
+    <button
       className={cn(
         "rounded-full font-bold transition-all flex items-center justify-center gap-2",
+        "hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98]",
+        "transition-transform duration-200 ease-out",
         sizeClasses[size],
         variants[variant],
         className
       )}
-      {...(props as any)}
+      style={{ transition: "transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)" }}
+      {...props}
     >
       {children}
-    </motion.button>
+    </button>
   );
 };

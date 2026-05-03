@@ -1,32 +1,85 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
-  --font-heading: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  
-  --color-brand-primary: #0086c1;
-  --color-brand-primary-hover: #0077b3;
-  --color-brand-primary-soft: rgba(0, 136, 204, 0.1);
-  
-  --color-bg-main: #f4f5f7;
-  --color-bg-card: #ffffff;
-  --color-bg-soft: #ebf5fa;
-  --color-border-main: #e5e7eb;
-  
-  --color-text-main: #1e293b;
-  --color-text-muted: #64748b;
-  --color-text-faint: #94A3B8;
-  
-  /* Industrial Border System */
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --font-heading: var(--font-heading), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  /* TYPOGRAPHIC SCALE */
+  --text-xs:    11px;
+  --text-xs--line-height: 1.5;
+  --text-sm:    13px;
+  --text-sm--line-height: 1.5;
+  --text-base:  16px;
+  --text-base--line-height: 1.6;
+  --text-lg:    18px;
+  --text-lg--line-height: 1.5;
+  --text-xl:    20px;
+  --text-xl--line-height: 1.4;
+  --text-2xl:   24px;
+  --text-2xl--line-height: 1.3;
+  --text-3xl:   30px;
+  --text-3xl--line-height: 1.2;
+  --text-4xl:   36px;
+  --text-4xl--line-height: 1.15;
+  --text-5xl:   48px;
+  --text-5xl--line-height: 1.1;
+  --text-6xl:   60px;
+  --text-6xl--line-height: 1.05;
+  --text-7xl:   72px;
+  --text-7xl--line-height: 1.0;
+
+  /* FONT WEIGHTS */
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --font-weight-black:    900;
+  /* COLOR TOKENS */
+  --color-brand-primary:     #0A4FCC;  /* Core Edrift Blue */
+  --color-brand-secondary:   #0066FF;  /* Accent Electric Blue */
+  --color-brand-dark:        #002B8A;  /* Deep Blue — headers */
+  --color-brand-light:       #E8F0FF;  /* Light Blue — backgrounds */
+  --color-accent-cyan:       #00C4FF;  /* Energy accent — data callouts */
+  --color-accent-success:    #10B981;  /* Efficiency metrics */
+  --color-neutral-900:       #0D1117;  /* Primary text */
+  --color-neutral-700:       #374151;  /* Secondary text */
+  --color-neutral-500:       #6B7280;  /* Meta text */
+  --color-neutral-200:       #E5E7EB;  /* Borders */
+  --color-neutral-100:       #F3F4F6;  /* Card backgrounds */
+  --color-surface:           #FFFFFF;  /* Base surface */
+  --color-surface-dark:      #0B1120;  /* Dark section bg */
+
+  /* Legacy structure mappings (preserved for compatibility) */
+  --color-brand-primary-hover: #0066FF;
+  --color-brand-primary-soft: rgba(10, 79, 204, 0.1);
+  --color-bg-main: var(--color-neutral-100);
+  --color-bg-card: var(--color-surface);
+  --color-bg-soft: var(--color-brand-light);
+  --color-border-main: var(--color-neutral-200);
+  --color-text-main: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-700);
+  --color-text-faint: var(--color-neutral-500);
   --color-border-subtle: #DDE3E8;
   --color-stronger-border: #CBD5E1;
 
-  --radius-card: 8px;
-  --radius-input: 6px;
-  --radius-button: 6px;
-  --radius-pill: 9999px;
+  /* BORDER RADIUS */
+  --radius-sm:    4px;
+  --radius-md:    8px;
+  --radius-lg:    12px;
+  --radius-xl:    16px;
+  --radius-2xl:   24px;
+  --radius-full:  9999px;
+  --radius-card:  var(--radius-md);
+  --radius-input: var(--radius-sm);
+  --radius-button: var(--radius-sm);
+  --radius-pill:  var(--radius-full);
+
+  /* SHADOW SYSTEM */
+  --shadow-sm:    0 1px 3px rgba(10,79,204,0.08);
+  --shadow-md:    0 4px 16px rgba(10,79,204,0.12);
+  --shadow-lg:    0 8px 32px rgba(10,79,204,0.16);
+  --shadow-glow:  0 0 24px rgba(0,102,255,0.20);
 
   /* Spacing Scale */
   --spacing-section-desktop: 80px;
@@ -80,11 +133,41 @@
 }
 
 @layer components {
+  /* PRIMARY BUTTON */
   .btn-primary {
-    @apply h-11 px-6 bg-brand-primary text-white font-semibold rounded-button transition-all 
-           hover:bg-brand-primary-hover hover:shadow-lg hover:shadow-brand-primary/10 
-           active:scale-[0.98] inline-flex items-center justify-center gap-2 text-sm;
-    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    @apply h-11 px-6 bg-brand-primary text-white font-semibold rounded-button inline-flex items-center justify-center gap-2 text-sm;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform: translateY(0);
+    box-shadow: 0 4px 16px rgba(10, 79, 204, 0.0);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10, 79, 204, 0.30);
+    background: var(--color-brand-dark);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0) scale(0.97);
+    transition-duration: 0.1s;
+  }
+
+  /* LOADING STATE */
+  .btn-primary.loading::after {
+    content: '';
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  /* ICON BUTTON */
+  .btn-arrow .icon {
+    transition: transform 0.2s ease;
+  }
+  .btn-arrow:hover .icon {
+    transform: translateX(4px);
   }
   
   .btn-outline {
@@ -109,66 +192,107 @@
   }
 }
 
-/* --- Scroll-Driven Animation Specs --- */
-.reveal-fade {
+/* --- Vanilla JS Observer Animation Specs --- */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+[data-animate].animate-in {
   opacity: 1;
+  transform: translateY(0);
 }
 
-@supports (animation-timeline: view()) {
-  .reveal-fade {
-    opacity: 0;
-    animation: reveal-fade linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 85%;
-  }
-
-  .reveal-clip {
-    clip-path: inset(0 0 100% 0);
-    animation: reveal-clip linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 90%;
-  }
+/* STAGGERED CARDS */
+[data-animate-stagger] > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-@keyframes reveal-fade {
-  to { opacity: 1; }
+[data-animate-stagger].animate-in > *:nth-child(1) { transition-delay: 0ms; opacity: 1; transform: translateY(0); }
+[data-animate-stagger].animate-in > *:nth-child(2) { transition-delay: 100ms; opacity: 1; transform: translateY(0); }
+[data-animate-stagger].animate-in > *:nth-child(3) { transition-delay: 200ms; opacity: 1; transform: translateY(0); }
+[data-animate-stagger].animate-in > *:nth-child(4) { transition-delay: 300ms; opacity: 1; transform: translateY(0); }
+[data-animate-stagger].animate-in > *:nth-child(5) { transition-delay: 400ms; opacity: 1; transform: translateY(0); }
+[data-animate-stagger].animate-in > *:nth-child(n+6) { transition-delay: 500ms; opacity: 1; transform: translateY(0); }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-@keyframes reveal-clip {
-  to { clip-path: inset(0 0 0 0); }
+/* Hero section — CSS-only stagger animations (no JS required) */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Image lazy-load fade-in */
+@keyframes imgFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+img.loaded {
+  animation: imgFadeIn 0.3s ease-in-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes heroFadeUp { from { opacity:1; } to { opacity:1; } }
+  @keyframes heroFadeIn { from { opacity:1; } to { opacity:1; } }
 }
 
 /* --- Product Card Interaction Spec --- */
 .product-card {
+  border: 1px solid transparent;
   transition:
-    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
-    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background-color 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: var(--shadow-sm);
 }
 
 .product-card:hover {
   transform: translateY(-4px);
-  @apply border-brand-primary/30 shadow-md;
+  border-color: var(--color-brand-primary);
+  box-shadow: var(--shadow-lg);
 }
 
 .product-card:active {
   transform: translateY(-1px);
 }
 
-.product-card .cta-arrow {
-  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+.product-card img {
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.product-card:hover .cta-arrow {
-  transform: translateX(4px);
+.product-card:hover img {
+  transform: scale(1.03);
+}
+
+.product-card .cta-inner {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.product-card:hover .cta-inner {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* --- Accessibility: Reduced Motion --- */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }

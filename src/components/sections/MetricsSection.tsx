@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Counter } from "@/components/ui/Counter";
-import { staggerContainer, fadeIn } from "@/lib/motion";
 
 export const MetricsSection = () => {
   const metrics = [
@@ -14,19 +12,12 @@ export const MetricsSection = () => {
   ];
 
   return (
-    <section className="py-24 bg-white border-y border-border-subtle reveal-fade">
+    <section className="py-24 bg-white border-y border-border-subtle">
       <div className="section-container">
-        <motion.div 
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" data-animate-stagger>
           {metrics.map((metric, i) => (
-            <motion.div
+            <div
               key={i}
-              variants={fadeIn}
               className="p-8 flex flex-col justify-start border border-transparent hover:border-border-subtle transition-colors rounded-lg"
             >
               <p className="label-uppercase mb-4">{metric.label}</p>
@@ -40,9 +31,9 @@ export const MetricsSection = () => {
               <p className="text-sm font-medium text-text-muted leading-relaxed">
                 {metric.desc}
               </p>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

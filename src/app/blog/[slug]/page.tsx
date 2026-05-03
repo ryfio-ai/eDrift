@@ -2,10 +2,10 @@
 
 import React from "react";
 import { useParams, notFound } from "next/navigation";
-import { motion } from "framer-motion";
 import { blogPosts } from "@/data/blog";
 import { ArrowLeft, Clock, ArrowRight, Share2, Mail, Linkedin, Download } from "lucide-react";
 import Link from "next/link";
+import MarkdownRenderer from "@/components/ui/MarkdownRenderer";
 
 export default function BlogDetail() {
   const { slug } = useParams();
@@ -66,26 +66,13 @@ export default function BlogDetail() {
           </div>
         </div>
 
-        {/* Content Render (Simple Markdown Styling) */}
-        <div 
-          className="prose prose-slate prose-lg max-w-none mb-32 
-          prose-h2:text-2xl prose-h2:font-semibold prose-h2:text-slate-900 prose-h2:mt-16 prose-h2:mb-8 prose-h2:tracking-tight
-          prose-h3:text-xl prose-h3:font-semibold prose-h3:text-slate-900 prose-h3:mt-12 prose-h3:mb-6
-          prose-p:text-slate-600 prose-p:font-medium prose-p:leading-relaxed prose-p:mb-8
-          prose-li:text-slate-600 prose-li:font-medium prose-li:mb-2
-          prose-strong:text-slate-900 prose-strong:font-bold
-          prose-table:w-full prose-table:border-collapse prose-table:border prose-table:border-slate-100 prose-table:rounded-xl prose-table:overflow-hidden 
-          prose-th:bg-slate-50 prose-th:p-4 prose-th:text-xs prose-th:font-bold prose-th:uppercase prose-th:tracking-widest prose-th:text-slate-500 prose-th:text-left
-          prose-td:p-4 prose-td:text-sm prose-td:text-slate-600 prose-td:border-t prose-td:border-slate-100"
-          dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br/>') }} 
-        />
+        {/* Content Render */}
+        <MarkdownRenderer content={post.content} />
 
         {/* Gated Lead Magnet CTA */}
-        <motion.div 
-           initial={{ opacity: 0, y: 30 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
+        <div
            className="p-12 bg-slate-50 border border-slate-100 rounded-[48px] text-center mb-32"
+           data-animate
         >
           <div className="w-16 h-16 rounded-3xl bg-brand-primary/10 flex items-center justify-center text-brand-primary mx-auto mb-10 shadow-sm">
              <Download className="w-8 h-8" />
@@ -98,7 +85,7 @@ export default function BlogDetail() {
              <Link href="/resources" className="btn-primary h-14 px-10">Download Free Guide</Link>
              <Link href="/contact" className="btn-outline h-14 px-10">Request Technical Demo</Link>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Footer Internal Linking */}

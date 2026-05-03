@@ -1,43 +1,16 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
+import React from "react";
+import { VanillaCounter } from "@/components/ui/VanillaCounter";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Shield, Zap, Target, Cpu, Users, Award } from "lucide-react";
 
-/**
- * Animated counter component for B2B metrics
- */
-const Counter = ({ value, suffix = "" }: { value: number, suffix?: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const spring = useSpring(0, { stiffness: 40, damping: 20 });
-  const display = useTransform(spring, (current) => Math.floor(current).toString() + suffix);
-  const [currentValue, setCurrentValue] = useState("0" + suffix);
-
-  useEffect(() => {
-    if (isInView) {
-      spring.set(value);
-    }
-  }, [isInView, spring, value]);
-
-  useEffect(() => {
-    return display.on("change", (latest) => setCurrentValue(latest));
-  }, [display]);
-
-  return <span ref={ref}>{currentValue}</span>;
-};
-
 export default function AboutClient() {
   return (
-    <main className="pt-32 bg-white min-h-screen font-sans">
+    <main className="pt-10 bg-white min-h-screen font-sans">
       <div className="max-w-7xl mx-auto px-6">
         {/* B2B Hero Section */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-40">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+          <div data-animate>
             <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary mb-6">Our Engineering Mission</div>
             <h1 className="text-4xl md:text-6xl font-semibold text-slate-900 mb-8 leading-tight">
                Redefining EV <br />
@@ -61,7 +34,7 @@ export default function AboutClient() {
                   <span className="text-xs font-bold text-slate-900 uppercase tracking-widest">ASIL-D Functional Safety Ready</span>
                </div>
             </div>
-          </motion.div>
+          </div>
           <div className="relative aspect-video rounded-[48px] overflow-hidden bg-slate-50 border border-slate-100 shadow-2xl">
              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(0,102,255,0.05),transparent)]" />
              <div className="h-full w-full flex flex-col items-center justify-center p-12 text-center">
@@ -115,14 +88,14 @@ export default function AboutClient() {
            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 text-center px-12">
               <div>
                  <div className="text-5xl md:text-6xl font-semibold text-white mb-4 tracking-tighter">
-                   <Counter value={97} suffix="%" />
+                   <VanillaCounter value={97} suffix="%" />
                  </div>
                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Peak Efficiency</p>
                  <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Verified across the Elite series OBC platforms.</p>
               </div>
               <div>
                  <div className="text-5xl md:text-6xl font-semibold text-brand-primary mb-4 tracking-tighter">
-                   <Counter value={10000} suffix="+" />
+                   <VanillaCounter value={10000} suffix="+" />
                  </div>
                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">Units Delivered</p>
                  <p className="text-sm font-semibold text-white/60 max-w-[220px] mx-auto">Field-proven engineering deployed globally.</p>

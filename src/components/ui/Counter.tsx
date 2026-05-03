@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { useMotionValue, useSpring, useTransform, animate, motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
 
 interface CounterProps {
   value: number;
@@ -11,35 +10,55 @@ interface CounterProps {
   decimals?: number;
 }
 
-export const Counter = ({ 
-  value, 
-  duration = 0.8, 
-  className = "", 
-  suffix = "", 
-  decimals = 0 
+export const Counter = ({
+  value,
+  duration = 800,
+  className = "",
+  suffix = "",
+  decimals = 0,
 }: CounterProps) => {
-  const count = useMotionValue(value);
-  const rounded = useTransform(count, (latest) => latest.toFixed(decimals));
+  const [display, setDisplay] = useState((0).toFixed(decimals));
   const ref = useRef<HTMLSpanElement>(null);
-  const [hasAnimated, setHasAnimated] = React.useState(false);
 
   useEffect(() => {
-    // Only animate on mount if we haven't already
-    if (!hasAnimated) {
-      count.set(0);
-      const controls = animate(count, value, {
-        duration: duration,
-        ease: [0.16, 1, 0.3, 1],
-        onComplete: () => setHasAnimated(true)
-      });
-      return controls.stop;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const element = ref.current;
+    if (!element) return;
+
+    if (prefersReducedMotion) {
+      setDisplay(value.toFixed(decimals));
+      return;
     }
-  }, [value, duration, count, hasAnimated]);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          let startTimestamp: number | null = null;
+
+          const step = (timestamp: number) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            // easeOutExpo
+            const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+            setDisplay((ease * value).toFixed(decimals));
+
+            if (progress < 1) window.requestAnimationFrame(step);
+          };
+
+          window.requestAnimationFrame(step);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [value, duration, decimals]);
 
   return (
-    <span className={className}>
-      <motion.span>{rounded}</motion.span>
-      {suffix}
+    <span ref={ref} className={className}>
+      {display}{suffix}
     </span>
   );
 };

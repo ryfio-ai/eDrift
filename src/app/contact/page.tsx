@@ -4,13 +4,13 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Contact Engineering | eDrift Electric",
-  description: "Get in touch with eDrift's engineering team for custom EV power electronics, On-Board Chargers, and DC-DC converter solutions.",
+  description: "Get in touch with eDrift's engineering team for custom EV power electronics and technical support.",
 };
 
 export default function ContactPage() {
   return (
-    <div className="bg-white min-h-screen">
+    <main>
       <ContactSection />
-    </div>
+    </main>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Zap, Battery, Cpu, Share2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -50,14 +49,10 @@ export const ProductOverview = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" data-animate-stagger>
           {products.map((product, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
               className="group p-10 border border-border-subtle bg-bg-subtle rounded-[24px] hover:bg-white hover:border-brand-primary/20 hover:shadow-2xl transition-all duration-500 flex flex-col justify-between"
             >
               <div>
@@ -72,7 +67,7 @@ export const ProductOverview = () => {
                 View Specifications
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
 

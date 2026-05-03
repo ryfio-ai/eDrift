@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+
 import { CalculatorVariable, CalculationResult } from "@/lib/calculator/types";
 import { runCalculation } from "@/lib/calculator/engine";
 import { convertToBase, convertFromBase } from "@/lib/calculator/unitConversions";
@@ -139,22 +139,6 @@ interface CalculatorModuleProps {
   variable: CalculatorVariable;
 }
 
-// Performance Optimization: Disabled heavy transitions for instant switching (<100ms)
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { duration: 0 }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1, 
-    transition: { duration: 0 }
-  }
-};
 
 export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) => {
   const [methodIndex, setMethodIndex] = useState(0);
@@ -396,15 +380,11 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
   const showSymbol = variable.symbol && variable.symbol.toLowerCase() !== baseName.toLowerCase();
 
   return (
-    <motion.div 
-      key={variable.name}
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
+    <div
       className="flex flex-col gap-2 print:hidden w-full font-sans"
     >
       {/* 1. Header Section */}
-      <motion.div variants={itemVariants} className="relative flex flex-col pb-1 border-b border-slate-50 items-center text-center">
+      <div className="relative flex flex-col pb-1 border-b border-slate-50 items-center text-center">
         <h1 className="text-[22px] font-heading font-extrabold text-slate-800 tracking-tight leading-none flex items-center justify-center gap-2">
           <div className="flex items-center gap-1">
             <span>{baseName}</span>
@@ -432,11 +412,11 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
             <ExternalLink className="w-3 h-3 opacity-40" />
           </a>
         )}
-      </motion.div>
+      </div>
 
       {/* 2. Method Selection - Left Aligned Tabs */}
       {variable.methods.length > 1 && (
-        <motion.div variants={itemVariants} className="flex justify-start z-10 relative">
+        <div className="flex justify-start z-10 relative">
           <div className="flex bg-slate-100 p-0.5 rounded-xl shadow-inner border border-slate-200">
             {variable.methods.map((method, index) => (
               <button
@@ -453,7 +433,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
               </button>
             ))}
           </div>
-        </motion.div>
+        </div>
       )}
 
       <div className="flex flex-col xl:flex-row gap-3 items-start">
@@ -498,7 +478,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
             <>
               {/* Formula and Image Card */}
           <div className={cn("grid gap-2", variable.image ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
-            <motion.div variants={itemVariants} className="bg-brand-primary-soft border border-brand-primary/10 rounded-[16px] p-2 flex items-center justify-center min-h-[60px] shadow-sm overflow-hidden">
+            <div className="bg-brand-primary-soft border border-brand-primary/10 rounded-[16px] p-2 flex items-center justify-center min-h-[60px] shadow-sm overflow-hidden">
                <div className="hide-scroll w-full overflow-x-auto py-3" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                   <style dangerouslySetInnerHTML={{ __html: `
                     .hide-scroll::-webkit-scrollbar { display: none; }
@@ -513,16 +493,16 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                      </div>
                   </div>
                </div>
-            </motion.div>
+            </div>
             {variable.image && (
-               <motion.div variants={itemVariants} className="bg-white border border-border-main rounded-[16px] p-2 flex items-center justify-center min-h-[60px] shadow-sm">
+               <div className="bg-white border border-border-main rounded-[16px] p-2 flex items-center justify-center min-h-[60px] shadow-sm">
                   <img src={variable.image} alt={variable.label} className="max-w-full max-h-[80px] object-contain" />
-               </motion.div>
+               </div>
             )}
           </div>
 
           {/* Main Input Grid Section */}
-          <motion.div variants={itemVariants} className="bg-white p-3 rounded-[20px] border border-border-main shadow-sm flex flex-col gap-3">
+          <div className="bg-white p-3 rounded-[20px] border border-border-main shadow-sm flex flex-col gap-3">
              {/* Topology Selector - Left Aligned */}
              {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
                 <div className="flex flex-col gap-2 pb-2 border-b border-slate-50 items-start">
@@ -635,12 +615,12 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                    <span className="uppercase tracking-widest text-[11px]">Calculate Result</span>
                 </button>
              </div>
-          </motion.div>
+          </div>
 
           {/* Bottom Split - Summary and Results side by side */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
              {/* Left: Current Inputs Summary */}
-             <motion.div variants={itemVariants} className="bg-white p-3 rounded-[16px] border border-border-main shadow-sm flex flex-col gap-2 text-center">
+             <div className="bg-white p-3 rounded-[16px] border border-border-main shadow-sm flex flex-col gap-2 text-center">
                 <h3 className="text-[11px] font-heading font-extrabold text-slate-800 uppercase tracking-widest border-b border-slate-50 pb-2">Current Configuration</h3>
                 <div className="space-y-3">
                    {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
@@ -659,10 +639,10 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                       </div>
                    ))}
                 </div>
-             </motion.div>
+             </div>
 
              {/* Right: Calculated Result */}
-             <motion.div variants={itemVariants} className="bg-white p-3 rounded-[16px] border border-border-main shadow-sm flex flex-col gap-2 text-center">
+             <div className="bg-white p-3 rounded-[16px] border border-border-main shadow-sm flex flex-col gap-2 text-center">
                 <div className="flex justify-between items-center border-b border-slate-50 pb-2 relative">
                    <h3 className="text-[11px] font-heading font-extrabold text-slate-800 uppercase tracking-widest">Calculated Result</h3>
                    {variable.outputUnits && variable.outputUnits.length > 0 && variable.outputUnits[0] !== "" && (
@@ -699,22 +679,22 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                       </div>
                    )}
                 </div>
-             </motion.div>
+             </div>
           </div>
             </>
           )}
         </div>
 
         {/* Sidebar - History */}
-        <motion.div variants={itemVariants} className="w-full xl:w-[340px] shrink-0 sticky top-4">
+        <div className="w-full xl:w-[340px] shrink-0 sticky top-4">
            <HistoryPanel 
              onReplay={handleReplay}
              onExportPDF={exportToPDF}
              onExportExcel={exportToExcel}
              currentVariableName={variable.name}
            />
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };

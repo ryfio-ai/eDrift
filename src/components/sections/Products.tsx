@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
 import { ChevronRight, Cpu, Zap, RefreshCw, Layers } from "lucide-react";
 import Link from "next/link";
@@ -49,7 +48,7 @@ export const Products = () => {
   return (
     <section id="products" className="py-32 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8" data-animate>
           <div className="max-w-2xl">
             <Badge variant="purple" className="mb-6">Global Lineup</Badge>
             <h2 className="text-4xl md:text-6xl font-bold font-heading tracking-tight text-text-main">
@@ -62,78 +61,58 @@ export const Products = () => {
           </p>
         </div>
 
-        <motion.div 
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.15
-              }
-            }
-          }}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" data-animate-stagger>
           {productCategories.map((cat) => (
-            <motion.div
-              key={cat.id}
-              variants={{
-                hidden: { opacity: 0, y: 30 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
-              }}
-              className="flex flex-col"
-            >
+            <div key={cat.id} className="flex flex-col">
               <div className="flex flex-col h-full bg-bg-main border border-border-subtle rounded-[24px] overflow-hidden group hover:shadow-xl transition-all duration-500">
                 <div className="aspect-[1/1] relative overflow-hidden bg-slate-100">
-                  <Image 
-                    src={cat.image} 
+                  <Image
+                    src={cat.image}
                     alt={cat.name}
                     fill
+                    loading="lazy"
                     className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
                   />
                   <div className="absolute top-6 left-6">
-                     {cat.status ? (
-                       <Badge variant="purple" className="bg-white/90 backdrop-blur shadow-sm">Upcoming</Badge>
-                     ) : (
-                       <Badge variant="cyan" className="bg-white/90 backdrop-blur shadow-sm">Production</Badge>
-                     )}
+                    {cat.status ? (
+                      <Badge variant="purple" className="bg-white/90 backdrop-blur shadow-sm">Upcoming</Badge>
+                    ) : (
+                      <Badge variant="cyan" className="bg-white/90 backdrop-blur shadow-sm">Production</Badge>
+                    )}
                   </div>
                 </div>
-                
+
                 <div className="p-8 flex-grow flex flex-col">
                   <div className="w-12 h-12 rounded-xl bg-white border border-border-subtle flex items-center justify-center text-brand-primary mb-4 shadow-sm">
-                     <cat.icon className="w-6 h-6" />
+                    <cat.icon className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-bold font-heading mb-2 text-text-main">{cat.name}</h3>
                   <p className="text-text-muted text-sm mb-6 font-medium leading-relaxed">{cat.tagline}</p>
-                  
+
                   <div className="mt-auto space-y-3">
                     {cat.items ? (
                       cat.items.map((item, i) => (
                         <Link key={i} href={item.href} className="block group/link">
-                           <div className="p-4 rounded-xl bg-white border border-border-subtle hover:border-brand-primary/20 hover:shadow-md transition-all flex items-center justify-between">
-                              <div>
-                                 <span className="block text-xs font-bold text-text-main mb-1">{item.name}</span>
-                                 <span className="block text-[10px] text-text-faint font-semibold uppercase tracking-wider">{item.desc}</span>
-                              </div>
-                              <ChevronRight className="w-4 h-4 text-brand-primary group-hover/link:translate-x-1 transition-transform" />
-                           </div>
+                          <div className="p-4 rounded-xl bg-white border border-border-subtle hover:border-brand-primary/20 hover:shadow-md transition-all flex items-center justify-between">
+                            <div>
+                              <span className="block text-xs font-bold text-text-main mb-1">{item.name}</span>
+                              <span className="block text-[10px] text-text-faint font-semibold uppercase tracking-wider">{item.desc}</span>
+                            </div>
+                            <ChevronRight className="w-4 h-4 text-brand-primary group-hover/link:translate-x-1 transition-transform" />
+                          </div>
                         </Link>
                       ))
                     ) : (
                       <div className="p-4 rounded-xl bg-slate-100/30 border border-dashed border-border-subtle text-center">
-                         <span className="text-[10px] uppercase tracking-widest font-semibold text-text-faint">Launching Soon</span>
+                        <span className="text-[10px] uppercase tracking-widest font-semibold text-text-faint">Launching Soon</span>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

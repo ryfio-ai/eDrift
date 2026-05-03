@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { ArrowRight, Zap, Cpu, Gauge, Layers, ZoomIn } from "lucide-react";
 import Image from "next/image";
 import { Product } from "@/data/products";
-import { gridItem } from "@/lib/motion";
 import { ImageLightbox } from "@/components/ui/ImageLightbox";
 import { QuoteModal } from "@/components/ui/QuoteModal";
 
@@ -19,12 +17,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <>
-      <motion.div
-        variants={gridItem}
-        className="group flex flex-col bg-white border border-border-subtle rounded-2xl overflow-hidden h-full relative hover:shadow-xl hover:border-brand-primary/30 transition-all duration-300"
-      >
+      <div className="product-card group flex flex-col bg-white rounded-2xl overflow-hidden h-full relative">
         {/* Product Image Area */}
-        <div 
+        <div
           className="block aspect-[4/3] relative overflow-hidden bg-slate-50 cursor-pointer group/image border-b border-border-subtle/50"
           onClick={() => setIsLightboxOpen(true)}
         >
@@ -32,19 +27,20 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             src={product.image}
             alt={product.name}
             fill
-            className="object-contain p-8 transition-transform duration-700 ease-out group-hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading="lazy"
           />
-          
+
           {/* Zoom icon overlay on hover */}
           <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/5 transition-colors z-20 flex items-center justify-center">
-             <div className="opacity-0 group-hover/image:opacity-100 bg-white text-text-main p-2.5 rounded-full shadow-xl transform translate-y-4 group-hover/image:translate-y-0 transition-all duration-300">
-               <ZoomIn className="w-5 h-5" />
-             </div>
+            <div className="opacity-0 group-hover/image:opacity-100 bg-white text-text-main p-2.5 rounded-full shadow-xl transform translate-y-4 group-hover/image:translate-y-0 transition-all duration-300">
+              <ZoomIn className="w-5 h-5" />
+            </div>
           </div>
-          
+
           {/* Status Chips */}
-          <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
+          <div className="absolute top-4 right-4 flex flex-wrap gap-2 z-10">
             <span className="px-3 py-1 bg-brand-primary text-white text-[10px] font-bold tracking-wider rounded-full uppercase shadow-sm">
               {product.series}
             </span>
@@ -62,11 +58,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 {product.metadata.sku}
               </span>
             </div>
-            
             <h3 className="text-xl font-bold text-text-main mb-2 tracking-tight">
               {product.name}
             </h3>
-            
             <p className="text-text-muted text-sm leading-relaxed line-clamp-2">
               {product.tagline}
             </p>
@@ -74,44 +68,41 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
           {/* Clean Specs List */}
           <div className="grid grid-cols-2 gap-y-5 gap-x-3 mb-8">
-             <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1.5 text-text-faint">
-                  <Zap className="w-3.5 h-3.5 text-brand-primary/60" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Output Power</span>
-                </div>
-                <p className="text-sm font-bold text-text-main">{product.powerRating}</p>
-             </div>
-             
-             <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1.5 text-text-faint">
-                  <Cpu className="w-3.5 h-3.5 text-brand-primary/60" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Voltage</span>
-                </div>
-                <p className="text-sm font-bold text-text-main">{product.voltageRange}</p>
-             </div>
-             
-             <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1.5 text-text-faint">
-                  <Gauge className="w-3.5 h-3.5 text-brand-primary/60" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Current</span>
-                </div>
-                <p className="text-sm font-bold text-text-main">{product.maxCurrent}</p>
-             </div>
-             
-             <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-1.5 text-text-faint">
-                  <Layers className="w-3.5 h-3.5 text-brand-primary/60" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Input</span>
-                </div>
-                <p className="text-sm font-bold text-text-main truncate" title={product.inputSpecs}>
-                  {product.inputSpecs.split(' (')[0]}
-                </p>
-             </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5 text-text-faint">
+                <Zap className="w-3.5 h-3.5 text-brand-primary/60" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">Output Power</span>
+              </div>
+              <p className="text-sm font-bold text-text-main">{product.powerRating}</p>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5 text-text-faint">
+                <Cpu className="w-3.5 h-3.5 text-brand-primary/60" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">Voltage</span>
+              </div>
+              <p className="text-sm font-bold text-text-main">{product.voltageRange}</p>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5 text-text-faint">
+                <Gauge className="w-3.5 h-3.5 text-brand-primary/60" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">Current</span>
+              </div>
+              <p className="text-sm font-bold text-text-main">{product.maxCurrent}</p>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5 text-text-faint">
+                <Layers className="w-3.5 h-3.5 text-brand-primary/60" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">Input</span>
+              </div>
+              <p className="text-sm font-bold text-text-main truncate" title={product.inputSpecs}>
+                {product.inputSpecs.split(' (')[0]}
+              </p>
+            </div>
           </div>
 
           {/* Primary Action */}
           <div className="mt-auto">
-            <button 
+            <button
               onClick={() => setIsQuoteModalOpen(true)}
               className="w-full h-12 bg-white text-brand-primary border-2 border-brand-primary font-bold tracking-wide rounded-lg flex items-center justify-center gap-2 transition-all hover:bg-brand-primary hover:text-white group/btn shadow-sm hover:shadow-md"
             >
@@ -120,9 +111,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      <ImageLightbox 
+      <ImageLightbox
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
         imageSrc={product.image}

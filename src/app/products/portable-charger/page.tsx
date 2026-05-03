@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
 import { GlowButton } from "@/components/ui/GlowButton";
 import Link from "next/link";
@@ -27,10 +26,7 @@ export default function PortableChargerPage() {
 
         {/* Hero Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-32 items-center">
-           <motion.div
-             initial={{ opacity: 0, x: -20 }}
-             animate={{ opacity: 1, x: 0 }}
-           >
+           <div style={{ animation: "heroFadeUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0ms both" }}>
              <Badge variant="purple" className="mb-8 font-semibold">Premium Powerhouse</Badge>
              <h1 className="text-5xl md:text-7xl font-bold font-sans text-text-main mb-8 tracking-tighter leading-tight">
                 Portable EV <br />
@@ -49,12 +45,11 @@ export default function PortableChargerPage() {
                 ))}
              </div>
              <GlowButton variant="purple" size="lg" className="h-16 px-10 rounded-2xl">Download Portfolio</GlowButton>
-           </motion.div>
+           </div>
 
-           <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
+           <div
               className="relative aspect-square rounded-[32px] overflow-hidden group shadow-2xl bg-bg-main border border-border-subtle"
+              style={{ animation: "heroFadeUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 100ms both" }}
            >
               <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center flex-col gap-6">
@@ -63,7 +58,7 @@ export default function PortableChargerPage() {
                   </div>
                   <Badge variant="cyan" className="font-semibold shadow-sm">Premium Grade Components</Badge>
               </div>
-           </motion.div>
+           </div>
         </div>
 
         {/* Technical Data */}

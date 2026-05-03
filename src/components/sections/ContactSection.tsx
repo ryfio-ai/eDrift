@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import { Phone, Clock, Mail, ChevronDown, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -15,13 +14,12 @@ export const ContactSection = () => {
     product: "",
     message: "",
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    // Enforce 250 character limit on message
     if (name === "message" && value.length > 250) return;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -45,7 +43,7 @@ export const ContactSection = () => {
 
       if (!response.ok) throw new Error("Failed to submit");
       setSubmitStatus("success");
-    } catch (error) {
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -53,30 +51,44 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-24 bg-white overflow-hidden relative">
+    <section id="contact" className="pt-4 pb-24 bg-white overflow-hidden relative">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 mb-24">
-          
-          {/* Left Column: Contact Info */}
-          <div className="lg:col-span-4 flex flex-col gap-12 pt-8">
-             {/* Customer Service */}
-             <div>
-                <h3 className="text-[13px] font-bold text-text-main mb-6 uppercase tracking-wider">Customer Service</h3>
-                <div className="space-y-5">
-                  <div className="flex items-center gap-4">
-                     <Phone className="w-5 h-5 text-brand-primary shrink-0" />
-                     <span className="text-text-muted font-medium text-[15px]">+91 97902 74709</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                     <Clock className="w-5 h-5 text-brand-primary shrink-0" />
-                     <span className="text-text-muted font-medium text-[15px]">24*7 (Mon-Sun)</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                     <Mail className="w-5 h-5 text-brand-primary shrink-0" />
-                     <span className="text-text-muted font-medium text-[15px]">support@edriftelectric.com</span>
-                  </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20">
+
+          {/* Left Column: Contact Info & Map */}
+          <div className="lg:col-span-4 flex flex-col gap-10 pt-8">
+            <div>
+              <h3 className="text-[13px] font-bold text-text-main mb-6 uppercase tracking-wider">Customer Service</h3>
+              <div className="space-y-5">
+                <div className="flex items-center gap-4">
+                  <Phone className="w-5 h-5 text-brand-primary shrink-0" />
+                  <span className="text-text-muted font-medium text-[15px]">+91 97902 74709</span>
                 </div>
-             </div>
+                <div className="flex items-center gap-4">
+                  <Clock className="w-5 h-5 text-brand-primary shrink-0" />
+                  <span className="text-text-muted font-medium text-[15px]">24*7 (Mon-Sun)</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Mail className="w-5 h-5 text-brand-primary shrink-0" />
+                  <span className="text-text-muted font-medium text-[15px]">support@edriftelectric.com</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Map Section - Now integrated into sidebar */}
+            <div className="w-full aspect-square lg:aspect-[4/5] bg-slate-100 relative rounded-xl overflow-hidden shadow-sm border border-slate-200" data-animate>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3891.818267384132!2d77.85720227022637!3d12.72527579278043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae772f630ebaa3%3A0x582a98a4412b5169!2sFORT.Hosur!5e0!3m2!1sen!2sin!4v1777785953434!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="absolute inset-0"
+                title="Google Map"
+              />
+            </div>
           </div>
 
           {/* Right Column: Form */}
@@ -86,22 +98,19 @@ export const ContactSection = () => {
             </h2>
 
             {submitStatus === "success" ? (
-               <motion.div 
-                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                 className="flex flex-col items-center justify-center py-16 text-center"
-               >
-                 <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
-                   <CheckCircle2 className="w-8 h-8" />
-                 </div>
-                 <h3 className="text-2xl font-bold text-text-main mb-3">Request Received!</h3>
-                 <p className="text-text-muted">Our team will get back to you within 24 hours.</p>
-                 <button 
-                   onClick={() => { setSubmitStatus("idle"); setFormData({ name: "", email: "", phone: "", company: "", businessType: "", product: "", message: "" }) }}
-                   className="mt-8 text-brand-primary font-bold hover:underline"
-                 >
-                   Submit another inquiry
-                 </button>
-               </motion.div>
+              <div className="flex flex-col items-center justify-center py-16 text-center" style={{ animation: "heroFadeIn 0.4s ease both" }}>
+                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
+                  <CheckCircle2 className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-bold text-text-main mb-3">Request Received!</h3>
+                <p className="text-text-muted">Our team will get back to you within 24 hours.</p>
+                <button
+                  onClick={() => { setSubmitStatus("idle"); setFormData({ name: "", email: "", phone: "", company: "", businessType: "", product: "", message: "" }); }}
+                  className="mt-8 text-brand-primary font-bold hover:underline"
+                >
+                  Submit another inquiry
+                </button>
+              </div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 {submitStatus === "error" && (
@@ -151,12 +160,9 @@ export const ContactSection = () => {
                 </div>
 
                 <div>
-                  <textarea 
-                    name="message" 
-                    value={formData.message} 
-                    onChange={handleChange} 
-                    rows={4} 
-                    className="w-full bg-white border border-border-strong rounded-md px-4 py-3 outline-none focus:border-brand-primary transition-all text-sm resize-none placeholder:text-text-faint" 
+                  <textarea
+                    name="message" value={formData.message} onChange={handleChange} rows={4}
+                    className="w-full bg-white border border-border-strong rounded-md px-4 py-3 outline-none focus:border-brand-primary transition-all text-sm resize-none placeholder:text-text-faint"
                   />
                   <div className="flex justify-end mt-1.5">
                     <span className="text-[11px] text-text-muted font-medium">{formData.message.length} / 250</span>
@@ -175,23 +181,6 @@ export const ContactSection = () => {
               </form>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Map Section */}
-      <div className="max-w-6xl mx-auto px-6 pb-12 flex justify-center">
-        <div className="w-full max-w-[600px] h-[450px] bg-slate-100 relative rounded-2xl overflow-hidden shadow-md border border-slate-200">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3891.818267384132!2d77.85720227022637!3d12.72527579278043!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae772f630ebaa3%3A0x582a98a4412b5169!2sFORT.Hosur!5e0!3m2!1sen!2sin!4v1777785953434!5m2!1sen!2sin" 
-            width="100%" 
-            height="100%" 
-            style={{ border: 0 }} 
-            allowFullScreen={true}
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0"
-            title="Google Map"
-          />
         </div>
       </div>
     </section>

@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
-import { staggerContainer, fadeIn, motionTokens } from "@/lib/motion";
 
 const faqs = [
   {
@@ -49,19 +47,13 @@ export const FAQ = () => {
   };
 
   return (
-    <section className="py-32 px-6 bg-white overflow-hidden reveal-fade">
+    <section className="py-32 px-6 bg-white overflow-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <div className="max-w-4xl mx-auto">
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-20 text-center"
-        >
+        <div className="mb-20 text-center" data-animate>
           <div className="inline-flex items-center gap-4 mb-6">
             <div className="w-12 h-[1px] bg-border-subtle" />
             <p className="label-uppercase">Inquiry / Support</p>
@@ -71,19 +63,12 @@ export const FAQ = () => {
             Engineering & Procurement <br />
             <span className="text-brand-primary">Support FAQ</span>
           </h2>
-        </motion.div>
+        </div>
 
-        <motion.div 
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="space-y-3"
-        >
+        <div className="space-y-3" data-animate>
           {faqs.map((faq, i) => (
-            <motion.div 
-              key={i} 
-              variants={fadeIn}
+            <div
+              key={i}
               className={`border transition-all duration-300 rounded-lg ${openIndex === i ? "border-brand-primary/20 bg-bg-main" : "border-border-subtle hover:border-stronger-border"}`}
             >
               <button
@@ -97,28 +82,27 @@ export const FAQ = () => {
                   {openIndex === i ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                 </div>
               </button>
-              
-              <AnimatePresence>
-                {openIndex === i && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.32, ease: motionTokens.easeEnter }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-8 pb-8">
-                      <div className="h-px bg-border-subtle mb-6" />
-                      <p className="text-[13px] font-medium text-text-muted leading-relaxed">
-                        {faq.a}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
+
+              {/* CSS-only accordion — height collapses via grid trick */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateRows: openIndex === i ? "1fr" : "0fr",
+                  transition: "grid-template-rows 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                }}
+              >
+                <div className="overflow-hidden">
+                  <div className="px-8 pb-8">
+                    <div className="h-px bg-border-subtle mb-6" />
+                    <p className="text-[13px] font-medium text-text-muted leading-relaxed">
+                      {faq.a}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useParams, notFound } from "next/navigation";
-import { motion } from "framer-motion";
 import { products } from "@/data/products";
 import Image from "next/image";
 import { 
@@ -40,10 +39,9 @@ export default function ProductDetail() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left: Product Image & Badges */}
-            <motion.div
-               initial={{ opacity: 0, x: -30 }}
-               animate={{ opacity: 1, x: 0 }}
+            <div
                className="space-y-8"
+               style={{ animation: "heroFadeUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0ms both" }}
             >
               <div className="relative aspect-[4/3] rounded-[48px] overflow-hidden bg-slate-50 border border-slate-100 shadow-2xl">
                  <Image 
@@ -79,12 +77,11 @@ export default function ProductDetail() {
                     <p className="text-xl font-bold text-slate-900">{product.maxCurrent}</p>
                  </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Right: Overview & Primary Specs */}
-            <motion.div
-               initial={{ opacity: 0, x: 30 }}
-               animate={{ opacity: 1, x: 0 }}
+            <div
+               style={{ animation: "heroFadeUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 100ms both" }}
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary">{product.category}</div>
@@ -108,7 +105,7 @@ export default function ProductDetail() {
                     Technical Specs
                  </Link>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
 

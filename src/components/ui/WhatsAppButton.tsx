@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 
 export const WhatsAppButton = () => {
   const phoneNumber = "919790274709";
@@ -9,20 +8,20 @@ export const WhatsAppButton = () => {
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
   return (
-    <motion.a
+    <a
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
       className="relative group"
+      style={{
+        animation: "fadeInScale 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both",
+        animationDelay: "0.6s",
+      }}
     >
       {/* Pulse Effect */}
       <span className="absolute inset-0 rounded-full bg-emerald-500/40 animate-ping" />
       
-      <div className="relative w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20 text-white overflow-hidden transition-colors hover:bg-[#128C7E]">
+      <div className="relative w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/20 text-white overflow-hidden transition-all duration-250 hover:scale-110 hover:bg-[#128C7E] active:scale-90">
         <svg 
           viewBox="0 0 24 24" 
           width="28" 
@@ -38,6 +37,6 @@ export const WhatsAppButton = () => {
       <span className="absolute right-full mr-4 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-slate-900/90 text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
         Chat on WhatsApp
       </span>
-    </motion.a>
+    </a>
   );
 };

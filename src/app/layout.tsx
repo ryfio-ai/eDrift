@@ -1,16 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { FloatingSupport } from "@/components/layout/FloatingSupport";
 import { CookieConsent } from "@/components/layout/CookieConsent";
+import { ScrollAnimationProvider } from "@/components/layout/ScrollAnimationProvider";
 import { Analytics } from "@vercel/analytics/react";
-import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 
-const geist = Geist({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist",
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -106,14 +118,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geist.variable} h-full antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <head>
         <link rel="icon" href="/images/edrift logo.png" sizes="any" />
         <link rel="apple-touch-icon" href="/images/edrift logo.png" />
       </head>
       <body className="min-h-full flex flex-col bg-white font-sans text-slate-900">
-        <OrganizationSchema />
+        <ScrollAnimationProvider />
         <Navbar />
         <main className="flex-grow">
           {children}

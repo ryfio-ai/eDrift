@@ -40,7 +40,8 @@ const nextConfig: import('next').NextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
           { 
             key: 'Content-Security-Policy', 
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://assets.aceternity.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https://images.unsplash.com https://assets.aceternity.com; connect-src 'self'; frame-src 'self' https://www.google.com; frame-ancestors 'none';" 
+            // Allow Google Fonts and internal assets for styling/rendering
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://assets.aceternity.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://assets.aceternity.com; connect-src 'self'; frame-src 'self' https://www.google.com; frame-ancestors 'none';" 
           },
         ],
       },
