@@ -384,19 +384,6 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
               <span className="opacity-60">{categoryName}</span> • <span className="text-brand-primary">{activeMethod.name}</span>
             </p>
 
-            {/* Derivation Link */}
-            {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
-              <a 
-                href={variable.name === "Inductance" ? "/materials/Inductance derivation.pdf" : "/materials/Derivations.pdf"} 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute top-4 right-0 hidden xl:flex items-center gap-2 px-4 py-2 bg-[#f8fafc] border border-slate-200 rounded-lg text-[11px] font-heading font-bold text-brand-primary hover:bg-brand-primary/5 hover:border-brand-primary/20 transition-all shadow-sm active:scale-95"
-              >
-                <FileText className="w-3.5 h-3.5" />
-                <span>Click here for derivation</span>
-                <ExternalLink className="w-3 h-3 opacity-40" />
-              </a>
-            )}
           </div>
 
           {/* 2. Method Selection - Centered Tabs */}
@@ -459,7 +446,22 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
             <>
               {/* Formula and Image Card */}
           <div className={cn("grid gap-2", variable.image ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
-            <div className="bg-brand-primary-soft border border-brand-primary/10 rounded-[16px] p-2 flex items-center justify-center min-h-[60px] shadow-sm overflow-hidden">
+            <div className="bg-brand-primary-soft border border-brand-primary/10 rounded-[16px] p-2 flex items-center justify-center min-h-[60px] shadow-sm overflow-hidden relative group/formula">
+               
+               {/* Derivation Link - Corrected Position */}
+               {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
+                 <a 
+                   href={variable.name === "Inductance" ? "/materials/Inductance derivation.pdf" : "/materials/Derivations.pdf"} 
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-1 bg-white/90 backdrop-blur-sm border border-brand-primary/10 rounded-md text-[10px] font-heading font-bold text-brand-primary hover:bg-white transition-all shadow-sm active:scale-95 z-10"
+                 >
+                   <FileText className="w-3 h-3" />
+                   <span>Click here for derivation</span>
+                   <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+                 </a>
+               )}
+
                <div className="hide-scroll w-full overflow-x-auto py-3" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                   <style dangerouslySetInnerHTML={{ __html: `
                     .hide-scroll::-webkit-scrollbar { display: none; }
