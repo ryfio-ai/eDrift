@@ -11,9 +11,9 @@ export default function CalculatorLayout({
 }) {
   return (
     <HistoryProvider>
-      <div className="flex flex-col lg:flex-row pt-20 bg-[var(--bg-main)] min-h-screen">
+      <div className="flex flex-col lg:flex-row bg-[var(--bg-main)] h-[calc(100vh-68px)] overflow-hidden">
         {/* Left Sidebar - Exact Reference Width & Border */}
-        <aside className="lg:w-75 lg:shrink-0 lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] overflow-hidden hidden lg:block bg-card border-r border-main">
+        <aside className="lg:w-75 lg:shrink-0 lg:h-full overflow-y-auto hidden lg:block bg-card border-r border-main scrollbar-clean">
           <CalculatorSidebar />
         </aside>
 
@@ -29,8 +29,8 @@ export default function CalculatorLayout({
         </div>
 
         {/* Main Application Area - Optimized Max Width for Calculator Grid */}
-        <main className="flex-1 w-full flex flex-col items-center">
-          <div className="w-full max-w-[1200px] p-4 lg:p-4 flex-1">
+        <main className="flex-1 w-full overflow-y-auto scrollbar-clean">
+          <div className="w-full max-w-[1400px] mx-auto px-4 py-2 lg:px-6 lg:py-4">
              <div className="bg-white/40 rounded-[32px] p-0 md:p-2 backdrop-blur-sm border border-white/20">
                 {children}
              </div>

@@ -60,7 +60,7 @@ export const CalculatorSidebar: React.FC = () => {
         <div className="flex-1 overflow-y-auto scrollbar-clean py-3 pr-1">
           {calculatorConfig.categories.map((category) => (
             <div key={category.name} className="mb-2">
-              <h2 className="text-[12px] font-semibold text-[#64748b] mb-1 px-4 capitalize tracking-normal">
+              <h2 className="text-[15px] font-bold text-[#4DA3FF] mb-1 px-4 capitalize tracking-tight text-left">
                 {category.name.toLowerCase()}
               </h2>
               <ul className="flex flex-col relative space-y-0">
@@ -97,8 +97,8 @@ export const CalculatorSidebar: React.FC = () => {
                         </span>
                         <div className="group relative">
                            <HelpCircle className={cn(
-                              "w-3.5 h-3.5 transition-colors",
-                              isActive ? "text-[#0086c1]/40" : "text-slate-200 group-hover:text-[#64748b]"
+                               "w-3.5 h-3.5 transition-colors",
+                               isActive ? "text-[#0086c1]/40" : "text-slate-200 group-hover:text-[#64748b]"
                            )} />
                            <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 w-48 p-2 bg-slate-900 text-white text-[10px] rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 pointer-events-none shadow-xl">
                               {variable.unit ? `Unit: ${variable.unit} | ` : ""}{variable.helptext}

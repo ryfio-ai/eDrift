@@ -149,7 +149,6 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
   const [formData, setFormData] = useState<Record<string, any>>({ topology: "Buck Converter" });
   const [calculated, setCalculated] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-  const [manualDutyCycle, setManualDutyCycle] = useState(false);
   const [customFormulaStr, setCustomFormulaStr] = useState("x * y + z");
   const [customVariables, setCustomVariables] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -181,7 +180,6 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
         setInputStrings(parsed.inputStrings || {});
         setUnits(parsed.units || {});
         if (parsed.customFormulaStr) setCustomFormulaStr(parsed.customFormulaStr);
-        if (parsed.manualDutyCycle) setManualDutyCycle(parsed.manualDutyCycle);
         if (parsed.result) {
           setCalculated(true);
           setPersistedResult(parsed.result);
@@ -218,12 +216,11 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
         inputStrings,
         units,
         customFormulaStr,
-        manualDutyCycle,
         result: calculated ? persistedResult : null
       }));
     }, 200);
     return () => clearTimeout(timer);
-  }, [methodIndex, inputs, inputStrings, units, customFormulaStr, manualDutyCycle, calculated, persistedResult, stateKey, mounted]);
+  }, [methodIndex, inputs, inputStrings, units, customFormulaStr, calculated, persistedResult, stateKey, mounted]);
 
   // Extract variables for custom formula
   useEffect(() => {
@@ -238,24 +235,6 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
     }
   }, [customFormulaStr, activeMethod]);
 
-  // Auto-calculate Duty Cycle
-  useEffect(() => {
-    if (manualDutyCycle || activeMethod.customFormulaInput) return;
-    const vin = inputs["Vin"];
-    const vout = inputs["Vout"];
-    if (vin > 0 && vout > 0) {
-      let newD = 0;
-      if (formData.topology === "Buck Converter" && vin > vout) {
-        newD = vout / vin;
-      } else if (formData.topology === "Boost Converter" && vout > vin) {
-        newD = 1 - (vin / vout);
-      }
-      if (newD > 0 && Math.abs((inputs["D"] || 0) - newD) > 0.001) {
-         setInputs(prev => ({ ...prev, D: newD }));
-         setInputStrings(prev => ({ ...prev, D: smartFormatText(newD) }));
-      }
-    }
-  }, [inputs["Vin"], inputs["Vout"], formData.topology, manualDutyCycle, activeMethod]);
 
   const toBase = (fieldName: string) => {
     const val = inputs[fieldName] || 0;
@@ -383,66 +362,68 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
     <div
       className="flex flex-col gap-2 print:hidden w-full font-sans"
     >
-      {/* 1. Header Section */}
-      <div className="relative flex flex-col pb-1 border-b border-slate-50 items-center text-center">
-        <h1 className="text-[22px] font-heading font-extrabold text-slate-800 tracking-tight leading-none flex items-center justify-center gap-2">
-          <div className="flex items-center gap-1">
-            <span>{baseName}</span>
-            {showSymbol && <span>({formatLabel(variable.symbol!)})</span>}
-          </div>
-          <span>Calculator</span>
-          {isUnderDevelopment && (
-             <span className="text-[9px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-md tracking-wider uppercase">Under Development</span>
-          )}
-        </h1>
-        <p className="text-[13px] font-sans text-slate-400 font-medium text-center">
-          <span className="text-brand-primary font-heading font-bold">{categoryName}</span> • {activeMethod.name}
-        </p>
 
-        {/* Derivation Link */}
-        {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
-          <a 
-            href={variable.name === "Inductance" ? "/materials/Inductance derivation.pdf" : "/materials/Derivations.pdf"} 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="absolute top-0 right-0 hidden md:flex items-center gap-2 px-4 py-2 bg-[#f8fafc] border border-slate-200 rounded-lg text-[11px] font-heading font-bold text-brand-primary hover:bg-brand-primary/5 hover:border-brand-primary/20 transition-all shadow-sm active:scale-95"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span>Click here for derivation</span>
-            <ExternalLink className="w-3 h-3 opacity-40" />
-          </a>
-        )}
-      </div>
-
-      {/* 2. Method Selection - Left Aligned Tabs */}
-      {variable.methods.length > 1 && (
-        <div className="flex justify-start z-10 relative">
-          <div className="flex bg-slate-100 p-0.5 rounded-xl shadow-inner border border-slate-200">
-            {variable.methods.map((method, index) => (
-              <button
-                key={method.name}
-                onClick={() => setMethodIndex(index)}
-                className={cn(
-                  "px-6 py-2 rounded-lg text-[12px] font-heading font-bold transition-all active:scale-95",
-                  methodIndex === index 
-                    ? "bg-white text-brand-primary shadow-md border border-slate-100" 
-                    : "text-slate-400 hover:text-slate-600"
-                )}
-              >
-                {method.name.startsWith("M") ? `Method ${method.name.replace("M", "")}` : method.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       <div className="flex flex-col xl:flex-row gap-3 items-start">
         {/* Left Content Area */}
         <div className="flex-1 min-w-0 flex flex-col gap-3 relative">
           
+          {/* 1. Header Section */}
+          <div className="relative flex flex-col py-4 items-center text-center">
+            <h1 className="text-[28px] md:text-[32px] font-heading font-extrabold text-[#4DA3FF] tracking-tight leading-tight flex items-center justify-center gap-2 mb-2">
+              <div className="flex items-center gap-2">
+                <span>{baseName}</span>
+                {showSymbol && <span>({formatLabel(variable.symbol!)})</span>}
+              </div>
+              <span>Calculator</span>
+              {isUnderDevelopment && (
+                <span className="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-md tracking-wider uppercase ml-2">Under Development</span>
+              )}
+            </h1>
+            <p className="text-[14px] font-sans text-slate-600 font-bold uppercase tracking-widest">
+              <span className="opacity-60">{categoryName}</span> • <span className="text-brand-primary">{activeMethod.name}</span>
+            </p>
+
+            {/* Derivation Link */}
+            {(variable.name === "Inductance" || variable.name === "RMSCapacitorCurrent" || variable.name === "MinimumCapacitance") && (
+              <a 
+                href={variable.name === "Inductance" ? "/materials/Inductance derivation.pdf" : "/materials/Derivations.pdf"} 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute top-4 right-0 hidden xl:flex items-center gap-2 px-4 py-2 bg-[#f8fafc] border border-slate-200 rounded-lg text-[11px] font-heading font-bold text-brand-primary hover:bg-brand-primary/5 hover:border-brand-primary/20 transition-all shadow-sm active:scale-95"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Click here for derivation</span>
+                <ExternalLink className="w-3 h-3 opacity-40" />
+              </a>
+            )}
+          </div>
+
+          {/* 2. Method Selection - Centered Tabs */}
+          {variable.methods.length > 1 && (
+            <div className="flex justify-center z-10 relative mb-2">
+              <div className="flex bg-slate-100 p-0.5 rounded-xl shadow-inner border border-slate-200">
+                {variable.methods.map((method, index) => (
+                  <button
+                    key={method.name}
+                    onClick={() => setMethodIndex(index)}
+                    className={cn(
+                      "px-6 py-2 rounded-lg text-[12px] font-heading font-bold transition-all active:scale-95",
+                      methodIndex === index 
+                        ? "bg-white text-brand-primary shadow-md border border-slate-100" 
+                        : "text-slate-400 hover:text-slate-600"
+                    )}
+                  >
+                    {method.name.startsWith("M") ? `Method ${method.name.replace("M", "")}` : method.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          
           {isUnderDevelopment && (
-             <div className="absolute inset-0 z-50 flex items-start justify-center pt-8">
-               <div className="bg-white p-8 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col items-center w-[360px] max-w-[95%] text-center border border-slate-100">
+             <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-md rounded-[32px]">
+               <div className="bg-white p-8 rounded-[24px] shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col items-center w-[360px] max-w-[95%] text-center border border-slate-100 animate-in zoom-in-95 duration-300">
                   <div className="w-12 h-12 bg-[#e8f5e9] rounded-full flex items-center justify-center mb-4">
                      <Wrench className="w-5 h-5 text-[#4caf50]" />
                   </div>
@@ -550,7 +531,6 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
 
              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
                 {currentInputFields.map((field) => {
-                   const isDutyCycleField = field.name === "D";
                    return (
                    <div key={field.name} className="flex flex-col gap-1.5 group">
                       <div className="flex items-center justify-between px-1.5">
@@ -560,32 +540,19 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                             </label>
                             <HelpCircle className="w-3.5 h-3.5 text-slate-300 cursor-help" />
                          </div>
-                         {isDutyCycleField && (
-                            <label className="flex items-center gap-1.5 cursor-pointer">
-                               <input 
-                                 type="checkbox" 
-                                 checked={manualDutyCycle} 
-                                 onChange={(e) => setManualDutyCycle(e.target.checked)} 
-                                 className="w-3 h-3 rounded border-slate-300 text-brand-primary focus:ring-brand-primary"
-                               />
-                               <span className="text-[10px] text-slate-400 font-bold uppercase">Manual</span>
-                            </label>
-                         )}
                       </div>
                       <div className="flex items-center gap-3">
                          <div className="relative flex-1">
                             <input 
-                              type="number"
-                              value={inputStrings[field.name] !== undefined ? inputStrings[field.name] : ""}
-                              onChange={(e) => handleInputChange(field.name, e.target.value)}
-                              disabled={isDutyCycleField && !manualDutyCycle}
-                              placeholder="0.0"
-                              className={cn(
-                                "w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-[15px] font-sans font-bold outline-none focus:bg-white transition-all text-slate-800 shadow-inner",
-                                validationErrors[field.name] ? "border-red-400 focus:border-red-500" : "hover:border-slate-300 focus:border-brand-primary",
-                                isDutyCycleField && !manualDutyCycle && "opacity-60 cursor-not-allowed"
-                              )}
-                            />
+                               type="number"
+                               value={inputStrings[field.name] !== undefined ? inputStrings[field.name] : ""}
+                               onChange={(e) => handleInputChange(field.name, e.target.value)}
+                               placeholder="0.0"
+                               className={cn(
+                                 "w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-[15px] font-sans font-bold outline-none focus:bg-white transition-all text-slate-800 shadow-inner",
+                                 validationErrors[field.name] ? "border-red-400 focus:border-red-500" : "hover:border-slate-300 focus:border-brand-primary"
+                               )}
+                             />
                          </div>
                          {field.units && field.units.length > 0 && field.units[0] !== "" && (
                             <div className="w-[100px] shrink-0">
