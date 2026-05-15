@@ -75,11 +75,12 @@ export default function Footer() {
           <div className="w-full lg:w-auto">
             <div className="flex flex-col sm:flex-row items-center gap-3">
               <input 
+                suppressHydrationWarning
                 type="email" 
                 placeholder="Enter your work email" 
                 className="w-full sm:w-[340px] bg-[#1A2940] border border-[#2E4A6B] rounded-lg h-12 px-4 text-white text-sm focus:outline-none focus:border-[#0A4FCC] transition-colors"
               />
-              <button className="w-full sm:w-auto bg-[#0A4FCC] hover:bg-[#002B8A] text-white px-6 h-12 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition-all">
+              <button suppressHydrationWarning className="w-full sm:w-auto bg-[#0A4FCC] hover:bg-[#002B8A] text-white px-6 h-12 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition-all">
                 Subscribe <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -95,8 +96,8 @@ export default function Footer() {
           {/* Column 1: Brand */}
           <div className="lg:col-span-1.5 lg:pr-8">
             <Link href="/" className="inline-block mb-4">
-              <div className="relative w-32 h-8 grayscale invert brightness-[1.5] opacity-90">
-                <Image src="/images/edrift logo.png" alt="eDrift Electric" fill className="object-contain object-left" />
+              <div className="relative w-32 h-8 brightness-0 invert opacity-100">
+                <Image src="/images/edrift logo.png" alt="eDrift Electric" fill className="object-contain object-left" sizes="128px" />
               </div>
             </Link>
             <p className="text-sm text-[#9CA3AF] leading-relaxed mb-6">
@@ -197,7 +198,7 @@ export default function Footer() {
               <Link href="/contact" className="w-full bg-[#0A4FCC] hover:bg-[#002B8A] text-white px-5 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition-all">
                 Partner With Us <ArrowRight className="w-4 h-4" />
               </Link>
-              <button className="w-full bg-transparent border border-[#2E4A6B] text-[#D1D5DB] hover:text-white hover:border-[#4A6A8B] px-5 py-2.5 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all">
+              <button suppressHydrationWarning className="w-full bg-transparent border border-[#2E4A6B] text-[#D1D5DB] hover:text-white hover:border-[#4A6A8B] px-5 py-2.5 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all">
                 Download Company Deck <Download className="w-4 h-4" />
               </button>
             </div>

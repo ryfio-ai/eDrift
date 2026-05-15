@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { ArrowRight, Zap, Cpu, Gauge, Layers, ZoomIn } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/data/products";
 import { ImageLightbox } from "@/components/ui/ImageLightbox";
@@ -19,9 +20,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     <>
       <div className="product-card group flex flex-col bg-white rounded-2xl overflow-hidden h-full relative">
         {/* Product Image Area */}
-        <div
+        <Link
+          href={`/products/${product.slug}`}
           className="block aspect-[4/3] relative overflow-hidden bg-slate-50 cursor-pointer group/image border-b border-border-subtle/50"
-          onClick={() => setIsLightboxOpen(true)}
         >
           <Image
             src={product.image}
@@ -45,7 +46,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               {product.series}
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Content Area */}
         <div className="p-6 flex-grow flex flex-col">
@@ -58,9 +59,11 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 {product.metadata.sku}
               </span>
             </div>
-            <h3 className="text-xl font-bold text-text-main mb-2 tracking-tight">
-              {product.name}
-            </h3>
+            <Link href={`/products/${product.slug}`}>
+              <h3 className="text-xl font-bold text-text-main mb-2 tracking-tight hover:text-brand-primary transition-colors cursor-pointer">
+                {product.name}
+              </h3>
+            </Link>
             <p className="text-text-muted text-sm leading-relaxed line-clamp-2">
               {product.tagline}
             </p>
@@ -103,6 +106,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           {/* Primary Action */}
           <div className="mt-auto">
             <button
+              suppressHydrationWarning
               onClick={() => setIsQuoteModalOpen(true)}
               className="w-full h-12 bg-white text-brand-primary border-2 border-brand-primary font-bold tracking-wide rounded-lg flex items-center justify-center gap-2 transition-all hover:bg-brand-primary hover:text-white group/btn shadow-sm hover:shadow-md"
             >

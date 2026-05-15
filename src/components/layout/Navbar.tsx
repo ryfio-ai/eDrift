@@ -153,6 +153,7 @@ export const Navbar = () => {
                 alt="eDrift Electric"
                 fill
                 className="object-contain object-left"
+                sizes="144px"
                 priority
               />
             </div>
@@ -167,7 +168,7 @@ export const Navbar = () => {
               onMouseEnter={() => enter("products")}
               onMouseLeave={leave}
             >
-              <button className={navBtn(isProducts || activeMenu === "products")}>
+              <button suppressHydrationWarning className={navBtn(isProducts || activeMenu === "products")}>
                 Products
                 <ChevronDown
                   className="w-3.5 h-3.5 transition-transform duration-200"
@@ -236,7 +237,7 @@ export const Navbar = () => {
               onMouseEnter={() => enter("resources")}
               onMouseLeave={leave}
             >
-              <button className={navBtn(isResources || activeMenu === "resources")}>
+              <button suppressHydrationWarning className={navBtn(isResources || activeMenu === "resources")}>
                 Resources
                 <ChevronDown
                   className="w-3.5 h-3.5 transition-transform duration-200"
@@ -313,7 +314,7 @@ export const Navbar = () => {
               onMouseEnter={() => enter("company")}
               onMouseLeave={leave}
             >
-              <button className={navBtn(isCompany || activeMenu === "company")}>
+              <button suppressHydrationWarning className={navBtn(isCompany || activeMenu === "company")}>
                 Company
                 <ChevronDown
                   className="w-3.5 h-3.5 transition-transform duration-200"
@@ -378,6 +379,7 @@ export const Navbar = () => {
 
           {/* ── MOBILE HAMBURGER ── */}
           <button
+            suppressHydrationWarning
             className="lg:hidden p-2 text-[#374151] hover:text-[#0A4FCC] transition-colors"
             onClick={mobileOpen ? closeMobile : openMobile}
             aria-label="Toggle navigation menu"
@@ -408,7 +410,7 @@ export const Navbar = () => {
             {/* header */}
             <div className="flex items-center justify-between px-6 border-b border-[#E5E7EB]" style={{ height: 68 }}>
               <div className="relative w-32 h-8">
-                <Image src="/images/edrift logo.png" alt="eDrift" fill className="object-contain object-left" />
+                <Image src="/images/edrift logo.png" alt="eDrift" fill className="object-contain object-left" sizes="128px" />
               </div>
               <button onClick={closeMobile} className="p-2 text-[#9CA3AF] hover:text-[#374151]">
                 <X className="w-5 h-5" />

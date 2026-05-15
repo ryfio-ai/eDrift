@@ -121,17 +121,17 @@ export const ContactSection = () => {
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <input required type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
-                  <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
+                  <input suppressHydrationWarning required type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
+                  <input suppressHydrationWarning required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
-                  <input type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Company Name (Optional)" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
+                  <input suppressHydrationWarning required type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
+                  <input suppressHydrationWarning type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Company Name (Optional)" className="w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm placeholder:text-text-faint" />
                 </div>
 
                 <div className="relative">
-                  <select required name="businessType" value={formData.businessType} onChange={handleChange} className={cn("w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm appearance-none cursor-pointer", formData.businessType ? "text-text-main" : "text-text-faint")}>
+                  <select suppressHydrationWarning required name="businessType" value={formData.businessType} onChange={handleChange} className={cn("w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm appearance-none cursor-pointer", formData.businessType ? "text-text-main" : "text-text-faint")}>
                     <option value="" disabled hidden>Type of Business</option>
                     <option value="Residential Welfare Associations">Residential Welfare Associations/Community Charging</option>
                     <option value="Builders/Developers">Builders/Developers/New Construction</option>
@@ -148,7 +148,7 @@ export const ContactSection = () => {
                 </div>
 
                 <div className="relative">
-                  <select required name="product" value={formData.product} onChange={handleChange} className={cn("w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm appearance-none cursor-pointer", formData.product ? "text-text-main" : "text-text-faint")}>
+                  <select suppressHydrationWarning required name="product" value={formData.product} onChange={handleChange} className={cn("w-full bg-white border border-border-strong h-[46px] rounded-md px-4 outline-none focus:border-brand-primary transition-all text-sm appearance-none cursor-pointer", formData.product ? "text-text-main" : "text-text-faint")}>
                     <option value="" disabled hidden>What products are you interested in?</option>
                     <option value="Portable EV Charger">Portable EV Charger</option>
                     <option value="On Board Charger">On Board Charger</option>
@@ -170,7 +170,7 @@ export const ContactSection = () => {
                 </div>
 
                 <div className="flex justify-end mt-2">
-                  <button type="submit" disabled={isSubmitting} className="w-full md:w-[140px] bg-brand-primary hover:bg-brand-primary/90 text-white h-[42px] rounded-full font-bold text-sm flex items-center justify-center transition-colors shadow-sm">
+                  <button suppressHydrationWarning type="submit" disabled={isSubmitting} className="w-full md:w-[140px] bg-brand-primary hover:bg-brand-primary/90 text-white h-[42px] rounded-full font-bold text-sm flex items-center justify-center transition-colors shadow-sm">
                     {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit"}
                   </button>
                 </div>

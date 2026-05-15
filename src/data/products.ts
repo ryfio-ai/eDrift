@@ -33,7 +33,7 @@ export const products: Product[] = [
   // ELITE SERIES - PORTABLE
   {
     id: "pt48-50",
-    slug: "portable-charger-pt48-50",
+    slug: "pt48-50-portable-charger",
     name: "PT48-50 Portable Charger",
     series: "Elite",
     category: "Portable EV Charger",
@@ -50,7 +50,7 @@ export const products: Product[] = [
   },
   {
     id: "pt96-50",
-    slug: "portable-charger-pt96-50",
+    slug: "pt96-50-portable-charger",
     name: "PT96-50 Portable Charger",
     series: "Elite",
     category: "Portable EV Charger",

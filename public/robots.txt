@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
 
+# Sitemap location
 Sitemap: https://www.edriftelectric.com/sitemap.xml
+
+# Disallow calculator API endpoints
+Disallow: /api/calculate/
+
+# Disallow admin/private areas
+Disallow: /admin/
+Disallow: /internal/

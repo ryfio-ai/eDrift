@@ -25,8 +25,34 @@ export default function ProductDetail() {
     notFound();
   }
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": `https://www.edriftelectric.com${product.image}`,
+    "description": product.description,
+    "sku": product.metadata.sku,
+    "brand": {
+      "@type": "Brand",
+      "name": "eDrift Electric"
+    },
+    "manufacturer": {
+      "@type": "Organization",
+      "name": "eDrift Electric Private Limited"
+    },
+    "offers": {
+      "@type": "Offer",
+      "availability": "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition"
+    }
+  };
+
   return (
     <main className="pt-32 bg-white min-h-screen font-sans">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-6">
         {/* Breadcrumb & Navigation */}
         <div className="mb-12">
@@ -49,6 +75,7 @@ export default function ProductDetail() {
                    alt={product.name}
                    fill
                    className="object-cover opacity-90"
+                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
                  />
                  <div className="absolute top-8 left-8 flex flex-wrap gap-3">
                     <span className="px-5 py-2 rounded-full bg-brand-primary text-[10px] font-black uppercase tracking-[0.1em] text-white shadow-xl shadow-brand-primary/20">

@@ -69,7 +69,7 @@ export const Clients = () => {
         <div className="pt-20 border-t border-border-subtle">
           <div className="text-center mb-16">
             <p className="text-[10px] tracking-[0.2em] text-text-faint font-semibold uppercase mb-2">Technical Compliance</p>
-            <h3 className="text-2xl font-bold text-text-main">Validated Certification Stack</h3>
+            <h2 className="text-2xl font-bold text-text-main">Validated Certification Stack</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" data-animate-stagger>
             {badges.map((badge, i) => (
@@ -78,7 +78,7 @@ export const Clients = () => {
                   <Award className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-text-main mb-1">{badge.label}</p>
+                  <h3 className="text-sm font-bold text-text-main mb-1">{badge.label}</h3>
                   <p className="text-[10px] font-semibold tracking-widest text-text-faint uppercase">{badge.desc}</p>
                 </div>
               </div>

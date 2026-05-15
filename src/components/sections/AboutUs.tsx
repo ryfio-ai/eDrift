@@ -53,7 +53,7 @@ export const AboutUs = () => {
                 <div className="w-12 h-12 rounded bg-white border border-border-subtle flex items-center justify-center text-brand-primary mb-6 group-hover:bg-brand-primary group-hover:text-white transition-all">
                   <feature.icon className="w-5 h-5 transition-transform group-hover:scale-110" />
                 </div>
-                <h4 className="text-lg font-bold text-text-main mb-2 tracking-tight">{feature.title}</h4>
+                <h3 className="text-lg font-bold text-text-main mb-2 tracking-tight">{feature.title}</h3>
                 <p className="text-[11px] font-medium text-text-muted leading-relaxed">{feature.desc}</p>
               </div>
             ))}

@@ -72,6 +72,7 @@ export const FAQ = () => {
               className={`border transition-all duration-300 rounded-lg ${openIndex === i ? "border-brand-primary/20 bg-bg-main" : "border-border-subtle hover:border-stronger-border"}`}
             >
               <button
+                suppressHydrationWarning
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 className="w-full px-8 py-6 flex items-center justify-between text-left group"
               >

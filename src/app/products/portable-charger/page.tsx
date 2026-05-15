@@ -4,7 +4,10 @@ import React from "react";
 import { Badge } from "@/components/ui/Badge";
 import { GlowButton } from "@/components/ui/GlowButton";
 import Link from "next/link";
-import { ArrowLeft, Battery, Zap } from "lucide-react";
+import { ArrowLeft, Battery, Zap, ChevronLeft, ChevronRight } from "lucide-react";
+import { products } from "@/data/products";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 const Portable_Specs = [
   { label: "Config. Output Voltage", value: "48V, 60V, 72V, 84V, 96V, 240V, & 400V Nominal" },
@@ -17,6 +20,16 @@ const Portable_Specs = [
 ];
 
 export default function PortableChargerPage() {
+  const portableProducts = products.filter(p => p.category === "Portable EV Charger");
+  const [currentIdx, setCurrentIdx] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIdx(prev => (prev + 1) % portableProducts.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [portableProducts.length]);
+
   return (
     <div className="pt-32 pb-24 px-6 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -48,15 +61,60 @@ export default function PortableChargerPage() {
            </div>
 
            <div
-              className="relative aspect-square rounded-[32px] overflow-hidden group shadow-2xl bg-bg-main border border-border-subtle"
+              className="relative aspect-square rounded-[32px] overflow-hidden group shadow-2xl bg-white border border-border-subtle"
               style={{ animation: "heroFadeUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 100ms both" }}
            >
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-transparent" />
-              <div className="absolute inset-0 flex items-center justify-center flex-col gap-6">
-                  <div className="w-32 h-32 rounded-3xl bg-white shadow-xl flex items-center justify-center border border-border-subtle">
-                     <Battery className="w-16 h-16 text-brand-primary" />
-                  </div>
-                  <Badge variant="cyan" className="font-semibold shadow-sm">Premium Grade Components</Badge>
+              <div className="absolute inset-0 bg-slate-50/50" />
+              
+              {/* Image Slider */}
+              <div className="relative w-full h-full flex items-center justify-center p-12">
+                <div className="relative w-full h-full">
+                  {portableProducts.map((product, idx) => (
+                    <div
+                      key={product.id}
+                      className={cn(
+                        "absolute inset-0 transition-all duration-700 ease-in-out flex flex-col items-center justify-center",
+                        idx === currentIdx ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+                      )}
+                    >
+                      <div className="relative w-full h-full transform hover:scale-105 transition-transform duration-500">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          className="object-contain mix-blend-multiply"
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          priority={idx === 0}
+                        />
+                      </div>
+                      
+                      {/* Product Label */}
+                      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border border-border-subtle shadow-sm flex items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-brand-primary">{product.metadata.sku}</span>
+                        <div className="w-1 h-1 rounded-full bg-slate-300" />
+                        <span className="text-[10px] font-bold text-slate-900">{product.powerRating}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Navigation dots */}
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                {portableProducts.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentIdx(i)}
+                    className={cn(
+                      "h-1.5 rounded-full transition-all duration-300",
+                      i === currentIdx ? "w-6 bg-brand-primary" : "w-1.5 bg-slate-200"
+                    )}
+                  />
+                ))}
+              </div>
+
+              <div className="absolute top-6 right-6 z-20">
+                <Badge variant="cyan" className="font-semibold shadow-sm">Premium Grade Components</Badge>
               </div>
            </div>
         </div>

@@ -109,7 +109,7 @@ export const ChatWidget = () => {
                 </div>
               </div>
             </div>
-            <button onClick={toggleOpen} className="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center transition-all group">
+            <button suppressHydrationWarning onClick={toggleOpen} className="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center transition-all group">
               <X className="w-5 h-5 text-slate-400 group-hover:rotate-90 transition-transform" />
             </button>
           </div>
@@ -172,6 +172,7 @@ export const ChatWidget = () => {
           <div className="p-8 pt-4 bg-white/80 backdrop-blur-md border-t border-slate-100">
             <div className="relative">
               <input
+                suppressHydrationWarning
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
@@ -195,6 +196,7 @@ export const ChatWidget = () => {
 
       {/* Toggle Button */}
       <button
+        suppressHydrationWarning
         onClick={toggleOpen}
         className="w-14 h-14 rounded-[20px] bg-brand-primary text-white shadow-[0_12px_24px_-6px_rgba(0,134,193,0.4)] flex items-center justify-center relative group overflow-hidden border-2 border-white/40 ring-1 ring-brand-primary/20 transition-all hover:scale-105 hover:-translate-y-0.5 active:scale-95 z-[1001]"
       >

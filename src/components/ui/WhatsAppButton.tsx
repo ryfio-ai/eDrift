@@ -9,6 +9,7 @@ export const WhatsAppButton = () => {
 
   return (
     <a
+      suppressHydrationWarning
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"

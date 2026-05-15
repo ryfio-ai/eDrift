@@ -24,6 +24,16 @@ const nextConfig: import('next').NextConfig = {
         destination: 'https://www.edriftelectric.com/:path*',
         permanent: true,
       },
+      {
+        source: '/design-calculator/:slug',
+        destination: '/engineering-tools/:slug-calculator',
+        permanent: true,
+      },
+      {
+        source: '/about',
+        destination: '/about-edrift-electric-company',
+        permanent: true,
+      },
     ];
   },
   async headers() {

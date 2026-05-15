@@ -60,15 +60,16 @@ export const ProductCatalog = () => {
             <div className="w-8 h-px bg-brand-primary" />
             <div className="text-[10px] tracking-[0.15em] font-semibold text-text-faint uppercase">Product Engineering Catalog</div>
           </div>
-          <h2 className="mb-10 text-text-main">
+          <h1 className="mb-10 text-text-main">
             Automotive Grade <span className="text-brand-primary">Power Systems</span>
-          </h2>
+          </h1>
 
           {/* Search Bar */}
           <div className="flex flex-col lg:flex-row items-center gap-6">
             <div className="relative group flex-grow w-full">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-faint group-focus-within:text-brand-primary transition-colors" />
               <input
+                suppressHydrationWarning
                 type="text"
                 placeholder="Search by SKU, power rating, or application..."
                 className="w-full bg-white border border-border-strong rounded-lg h-12 pl-12 pr-6 outline-none focus:border-brand-primary transition-all text-sm font-medium text-text-main"
