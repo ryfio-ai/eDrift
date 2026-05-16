@@ -76,76 +76,84 @@ export const ChatWidget = () => {
       requestAnimationFrame(() => setPanelMounted(true));
     } else {
       setPanelMounted(false);
-      setTimeout(() => setIsOpen(false), 280);
+      setTimeout(() => setIsOpen(false), 400);
     }
   };
 
   return (
-    <div className="flex flex-col items-end">
+    <div className="flex flex-col items-end relative">
       {isOpen && (
         <div
-          className="mb-4 w-[360px] h-[520px] bg-[#fcfdfe]/95 backdrop-blur-2xl border border-slate-200/50 flex flex-col overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] rounded-[32px] z-[1000] ring-1 ring-black/5"
+          className="fixed inset-x-4 md:inset-auto bottom-24 md:bottom-auto md:right-24 md:top-1/2 md:-translate-y-1/2 w-auto md:w-[400px] h-[70vh] md:h-auto md:max-h-[85vh] bg-white/98 backdrop-blur-3xl border border-slate-200/60 flex flex-col overflow-hidden shadow-[0_24px_80px_-12px_rgba(0,0,0,0.2)] rounded-[32px] z-[1000]"
           style={{
             opacity: panelMounted ? 1 : 0,
-            transform: panelMounted ? "translateY(0) scale(1)" : "translateY(30px) scale(0.9)",
-            filter: panelMounted ? "blur(0px)" : "blur(10px)",
-            transition: "opacity 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.28s ease",
+            transform: panelMounted 
+              ? "translate(0, 0) scale(1)" 
+              : "translate(0, 20px) scale(0.95)",
+            filter: panelMounted ? "blur(0px)" : "blur(8px)",
+            transition: "all 0.4s cubic-bezier(0.19, 1, 0.22, 1)",
           }}
         >
-          {/* Premium Header */}
-          <div className="px-6 py-5 bg-white/40 border-b border-slate-100 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center shadow-lg shadow-slate-900/10 border border-white/10">
-                <Image src="/images/edrift logo.png" alt="eDrift" width={28} height={28} className="object-contain" />
-              </div>
-              <div>
-                <h3 className="font-bold text-slate-900 tracking-tight">eDrift AI Expert</h3>
-                <div className="flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </span>
-                  <span className="text-[10px] uppercase font-black tracking-widest text-slate-400">Low Latency Groq</span>
+          {/* Header */}
+          <div className="px-8 py-6 bg-gradient-to-br from-slate-900 to-slate-800 text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/20 blur-[50px] rounded-full -mr-16 -mt-16" />
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 p-2">
+                  <Image src="/images/edrift logo.png" alt="eDrift" width={32} height={32} className="object-contain brightness-0 invert" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg tracking-tight">eDrift Assistant</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
+                    <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/50">Engineering AI</span>
+                  </div>
                 </div>
               </div>
+              <button 
+                suppressHydrationWarning 
+                onClick={toggleOpen} 
+                className="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all group border border-white/10"
+              >
+                <X className="w-5 h-5 text-white/80 group-hover:rotate-90 transition-transform" />
+              </button>
             </div>
-            <button suppressHydrationWarning onClick={toggleOpen} className="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center transition-all group">
-              <X className="w-5 h-5 text-slate-400 group-hover:rotate-90 transition-transform" />
-            </button>
           </div>
 
-          {/* Message Feed */}
-          <div ref={scrollRef} className="flex-grow overflow-y-auto p-8 space-y-8 scroll-smooth no-scrollbar">
+          {/* Messages */}
+          <div ref={scrollRef} className="flex-grow overflow-y-auto p-6 space-y-6 scroll-smooth bg-slate-50/30">
             {messages.map((m, i) => (
-              <div key={i} className={cn("flex flex-col gap-3", m.role === "user" ? "items-end" : "items-start")}>
+              <div key={i} className={cn("flex flex-col gap-2", m.role === "user" ? "items-end" : "items-start")}>
                 <div className={cn(
-                  "max-w-[85%] px-5 py-4 rounded-[24px] text-[14px] leading-relaxed shadow-sm",
+                  "max-w-[85%] px-5 py-4 rounded-3xl text-[14px] leading-relaxed",
                   m.role === "user"
-                    ? "bg-brand-primary text-white font-medium rounded-tr-none"
-                    : "bg-white text-slate-700 border border-slate-100 rounded-tl-none"
+                    ? "bg-brand-primary text-white font-medium rounded-tr-sm shadow-lg shadow-brand-primary/10"
+                    : "bg-white text-slate-800 border border-slate-100 rounded-tl-sm shadow-sm"
                 )}>
                   {m.content}
                 </div>
                 {m.action && (
-                  <div className="w-full max-w-[85%]" style={{ animation: "heroFadeIn 0.3s ease both" }}>
+                  <div className="w-full max-w-[85%]" style={{ animation: "heroFadeIn 0.5s ease both" }}>
                     <a
                       href={getActionUrl(m.action)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between gap-3 p-4 bg-white border border-slate-100 rounded-[20px] hover:border-brand-primary transition-all group shadow-md hover:shadow-lg"
+                      className="flex items-center justify-between gap-4 p-5 bg-white border border-slate-100 rounded-2xl hover:border-brand-primary hover:shadow-xl transition-all group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-bg-soft flex items-center justify-center text-brand-primary">
-                          {m.action.type === "product" ? <Box className="w-5 h-5" /> : <Calculator className="w-5 h-5" />}
+                        <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-brand-primary">
+                          {m.action.type === "product" ? <Box className="w-6 h-6" /> : <Calculator className="w-6 h-6" />}
                         </div>
                         <div>
-                          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Recommendation</span>
-                          <span className="block text-[13px] font-bold text-slate-800 capitalize">
-                            {m.action.type === "product" ? "View Product Specs" : "Open Engineering Tool"}
+                          <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Recommended</span>
+                          <span className="block text-[13px] font-bold text-slate-900 group-hover:text-brand-primary transition-colors">
+                            {m.action.type === "product" ? "Product Datasheet" : "Engineering Calculator"}
                           </span>
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-brand-primary group-hover:translate-x-1 transition-all" />
+                      <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-brand-primary/10 transition-colors">
+                        <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-brand-primary group-hover:translate-x-1 transition-all" />
+                      </div>
                     </a>
                   </div>
                 )}
@@ -153,43 +161,43 @@ export const ChatWidget = () => {
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-white px-5 py-4 rounded-[24px] rounded-tl-none border border-slate-100 shadow-sm">
-                  <div className="flex gap-1">
-                    {[0, 1, 2].map((dot) => (
-                      <span
-                        key={dot}
-                        className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-pulse"
-                        style={{ animationDelay: `${dot * 0.2}s` }}
-                      />
-                    ))}
-                  </div>
+                <div className="bg-white px-5 py-4 rounded-3xl rounded-tl-sm border border-slate-100 shadow-sm flex gap-1.5">
+                  {[0, 1, 2].map((dot) => (
+                    <span
+                      key={dot}
+                      className="w-1.5 h-1.5 rounded-full bg-brand-primary animate-bounce"
+                      style={{ animationDelay: `${dot * 0.15}s` }}
+                    />
+                  ))}
                 </div>
               </div>
             )}
           </div>
 
-          {/* Input Layer */}
-          <div className="p-8 pt-4 bg-white/80 backdrop-blur-md border-t border-slate-100">
-            <div className="relative">
+          {/* Footer Input */}
+          <div className="p-6 bg-white border-t border-slate-100">
+            <div className="relative flex items-center">
               <input
                 suppressHydrationWarning
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Ask about products or calculations..."
-                className="w-full bg-slate-50 border border-slate-100 rounded-[28px] pl-6 pr-16 py-5 text-[14px] font-medium text-slate-800 focus:bg-white focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-all"
+                placeholder="How can we help?"
+                className="w-full bg-slate-50/50 border border-slate-200 rounded-2xl pl-6 pr-14 py-4 text-[14px] font-medium text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 outline-none transition-all"
               />
               <button
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-brand-primary text-white flex items-center justify-center hover:scale-[1.05] active:scale-[0.95] transition-all shadow-xl shadow-brand-primary/30 disabled:opacity-30 disabled:scale-100 disabled:shadow-none"
+                className="absolute right-2 w-11 h-11 rounded-xl bg-brand-primary text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-lg shadow-brand-primary/20 disabled:opacity-30 disabled:scale-100 disabled:shadow-none"
               >
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
               </button>
             </div>
-            <p className="text-center mt-4 text-[10px] text-slate-400 font-medium tracking-wide uppercase">
-              Advanced Llama 3.3 • Real-time Engineering Context
-            </p>
+            <div className="mt-4 flex items-center justify-center gap-2 text-[10px] text-slate-400 font-bold uppercase tracking-[0.15em]">
+              <span className="w-1 h-1 rounded-full bg-slate-300" />
+              Llama 3.3 Engine
+              <span className="w-1 h-1 rounded-full bg-slate-300" />
+            </div>
           </div>
         </div>
       )}
@@ -198,10 +206,17 @@ export const ChatWidget = () => {
       <button
         suppressHydrationWarning
         onClick={toggleOpen}
-        className="w-14 h-14 rounded-[20px] bg-brand-primary text-white shadow-[0_12px_24px_-6px_rgba(0,134,193,0.4)] flex items-center justify-center relative group overflow-hidden border-2 border-white/40 ring-1 ring-brand-primary/20 transition-all hover:scale-105 hover:-translate-y-0.5 active:scale-95 z-[1001]"
+        className={cn(
+          "w-16 h-16 rounded-2xl bg-brand-primary text-white shadow-2xl flex items-center justify-center relative group overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95 z-[1001]",
+          isOpen && "bg-slate-900"
+        )}
       >
-        <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
-        {isOpen ? <X className="w-6 h-6" /> : <MessageCircle className="w-6 h-6" />}
+        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+        {isOpen ? (
+          <X className="w-8 h-8 animate-in spin-in-90 duration-300" />
+        ) : (
+          <MessageCircle className="w-8 h-8 animate-in zoom-in-50 duration-300" />
+        )}
       </button>
     </div>
   );

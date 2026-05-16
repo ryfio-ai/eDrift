@@ -85,12 +85,14 @@ export default function CareersClient() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
             <button 
+              suppressHydrationWarning
               onClick={() => scrollTo("open-roles")}
               className="w-full sm:w-auto bg-[#0A4FCC] hover:bg-[#002B8A] text-white px-8 h-14 rounded-lg font-bold text-base transition-all shadow-lg flex items-center justify-center gap-2"
             >
               View Open Roles <ChevronRight className="w-4 h-4 mt-0.5" />
             </button>
             <button 
+              suppressHydrationWarning
               onClick={() => scrollTo("notify")}
               className="w-full sm:w-auto bg-transparent border border-white/20 hover:border-white/40 text-white px-8 h-14 rounded-lg font-bold text-base transition-all flex items-center justify-center gap-2"
             >
@@ -130,6 +132,7 @@ export default function CareersClient() {
           ].map((item) => (
             <button
               key={item.id}
+              suppressHydrationWarning
               onClick={() => scrollTo(item.id)}
               className={cn(
                 "h-full text-[13px] font-semibold transition-all relative px-1",
@@ -419,6 +422,7 @@ export default function CareersClient() {
               {["All", "Power Electronics", "Firmware", "Research"].map((tab) => (
                 <button 
                   key={tab}
+                  suppressHydrationWarning
                   className={cn(
                     "px-5 py-2 rounded-full text-[13px] font-semibold transition-all",
                     tab === "All" ? "bg-[#0A4FCC] text-white shadow-md" : "bg-[#E5E7EB] text-[#374151] hover:bg-[#D1D5DB]"
@@ -440,6 +444,7 @@ export default function CareersClient() {
               We are a lean, focused engineering team. We hire rarely but deliberately — looking for exceptional engineers who want to work on some of the hardest problems in power electronics.
             </p>
             <button 
+              suppressHydrationWarning
               onClick={() => scrollTo("notify")}
               className="bg-[#0A4FCC] hover:bg-[#002B8A] text-white px-8 h-12 rounded-lg font-bold text-sm transition-all shadow-md inline-flex items-center gap-2"
             >
@@ -493,16 +498,19 @@ export default function CareersClient() {
           <form className="max-w-lg mx-auto bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 text-left">
             <div className="space-y-4">
               <input 
+                suppressHydrationWarning
                 type="text" 
                 placeholder="Full Name" 
                 className="w-full bg-white border border-transparent rounded-lg h-12 px-4 text-sm focus:outline-none focus:border-white transition-all placeholder:text-[#4B5563]" 
               />
               <input 
+                suppressHydrationWarning
                 type="email" 
                 placeholder="Work Email" 
                 className="w-full bg-white border border-transparent rounded-lg h-12 px-4 text-sm focus:outline-none focus:border-white transition-all placeholder:text-[#4B5563]" 
               />
               <select 
+                suppressHydrationWarning
                 className="w-full bg-white border border-transparent rounded-lg h-12 px-4 text-sm focus:outline-none focus:border-white transition-all text-[#4B5563] appearance-none cursor-pointer"
                 defaultValue=""
               >
@@ -513,7 +521,7 @@ export default function CareersClient() {
                 <option value="Controls">Controls</option>
                 <option value="Other">Other</option>
               </select>
-              <button className="w-full bg-white text-[#0A4FCC] hover:bg-[#E8F0FF] h-14 rounded-lg font-bold text-base transition-all shadow-lg mt-4">
+              <button suppressHydrationWarning className="w-full bg-white text-[#0A4FCC] hover:bg-[#E8F0FF] h-14 rounded-lg font-bold text-base transition-all shadow-lg mt-4">
                 Notify Me When Roles Open
               </button>
             </div>
