@@ -11,14 +11,14 @@ export default function CalculatorLayout({
 }) {
   return (
     <HistoryProvider>
-      <div className="flex flex-col lg:flex-row bg-[var(--bg-main)] h-[calc(100vh-68px)] overflow-hidden">
+      <div className="flex flex-col lg:flex-row bg-[var(--bg-main)] h-[calc(100vh-68px)] lg:h-[calc(100vh-68px)] overflow-hidden print:h-auto print:overflow-visible print:bg-white">
         {/* Left Sidebar - Exact Reference Width & Border */}
-        <aside className="lg:w-75 lg:shrink-0 lg:h-full overflow-y-auto hidden lg:block bg-card border-r border-main scrollbar-clean">
+        <aside className="lg:w-75 lg:shrink-0 lg:h-full overflow-y-auto hidden lg:block bg-card border-r border-main scrollbar-clean print:hidden">
           <CalculatorSidebar />
         </aside>
 
         {/* Mobile Sidebar Trigger (Placeholder for Drawer behavior) */}
-        <div className="lg:hidden p-4 bg-white border-b border-main flex items-center justify-between">
+        <div className="lg:hidden p-4 bg-white border-b border-main flex items-center justify-between print:hidden">
            <span className="text-xs font-bold text-primary uppercase tracking-widest">Engineering Suite</span>
            <button className="text-muted">
               {/* This would trigger a mobile drawer if implemented */}

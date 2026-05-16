@@ -138,7 +138,7 @@ export const Navbar = () => {
       {/* ── FIXED BAR ── */}
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[100] bg-white border-b border-[#E5E7EB] transition-shadow duration-300",
+          "fixed top-0 left-0 right-0 z-[100] bg-white border-b border-[#E5E7EB] transition-shadow duration-300 print:hidden",
           scrolled && "shadow-[0_4px_20px_rgba(0,0,0,0.08)]"
         )}
         style={{ height: 68 }}

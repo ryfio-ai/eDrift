@@ -346,8 +346,36 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const exportToPDF = () => { /* ... */ };
-  const exportToExcel = () => { /* ... */ };
+  const exportToPDF = () => {
+    window.print();
+  };
+  const exportToExcel = () => {
+    if (history.length === 0) return;
+    
+    const XLSX = require("xlsx");
+    const data = history.map(item => {
+      const row: any = {
+        "Date": new Date(item.timestamp).toLocaleString(),
+        "Category": item.categoryName,
+        "Variable": item.variableLabel,
+        "Method": item.methodName,
+        "Result": item.primaryValue,
+        "Unit": item.primaryUnit,
+      };
+      
+      // Add inputs to columns
+      Object.entries(item.inputs).forEach(([key, val]) => {
+        row[`Input: ${key} (${item.inputUnits[key] || ''})`] = val;
+      });
+      
+      return row;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Calculation History");
+    XLSX.writeFile(workbook, `eDrift_Calculations_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
 
   const currentInputFields = activeMethod.customFormulaInput 
     ? customVariables.map(v => ({ name: v, label: v, helptext: `Variable ${v}`, units: [""] }))
@@ -360,11 +388,11 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
 
   return (
     <div
-      className="flex flex-col gap-2 print:hidden w-full font-sans"
+      className="flex flex-col gap-2 w-full font-sans"
     >
 
 
-      <div className="flex flex-col xl:flex-row gap-3 items-start">
+      <div className="flex flex-col xl:flex-row gap-3 items-start print:hidden">
         {/* Left Content Area */}
         <div className="flex-1 min-w-0 flex flex-col gap-3 relative">
           
@@ -662,6 +690,64 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
              onExportExcel={exportToExcel}
              currentVariableName={variable.name}
            />
+        </div>
+      </div>
+
+      {/* ── PRINT ONLY REPORT SECTION ── */}
+      <div className="hidden print:block w-full max-w-4xl mx-auto p-12 bg-white font-sans">
+        <div className="text-center mb-12 border-b pb-8">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Engineering Calculation Report</h1>
+          <p className="text-slate-500 text-sm">Generated on {new Date().toLocaleString()}</p>
+        </div>
+
+        <div className="border border-slate-200 rounded-[32px] p-10 bg-white shadow-sm">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-1">{variable.label}</h2>
+            <p className="text-sm text-slate-500 font-semibold uppercase tracking-widest">{categoryName}</p>
+            <p className="text-xs text-slate-400 mt-2">{activeMethod.name} • {new Date().toLocaleString()}</p>
+          </div>
+
+          <div className="space-y-8">
+            <div>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Inputs</h3>
+              <div className="space-y-3">
+                {currentInputFields.map(f => (
+                  <div key={f.name} className="flex justify-between items-center border-b border-slate-50 pb-2">
+                    <span className="text-sm font-bold text-slate-600">{f.label}</span>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-sm font-bold text-slate-900">{inputStrings[f.name] || 0}</span>
+                      <span className="text-[10px] text-slate-400 font-bold">{units[f.name] || (f.units && f.units[0]) || ""}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Result</h3>
+              <div className="flex flex-col items-center justify-center p-8 bg-slate-50 rounded-2xl border border-slate-100">
+                {calculated && persistedResult ? (
+                  <div className="text-center">
+                    <div className="flex items-baseline justify-center gap-2 font-bold text-emerald-600">
+                      <span className="text-xl">{variable.symbol} = </span>
+                      <span className="text-3xl">
+                        {smartFormat(convertFromBase(persistedResult.rawValue!, outputUnit))}
+                      </span>
+                      <span className="text-xl">{outputUnit}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-slate-400 text-sm">No calculation data available.</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-16 pt-8 border-t border-slate-100 text-center">
+            <p className="text-[10px] text-slate-300 font-bold uppercase tracking-widest">
+              Generated by eDrift Engineering Suite • www.edriftelectric.com
+            </p>
+          </div>
         </div>
       </div>
     </div>
