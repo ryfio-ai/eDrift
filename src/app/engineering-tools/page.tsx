@@ -68,7 +68,7 @@ export default function DesignCalculatorLanding() {
               {category.variables.map((v) => (
                 <div key={v.name}>
                   <Link
-                    href={`/design-calculator/${slugify(v.label)}`}
+                    href={`/engineering-tools/${slugify(v.label)}-calculator`}
                     className="group relative flex flex-col h-full p-8 bg-white rounded-[32px] border border-slate-100 hover:border-brand-primary/20 hover:shadow-2xl hover:shadow-brand-primary/10 transition-all duration-500 overflow-hidden"
                   >
                     {/* Background Accent */}

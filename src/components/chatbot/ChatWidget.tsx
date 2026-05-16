@@ -67,7 +67,7 @@ export const ChatWidget = () => {
   };
 
   const getActionUrl = (action: Action) => {
-    return action.type === "product" ? `/products/${action.slug}` : `/design-calculator/${action.slug}`;
+    return action.type === "product" ? `/products/${action.slug}` : `/engineering-tools/${action.slug}-calculator`;
   };
 
   const toggleOpen = () => {

@@ -66,7 +66,7 @@ export const CalculatorSidebar: React.FC = () => {
               <ul className="flex flex-col relative space-y-0">
                 {category.variables.map((variable) => {
                   const slug = slugify(variable.label);
-                  const isActive = activeSlug === slug;
+                  const isActive = activeSlug === `${slug}-calculator` || activeSlug === slug;
                   
                   // Extract base name if label contains (symbol)
                   const baseName = variable.label.includes("(")
@@ -79,7 +79,7 @@ export const CalculatorSidebar: React.FC = () => {
                   return (
                     <li key={variable.name} className="relative px-1 pl-3">
                       <Link
-                        href={`/design-calculator/${slug}`}
+                        href={`/engineering-tools/${slug}-calculator`}
                         className={cn(
                           "w-full flex items-center justify-between px-2 py-1 text-[14px] rounded transition-all duration-200 hover:translate-x-0.5 cursor-pointer",
                           isActive

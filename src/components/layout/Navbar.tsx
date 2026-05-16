@@ -355,10 +355,10 @@ export const Navbar = () => {
 
             {/* DESIGN CALCULATOR — pill */}
             <Link
-              href="/design-calculator"
+              href="/engineering-tools"
               className={cn(
                 "flex items-center gap-1.5 px-4 py-2 rounded-full border text-[14px] font-medium transition-all duration-150 whitespace-nowrap",
-                pathname.startsWith("/design-calculator")
+                pathname.startsWith("/engineering-tools")
                   ? "bg-[#0A4FCC] border-[#0A4FCC] text-white"
                   : "bg-[#EEF4FF] border-[#C7D9FF] text-[#0A4FCC] hover:bg-[#0A4FCC] hover:border-[#0A4FCC] hover:text-white"
               )}
@@ -524,7 +524,7 @@ export const Navbar = () => {
 
               {/* Design Calculator direct link */}
               <Link
-                href="/design-calculator"
+                href="/engineering-tools"
                 onClick={closeMobile}
                 className="flex items-center gap-2 px-6 py-4 text-[15px] font-semibold border-b border-[#F3F4F6] text-[#0D1117] hover:text-[#0A4FCC] transition-colors"
               >

@@ -421,7 +421,7 @@ export const CalculatorModule: React.FC<CalculatorModuleProps> = ({ variable }) 
                   <p className="text-[10px] font-heading font-bold text-slate-400 uppercase tracking-widest mb-3">Available Tools</p>
                   <div className="flex flex-col w-full gap-2">
                      {calculatorConfig.categories.filter(c => !c.underDevelopment && c.name !== "Custom Formulas").map(c => (
-                        <a key={c.name} href={`/design-calculator/${slugify(c.variables[0].label)}`} className="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[12px] font-heading font-bold rounded-xl text-center transition-colors">
+                        <a key={c.name} href={`/engineering-tools/${slugify(c.variables[0].label)}-calculator`} className="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 text-slate-600 text-[12px] font-heading font-bold rounded-xl text-center transition-colors">
                            {c.name}
                         </a>
                      ))}

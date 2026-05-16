@@ -95,7 +95,7 @@ export const ResourcesList = () => {
                   Run complex calculations for Total Cost of Ownership, charging times, and system efficiency based on your specific application requirements.
                </p>
                <Link 
-                 href="/design-calculator" 
+                 href="/engineering-tools" 
                  className="btn-primary px-8"
                >
                   Launch Engineering Tool

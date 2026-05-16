@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 
 export default function Footer() {
   const pathname = usePathname();
-  const isCalculator = pathname?.startsWith("/design-calculator");
+  const isCalculator = pathname?.startsWith("/engineering-tools");
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
 
   if (isCalculator) return null;
@@ -47,7 +47,7 @@ export default function Footer() {
       { name: "Case Studies", href: "/case-studies" },
       { name: "Blog", href: "/blog" },
       { name: "Newsletter", href: "/newsletter" },
-      { name: "Design Calculator", href: "/design-calculator", special: true }
+      { name: "Design Calculator", href: "/engineering-tools", special: true }
     ],
     company: [
       { name: "About", href: "/about" },

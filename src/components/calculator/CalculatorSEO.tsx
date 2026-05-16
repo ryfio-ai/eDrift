@@ -13,7 +13,7 @@ interface CalculatorSEOProps {
  */
 export const CalculatorSEO: React.FC<CalculatorSEOProps> = ({ variable }) => {
   const SITE_URL = "https://www.edriftelectric.com";
-  const toolUrl = `${SITE_URL}/design-calculator/${slugify(variable.label)}`;
+  const toolUrl = `${SITE_URL}/engineering-tools/${slugify(variable.label)}-calculator`;
 
   // 1. Breadcrumb Schema (Home > Design Calculator > Tool)
   const breadcrumbSchema = {
@@ -29,8 +29,8 @@ export const CalculatorSEO: React.FC<CalculatorSEOProps> = ({ variable }) => {
       {
         "@type": "ListItem",
         "position": 2,
-        "name": "Design Calculator",
-        "item": `${SITE_URL}/design-calculator`
+        "name": "Engineering Tools",
+        "item": `${SITE_URL}/engineering-tools`
       },
       {
         "@type": "ListItem",

@@ -15,8 +15,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   
   // Robust lookup: slugify the URL param to match our standard
   let activeVariable = null;
+  const normalizedSlug = slug.replace(/-calculator$/, "");
+
   for (const category of calculatorConfig.categories) {
-    activeVariable = category.variables.find(v => slugify(v.label) === slugify(slug));
+    activeVariable = category.variables.find(v => slugify(v.label) === slugify(normalizedSlug));
     if (activeVariable) break;
   }
 
@@ -29,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${activeVariable.label} | Power Electronics Designer`,
       description: `High-precision calculation for ${activeVariable.label}. Part of the eDrift Engineering Suite.`,
-      url: `https://www.edriftelectric.com/design-calculator/${slugify(activeVariable.label)}`,
+      url: `https://www.edriftelectric.com/engineering-tools/${slugify(activeVariable.label)}-calculator`,
       siteName: "eDrift Electric",
       images: [
         {
@@ -47,10 +49,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function DynamicCalculatorPage({ params }: PageProps) {
   const { slug } = await params;
 
+  const normalizedSlug = slug.replace(/-calculator$/, "");
+  
   let activeVariable = null;
-  // Use slugify on the URL param to ensure case-insensitivity and space-handling
   for (const category of calculatorConfig.categories) {
-    activeVariable = category.variables.find(v => slugify(v.label) === slugify(slug));
+    activeVariable = category.variables.find(v => slugify(v.label) === slugify(normalizedSlug));
     if (activeVariable) break;
   }
 

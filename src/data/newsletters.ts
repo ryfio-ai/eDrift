@@ -66,7 +66,7 @@ The totem-pole Power Factor Correction (PFC) topology is becoming the dominant A
 - Control loop compensation
 - Efficiency estimation
 
-[Try the GaN Totem-Pole PFC Calculator →](/design-calculator/gan-totem-pole-pfc)
+[Try the GaN Totem-Pole PFC Calculator →](/engineering-tools/gan-totem-pole-pfc-calculator)
 
 ---
 
@@ -144,7 +144,7 @@ We are excited to announce the launch of our LLC Resonant Converter Design Calcu
 - Provides transformer turns ratio and gain curves
 - Exports results as a downloadable PDF report
 
-[Try the LLC Calculator →](/design-calculator/llc-resonant)
+[Try the LLC Calculator →](/engineering-tools/llc-resonant-calculator)
 
 ---
 

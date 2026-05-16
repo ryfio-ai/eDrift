@@ -25,6 +25,11 @@ const nextConfig: import('next').NextConfig = {
         permanent: true,
       },
       {
+        source: '/design-calculator',
+        destination: '/engineering-tools',
+        permanent: true,
+      },
+      {
         source: '/design-calculator/:slug',
         destination: '/engineering-tools/:slug-calculator',
         permanent: true,
